@@ -2,10 +2,10 @@
 nixPkgs = ['flutter', 'python3']
 
 [phases.install]
-cmds = ['rm -f pubspec.lock', 'touch .env', 'flutter config --no-analytics', 'flutter pub get']
+cmds = ['touch .env', 'flutter config --no-analytics']
 
 [phases.build]
-cmds = ['flutter build web']
+cmds = ['rm -f pubspec.lock', 'flutter pub get', 'flutter build web']
 
 [start]
 cmd = 'python3 -m http.server $PORT --directory build/web'
