@@ -2,10 +2,13 @@
 nixPkgs = ['flutter', 'python3']
 
 [phases.install]
-cmds = ['flutter pub get']
+cmds = ['flutter config --no-analytics', 'flutter pub get']
 
 [phases.build]
 cmds = ['flutter build web']
 
 [start]
 cmd = 'python3 -m http.server $PORT --directory build/web'
+
+[variables]
+CI = "true"
