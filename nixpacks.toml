@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ['flutter', 'python3']
+
+[phases.install]
+cmds = ['cd app_casa_transparente && flutter pub get']
+
+[phases.build]
+cmds = ['cd app_casa_transparente && flutter build web']
+
+[start]
+cmd = 'cd app_casa_transparente && python3 -m http.server $PORT --directory build/web'

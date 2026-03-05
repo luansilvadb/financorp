@@ -30,7 +30,7 @@ class PersonSummaryRow extends ConsumerWidget {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: Colors.black.withOpacity(0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -51,7 +51,7 @@ class PersonSummaryRow extends ConsumerWidget {
                       height: 32,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: coresPessoa[p]?.withValues(alpha: 0.1),
+                        color: coresPessoa[p]?.withOpacity(0.1),
                         image: DecorationImage(
                           image: NetworkImage(avataresPessoa[p]!),
                           fit: BoxFit.cover,
