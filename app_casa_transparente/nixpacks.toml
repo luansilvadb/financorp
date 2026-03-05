@@ -1,5 +1,6 @@
 [phases.setup]
 nixPkgs = ['flutter', 'python3']
+nixpkgsArchive = '50ab793786d9de88ee30ec4e4c24fb4236fc2674'
 
 [phases.install]
 cmds = ['rm -f pubspec.lock', 'touch .env', 'flutter config --no-analytics', 'flutter pub get']
