@@ -255,7 +255,7 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
             borderRadius: BorderRadius.circular(16),
           ),
           child: DropdownButtonFormField<String>(
-            initialValue: _pessoa,
+            value: _pessoa,
             items: pessoas
                 .map((p) => DropdownMenuItem(value: p, child: Text(p)))
                 .toList(),
