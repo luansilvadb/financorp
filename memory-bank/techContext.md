@@ -4,7 +4,7 @@
 | Layer           | Technology                                  |
 |-----------------|---------------------------------------------|
 | Framework       | Flutter (Dart SDK ^3.0.0)                  |
-| State Mgmt      | **Flutter Riverpod (^3.2.1)**               |
+| State Mgmt      | **Flutter Riverpod (2.4.10)**               |
 | Backend / DB    | **Supabase (PostgreSQL)**                   |
 | Env Management  | **flutter_dotenv (^5.1.0)**                 |
 | Schema Mgmt     | **Supabase CLI (Migrations)**               |
