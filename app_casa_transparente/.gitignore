@@ -1,0 +1,87 @@
+# ----------------------------------------------------------------------------
+# Flutter/Dart Specific
+# ----------------------------------------------------------------------------
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# ----------------------------------------------------------------------------
+# Android Specific
+# ----------------------------------------------------------------------------
+android/**/gradle-wrapper.jar
+android/.gradle
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+
+# Android Studio / IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# ----------------------------------------------------------------------------
+# iOS/macOS Specific
+# ----------------------------------------------------------------------------
+ios/.generated/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/Flutter/flutter_export_environment.sh
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+
+# CocoaPods
+**/Pods/
+**/Podfile.lock
+
+# macOS specific
+.DS_Store
+**/macos/Flutter/ephemeral/
+**/macos/Flutter/GeneratedCode/
+
+# ----------------------------------------------------------------------------
+# Web Specific
+# ----------------------------------------------------------------------------
+lib/generated_plugin_registrant.dart
+
+# ----------------------------------------------------------------------------
+# Visual Studio Code Specific
+# ----------------------------------------------------------------------------
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ----------------------------------------------------------------------------
+# Supabase Specific
+# ----------------------------------------------------------------------------
+supabase/.temp/
+
+# ----------------------------------------------------------------------------
+# Miscellaneous / Secrets
+# ----------------------------------------------------------------------------
+*.log
+doc/api/
+ios/Flutter/.last_build_id
+
+# Environment variables / Secrets
+.env*
+!*.env.example

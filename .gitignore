@@ -1,0 +1,95 @@
+# ----------------------------------------------------------------------------
+# Flutter/Dart Specific
+# ----------------------------------------------------------------------------
+app_casa_transparente/.dart_tool/
+app_casa_transparente/.flutter-plugins
+app_casa_transparente/.flutter-plugins-dependencies
+app_casa_transparente/.packages
+app_casa_transparente/.pub-cache/
+app_casa_transparente/.pub/
+app_casa_transparente/build/
+
+# Symbolication related
+app_casa_transparente/app.*.symbols
+
+# Obfuscation related
+app_casa_transparente/app.*.map.json
+
+# ----------------------------------------------------------------------------
+# Android Specific
+# ----------------------------------------------------------------------------
+app_casa_transparente/android/**/gradle-wrapper.jar
+app_casa_transparente/android/.gradle
+app_casa_transparente/android/captures/
+app_casa_transparente/android/gradlew
+app_casa_transparente/android/gradlew.bat
+app_casa_transparente/android/local.properties
+app_casa_transparente/android/**/GeneratedPluginRegistrant.java
+
+# Android Studio / IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# ----------------------------------------------------------------------------
+# iOS/macOS Specific
+# ----------------------------------------------------------------------------
+app_casa_transparente/ios/.generated/
+app_casa_transparente/ios/Flutter/App.framework
+app_casa_transparente/ios/Flutter/Flutter.framework
+app_casa_transparente/ios/Flutter/Flutter.podspec
+app_casa_transparente/ios/Flutter/Generated.xcconfig
+app_casa_transparente/ios/Flutter/app.flx
+app_casa_transparente/ios/Flutter/app.zip
+app_casa_transparente/ios/Flutter/flutter_assets/
+app_casa_transparente/ios/Flutter/flutter_export_environment.sh
+app_casa_transparente/ios/ServiceDefinitions.json
+app_casa_transparente/ios/Runner/GeneratedPluginRegistrant.*
+
+# CocoaPods
+**/Pods/
+**/Podfile.lock
+
+# macOS specific
+.DS_Store
+**/macos/Flutter/ephemeral/
+**/macos/Flutter/GeneratedCode/
+
+# ----------------------------------------------------------------------------
+# Web Specific
+# ----------------------------------------------------------------------------
+app_casa_transparente/lib/generated_plugin_registrant.dart
+
+# ----------------------------------------------------------------------------
+# Visual Studio Code Specific
+# ----------------------------------------------------------------------------
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ----------------------------------------------------------------------------
+# Supabase Specific
+# ----------------------------------------------------------------------------
+app_casa_transparente/supabase/.temp/
+
+# ----------------------------------------------------------------------------
+# Project Specific
+# ----------------------------------------------------------------------------
+temp*.json
+dev_*.json
+apply_inst.json
+
+# ----------------------------------------------------------------------------
+# Miscellaneous / Secrets
+# ----------------------------------------------------------------------------
+*.log
+doc/api/
+app_casa_transparente/ios/Flutter/.last_build_id
+
+# Environment variables / Secrets
+.env*
+!*.env.example
+app_casa_transparente/.env*
