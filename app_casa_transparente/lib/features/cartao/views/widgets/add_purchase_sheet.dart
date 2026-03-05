@@ -75,7 +75,7 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: kPrimaryColor.withValues(alpha: 0.1),
+                    color: kPrimaryColor.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -163,7 +163,7 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
                       backgroundColor: kPrimaryColor,
                       foregroundColor: Colors.white,
                       elevation: 4,
-                      shadowColor: kPrimaryColor.withValues(alpha: 0.4),
+                      shadowColor: kPrimaryColor.withOpacity(0.4),
                       padding: const EdgeInsets.symmetric(vertical: 18),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -214,7 +214,7 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
           decoration: InputDecoration(
             hintText: placeholder,
             hintStyle: TextStyle(
-                color: kSlate400.withValues(alpha: 0.6),
+                color: kSlate400.withOpacity(0.6),
                 fontWeight: FontWeight.w500),
             prefixIcon: Icon(icon, color: kPrimaryColor, size: 22),
             filled: true,

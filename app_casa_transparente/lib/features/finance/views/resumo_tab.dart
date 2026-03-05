@@ -46,12 +46,12 @@ class ResumoTab extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(color: kPrimaryColor.withValues(alpha: 0.05)),
+        border: Border.all(color: kPrimaryColor.withOpacity(0.05)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +62,7 @@ class ResumoTab extends ConsumerWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: kPrimaryColor.withValues(alpha: 0.1),
+                  color: kPrimaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.savings_outlined,
@@ -155,17 +155,17 @@ class ResumoTab extends ConsumerWidget {
         : s.totalGeral > 0
             ? kRed500
             : kSlate400;
-    final statusBg = statusColor.withValues(alpha: 0.1);
+    final statusBg = statusColor.withOpacity(0.1);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: kPrimaryColor.withValues(alpha: 0.05)),
+        border: Border.all(color: kPrimaryColor.withOpacity(0.05)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -184,7 +184,7 @@ class ResumoTab extends ConsumerWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: kPrimaryColor.withValues(alpha: 0.1),
+                        color: kPrimaryColor.withOpacity(0.1),
                         shape: BoxShape.circle,
                         image: avataresPessoa[p] != null
                             ? DecorationImage(
@@ -320,9 +320,9 @@ class ResumoTab extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: kPrimaryColor.withValues(alpha: 0.05),
+        color: kPrimaryColor.withOpacity(0.05),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: kPrimaryColor.withValues(alpha: 0.1)),
+        border: Border.all(color: kPrimaryColor.withOpacity(0.1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

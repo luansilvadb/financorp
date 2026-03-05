@@ -98,7 +98,7 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
                   border: Border.all(color: kSlate100),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
+                      color: Colors.black.withOpacity(0.04),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -185,14 +185,14 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
         boxShadow: isExpanded
             ? [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.08),
+                  color: Colors.black.withOpacity(0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
               ]
             : [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
+                  color: Colors.black.withOpacity(0.04),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -211,7 +211,7 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: color.withValues(alpha: 0.1),
+                      color: color.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -351,9 +351,9 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
         width: fullWidth ? double.infinity : null,
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.05),
+          color: color.withOpacity(0.05),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withValues(alpha: 0.1)),
+          border: Border.all(color: color.withOpacity(0.1)),
         ),
         child: Column(
           children: [
