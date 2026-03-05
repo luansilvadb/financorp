@@ -16,7 +16,7 @@ A Flutter mobile application for transparent financial management and expense sp
 - Inhibit late/missing payments through visibility and accountability.
 
 ## Tech Stack (v2.0)
-- **Framework**: Flutter (Dart SDK ^3.11.0)
+- **Framework**: Flutter (Dart SDK ^3.0.0)
 - **Backend**: Supabase (PostgreSQL + Auth + Storage)
 - **State Management**: Riverpod (^3.2.1)
 - **Env Management**: flutter_dotenv (^5.1.0)
