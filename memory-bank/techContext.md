@@ -48,6 +48,6 @@ d:\financorp\app_casa_transparente\
 - ~~Auth~~: **Semi-implementada** (Uso de chave `anon` com RLS liberado. Próximo passo é login individual).
 
 ## Storage Decisions
-- **UUIDs**: Gerenciados diretamente pelo servidor PostgreSQL para garantir unicidade sem locais de colisão.
-- **Relational Integrity**: Uso de `REFERENCES` com `ON DELETE CASCADE` para garantir que pagamentos sejam limpos se uma despesa for removida.
+- **UUIDs**: Gerenciados diretamente pelo servidor PostgreSQL para garantir unicidade sem colisões locais.
+- **Relational Integrity**: Uso de `REFERENCES` with `ON DELETE CASCADE` para garantir que pagamentos sejam limpos se uma despesa for removida.
 - **Security**: RLS ativo nas tabelas com políticas permitindo acesso público (chave anon) para simplificação inicial.
