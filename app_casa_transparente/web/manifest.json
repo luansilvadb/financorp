@@ -1,6 +1,6 @@
 {
-    "name": "app_casa_transparente",
-    "short_name": "app_casa_transparente",
+    "name": "Financeiro",
+    "short_name": "Financeiro",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
