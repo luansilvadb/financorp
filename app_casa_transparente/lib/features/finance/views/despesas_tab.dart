@@ -18,7 +18,8 @@ class DespesasTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final despesasAsync = ref.watch(despesasProvider);
     final period = ref.watch(periodProvider);
-    final totalCasa = ref.watch(financeEngineProvider.select((s) => s.totalDespesasCasa));
+    final totalCasa =
+        ref.watch(diviEngineProvider.select((s) => s.totalDespesasCasa));
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -76,7 +77,9 @@ class DespesasTab extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             // Despesas Fixas — cada card é um ConsumerWidget isolado
-            ...despesas.where((d) => d.id != null).map((d) => DespesaCard(despesaId: d.id!)),
+            ...despesas
+                .where((d) => d.id != null)
+                .map((d) => DespesaCard(despesaId: d.id!)),
           ],
         ),
         loading: () => ListView(

@@ -18,27 +18,31 @@ class CartaoTab extends ConsumerWidget {
     final comprasAsync = ref.watch(cartaoProvider);
     final period = ref.watch(periodProvider);
     // Consome os dados já agrupados e indexados pelo motor (O(1) access na View)
-    final grouped = ref.watch(financeEngineProvider.select((s) => s.comprasPorPessoa));
+    final grouped =
+        ref.watch(diviEngineProvider.select((s) => s.comprasPorPessoa));
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: comprasAsync.when(
         data: (compras) {
-
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 200),
             children: [
               _buildLancamentosHeader(period),
               const SizedBox(height: 16),
               // Renderizar grupos filtrando quem não tem lançamentos
-              ...grouped.entries.where((e) => e.value.isNotEmpty).expand((entry) {
+              ...grouped.entries
+                  .where((e) => e.value.isNotEmpty)
+                  .expand((entry) {
                 final pessoa = entry.key;
                 final itens = entry.value;
                 final subtotal = itens.fold(0.0, (acc, c) => acc + c.valor);
 
                 return [
                   _buildGroupHeader(pessoa, subtotal),
-                  ...itens.where((c) => c.id != null).map((c) => CartaoCard(compraId: c.id!)),
+                  ...itens
+                      .where((c) => c.id != null)
+                      .map((c) => CartaoCard(compraId: c.id!)),
                   const SizedBox(height: 16),
                 ];
               }),

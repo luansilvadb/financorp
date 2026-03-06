@@ -1,4 +1,4 @@
-# Product Context
+# Product Context: DIVI ("Divida sem Dívida")
 
 ## Why This Project Exists
 The household of Luan, Luciana, and Giovanna suffers from:

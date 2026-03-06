@@ -128,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                       ),
                       child: PhosphorIcon(
-                        PhosphorIcons.bank(PhosphorIconsStyle.fill),
+                        PhosphorIcons.intersect(PhosphorIconsStyle.fill),
                         color: Colors.white,
                         size: 80,
                       ),
@@ -147,14 +147,28 @@ class _SplashScreenState extends State<SplashScreen>
                         child: child,
                       );
                     },
-                    child: Text(
-                      "Gestão Financeira",
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 2.0,
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "DIVI",
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 48,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 8.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Nova experiência em gestão financeira",
+                          style: GoogleFonts.inter(
+                            color: Colors.white.withOpacity(0.7),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

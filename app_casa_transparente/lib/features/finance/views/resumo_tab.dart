@@ -11,7 +11,8 @@ class ResumoTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Escuta APENAS as mudanças no total geral no motor unificado
-    final totalGeral = ref.watch(financeEngineProvider.select((s) => s.totalGeral));
+    final totalGeral =
+        ref.watch(diviEngineProvider.select((s) => s.totalGeral));
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 200),
@@ -46,12 +47,21 @@ class _PersonSummaryCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Assiste apenas o resumo desta pessoa específica no motor unificado
-    final summary = ref.watch(financeEngineProvider.select((s) => s.resumo[pessoa]));
-    
+    final summary =
+        ref.watch(diviEngineProvider.select((s) => s.resumo[pessoa]));
+
     if (summary == null) return const SizedBox.shrink();
 
-    final statusLabel = summary.totalGeral < 0 ? "Receber" : summary.totalGeral > 0 ? "Pagar" : "Quitado";
-    final statusColor = summary.totalGeral < 0 ? kGreen500 : summary.totalGeral > 0 ? kRed500 : kSlate400;
+    final statusLabel = summary.totalGeral < 0
+        ? "Receber"
+        : summary.totalGeral > 0
+            ? "Pagar"
+            : "Quitado";
+    final statusColor = summary.totalGeral < 0
+        ? kGreen500
+        : summary.totalGeral > 0
+            ? kRed500
+            : kSlate400;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -97,21 +107,23 @@ class _PersonSummaryCard extends ConsumerWidget {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                _SummaryRow(label: "Pendente Casa", val: fmt(summary.pendenteCasa)),
+                _SummaryRow(
+                    label: "Pendente Casa", val: fmt(summary.pendenteCasa)),
                 const SizedBox(height: 8),
                 _SummaryRow(label: "Cartão", val: fmt(summary.pendenteCartao)),
                 if (pessoa == "Luan") ...[
                   const SizedBox(height: 8),
                   _SummaryRow(
-                    label: "Crédito a Receber", 
-                    val: fmt(summary.creditoCartao), 
-                    color: kPrimaryColor,
-                    isBold: true
-                  ),
+                      label: "Crédito a Receber",
+                      val: fmt(summary.creditoCartao),
+                      color: kPrimaryColor,
+                      isBold: true),
                 ],
                 const SizedBox(height: 16),
                 _TotalRow(
-                  label: summary.totalGeral < 0 ? "SALDO A RECEBER" : "TOTAL A PAGAR",
+                  label: summary.totalGeral < 0
+                      ? "SALDO A RECEBER"
+                      : "TOTAL A PAGAR",
                   val: fmt(summary.totalGeral.abs()),
                   color: summary.totalGeral == 0 ? kSlate400 : statusColor,
                 ),
@@ -225,7 +237,8 @@ class _TotalRow extends StatelessWidget {
   final String val;
   final Color color;
 
-  const _TotalRow({required this.label, required this.val, required this.color});
+  const _TotalRow(
+      {required this.label, required this.val, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -280,12 +293,14 @@ class _FooterSummary extends StatelessWidget {
           const SizedBox(width: 8),
           RichText(
             text: TextSpan(
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: kSlate600),
+              style: const TextStyle(
+                  fontSize: 14, fontWeight: FontWeight.w600, color: kSlate600),
               children: [
                 const TextSpan(text: "Custo Total da Casa: "),
                 TextSpan(
                   text: fmt(total),
-                  style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                      color: kPrimaryColor, fontWeight: FontWeight.w800),
                 ),
               ],
             ),

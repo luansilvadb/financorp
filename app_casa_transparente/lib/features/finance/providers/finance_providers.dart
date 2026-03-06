@@ -117,6 +117,7 @@ class PagamentosNotifier extends AsyncNotifier<List<Pagamento>> {
 
 /// Provider granular que utiliza o motor central (O(1) access).
 /// Isso isola a reconstrução do widget do card apenas para mudanças relevantes a este ID.
-final despesaItemProvider = Provider.family<DespesaItemRecord?, String>((ref, id) {
-  return ref.watch(financeEngineProvider.select((s) => s.despesas[id]));
+final despesaItemProvider =
+    Provider.family<DespesaItemRecord?, String>((ref, id) {
+  return ref.watch(diviEngineProvider.select((s) => s.despesas[id]));
 });

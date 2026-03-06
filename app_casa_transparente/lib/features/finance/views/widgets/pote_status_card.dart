@@ -11,10 +11,13 @@ class PoteStatusCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Escuta a meta global (Despesas + Cartão) e a arrecadação global no motor unificado
-    final total = ref.watch(financeEngineProvider.select((s) => s.totalGeral));
-    final arrecadado = ref.watch(financeEngineProvider.select((s) => s.arrecadadoCasa));
+    final totalDespesas =
+        ref.watch(diviEngineProvider.select((s) => s.totalDespesasCasa));
+    final arrecadado =
+        ref.watch(diviEngineProvider.select((s) => s.arrecadadoCasa));
 
-    final progress = total > 0 ? (arrecadado / total).clamp(0.0, 1.0) : 0.0;
+    final progress =
+        totalDespesas > 0 ? (arrecadado / totalDespesas).clamp(0.0, 1.0) : 0.0;
     final percent = (progress * 100).toStringAsFixed(1);
 
     return Container(
@@ -86,7 +89,7 @@ class PoteStatusCard extends ConsumerWidget {
                 ),
               ),
               Text(
-                "Meta: ${fmt(total)}",
+                "Meta: ${fmt(totalDespesas)}",
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,

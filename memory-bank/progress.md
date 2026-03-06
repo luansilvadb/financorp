@@ -17,11 +17,12 @@
 - **High-Density Cards**: Cards de lista como `ConsumerWidget` compactos com ações baseadas em Detail Sheets secundários.
 - **Modelos Imutáveis (Freezed)**: Core data protegido com geradores automáticos para `copyWith` e JSON serialization.
 - **Optimistic UI**: Mutação zero-lag com fallback automático global via SnackBar.
-- **Motor de Alta Performance (O(N))**: `FinancorpEngine` processando agregados e resumos em single-pass.
-- **Densidade em UI State**: Uso agressivo de **Dart 3 Records** nos Providers granulares, reduzindo o build-time e consumo de HEAP.
+- [x] **Motor de Alta Performance (O(N))**: `DiviEngine` processando agregados e resumos em single-pass.
+- [x] **Densidade em UI State**: Uso agressivo de **Dart 3 Records** nos Providers granulares, reduzindo o build-time e consumo de HEAP.
 - [x] **Isolamento Total de Rebuilds**: Cards escutam estritamente modificações em seu próprio UUID em tempo `O(1)` no motor.
 - [x] **Premium Bottom Navigation**: Barra de navegação com glassmorphism avançado, indicador "gooey" (liquid movement) e micro-interações táteis.
 - [x] **Splash Screen Premium**: Entrada animada com orquestração de inicialização do Supabase e transição via Fade.
+- [x] **Rebrand DIVI**: Mudança de nome para "DIVI" e slogan "Divida sem Dívida", com nova identidade visual baseada no ícone Intersect.
 
 ## What's Left to Build 🔲
 - [ ] **User Authentication** — Login individual via Supabase Auth.
@@ -31,9 +32,9 @@
 - [ ] **Validação de Formulários**: Refinamento adicional de validações cliente-side.
 
 ## Current Status
-**Phase**: Performance & Density Engine  
-**Version**: 3.0.0 (FinancorpEngine)  
-**Last delivered change**: `splash-screen-premium` — Splash Screen animada com orquestração de inicialização.
+**Phase**: Production Ready Branding & Engine
+**Version**: 3.1.0 (DIVI Rebrand)
+**Last delivered change**: `rebrand-to-divi` — Rebrand completo para DIVI ("Divida sem Dívida").
 
 ## Known Issues
 1. **Public Anon Access**: RLS aberto para `anon`. Requer Auth.
@@ -53,5 +54,5 @@
 | **Widget Granularity** | `_build` methods in Tabs | **Isolated `.select()` per ID** | Prevent full-page rebuilds |
 | **Data Models** | Maps e classes simples | **Anotações `@freezed`** | Tipagem rigorosa para Database Models |
 | **UI Item States** | Classes `@freezed` gen. | **Dart 3 Records** | Performance absoluta e zero-boilerplate para view-models |
-| **Data Processing** | Múltiplos Providers | **Single-Pass O(N) Engine** | Eliminar repetitivos loops O(P*N) nos resumos |
+| **Data Processing** | Múltiplos Providers | **Single-Pass O(N) Engine** | Eliminar repetitivos loops O(P*N) nos resumos (`DiviEngine`) |
 | **Data Synchronization**| Pessimista (`ref.invalidate()`) | **Optimistic UI local state** | UX ágil, latência instantânea (0ms). |

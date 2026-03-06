@@ -1,7 +1,7 @@
-# Project Brief: App Casa Transparente
+# Project Brief: DIVI
 
 ## Overview
-A Flutter mobile application for transparent financial management and expense splitting in a shared household of 3 people (Luan, Luciana, Giovanna).
+DIVI ("Divida sem Dívida") is a Flutter mobile application for transparent financial management and expense splitting in a shared household of 3 people (Luan, Luciana, Giovanna).
 
 ## Core Requirements
 1. **Fixed Expense Management** — Track shared household bills (Aluguel, Energia, Água, Internet) with automatic 3-way splitting and per-person payment status tracking.

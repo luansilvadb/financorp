@@ -73,8 +73,9 @@ class CartaoNotifier extends AsyncNotifier<List<CompraCartao>> {
 }
 
 /// Provider granular que utiliza o motor central (O(1) access).
-final compraItemProvider = Provider.family<CompraItemRecord?, String>((ref, id) {
-  final compra = ref.watch(financeEngineProvider.select((s) => s.compras[id]));
+final compraItemProvider =
+    Provider.family<CompraItemRecord?, String>((ref, id) {
+  final compra = ref.watch(diviEngineProvider.select((s) => s.compras[id]));
   if (compra == null) return null;
 
   return (

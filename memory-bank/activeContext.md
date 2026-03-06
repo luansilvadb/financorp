@@ -1,8 +1,7 @@
-# Active Context
+# Active Context (DIVI)
 
 ## Current State (2026-03-06)
-The app has undergone a **performance engine optimization**, centralizing all financial logic into a single-pass `FinancorpEngine`. UI states that previously used `freezed` (like `DespesaItemState` and `CompraItemState`) were replaced by lightweight **Dart 3 Records** to eliminate memory overhead and boilerplate. The system achieves maximum granularity by having widgets subscribe to specific map keys within the engine's state (`ref.watch(financeEngineProvider.select(...))`), ensuring O(1) access and isolating rebuilds to only the affected items.
-
+The app has undergone a **rebrand to DIVI**, adopting the slogan **"Divida sem Dívida"**. The performance engine...
 ### Key Milestones Achieved
 1. **Modelagem Modular** — Transição de arquivo único para estrutura `core/`, `shared/`, `features/`.
 2. **Integração Supabase** — Persistência real de dados usando PostgreSQL via Supabase.
@@ -20,6 +19,7 @@ The app has undergone a **performance engine optimization**, centralizing all fi
 14. **Performance Engine (O(N))** — Processamento centralizado "single-pass" (`FinancorpEngine`) substituindo loops O(P*N) espalhados, acoplado com Dart 3 Records para estados UI (zero boilerplate).
 15. **Premium Bottom Nav** — Upgrade para barra de navegação "gooey" com glassmorphism e micro-animações táteis.
 16. **Splash Screen Premium** — Implementação de splash screen animada com transição suave e orquestração de inicialização assíncrona.
+17. **Rebrand DIVI** — Mudança de nome e slogan para "Divida sem Dívida" e atualização de identidade visual.
 
 ## What Was Done (Archived Changes via OpenSpec)
 As seguintes mudanças foram propostas, implementadas e arquivadas:

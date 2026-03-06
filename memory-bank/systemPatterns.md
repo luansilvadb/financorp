@@ -12,12 +12,12 @@ O sistema evoluiu de um arquivo único para uma arquitetura modular moderna e es
   - Cada feature contém subpastas `data/` (serviços/repositórios), `providers/` (logica de estado) e `views/` (widgets).
   - `views/widgets/`: Widgets reutilizáveis e isolados (ex: `DespesaCard`, `CartaoCard`, `AddExpenseSheet`).
 
-### State Management: Riverpod & FinancorpEngine
+### State Management: Riverpod & DiviEngine
 Utilizamos **Flutter Riverpod** acoplado ao motor unificado para alta performance.
 - **Providers Assíncronos Base**: `AsyncNotifierProvider` cuidam da rede e Optimistic UI (`despesasProvider`, `cartaoProvider`).
 - **Estado Global de Filtro**: `periodProvider` gerencia o mês/ano selecionado.
-- **Motor Central (FinancorpEngine)**: O `financeEngineProvider` escuta todos os dados brutos e realiza um processamento **Single-Pass O(N)**. Ele gera os resumos agregados e indexa os itens (Despesas e Compras) em Mapas por UUID, retornando um grande Record densamente tipado.
-- **Seletividade via `.select()` e O(1) Access**: Todos os widgets individuais consomem dados indexados buscando sua chave específica, ex: `ref.watch(financeEngineProvider.select((s) => s.despesas[id]))`. Isso isola os rebuilds cirurgicamente.
+- **Motor Central (DiviEngine)**: O `diviEngineProvider` escuta todos os dados brutos e realiza um processamento **Single-Pass O(N)**. Ele gera os resumos agregados e indexa os itens (Despesas e Compras) em Mapas por UUID, retornando um grande Record densamente tipado.
+- **Seletividade via `.select()` e O(1) Access**: Todos os widgets individuais consomem dados indexados buscando sua chave específica, ex: `ref.watch(diviEngineProvider.select((s) => s.despesas[id]))`. Isso isola os rebuilds cirurgicamente.
 
 ### Persistence: Supabase
 Dados são persistidos em um banco relacional (PostgreSQL) via **Supabase**.
@@ -80,14 +80,14 @@ Encapsulamento do cliente Supabase para isolar a lógica de rede da lógica de e
 ### Optimistic UI (Zero-Latency Updates)
 Todas as mutações (`add`, `update`, `delete`, `toggle`) atualizam primeiro o `state` local no Notifier e depois repassam o comando para o Supabase. Se a rede falhar, o estado é revertido (`state = previousState`) e uma `SnackBar` global é ativada via `scaffoldMessengerKey`.
 
-### FinancorpEngine (Motor de Alta Performance)
+### DiviEngine (Motor de Alta Performance)
 Remove a sobrecarga de cálculos repetitivos iterando sobre as faturas uma única vez (O(N)). Grupos (para a CartaoTab), Mapas (para os Cards O(1)) e o Balanço Final do Resumo (para o Dashboard) são montados na mesma passada e imutavelmente guardados em Records do Dart 3.
 
 ### High-Density Cards & Detail Sheets
 As abas de listagem (`DespesasTab`, `CartaoTab`) são `ConsumerWidget` leves que mapeiam a lista de IDs para widgets filhos compactos. Toques no corpo dos cards não causam expansão em linha, mas invocam instâncias elegantes de `ModalBottomSheet` para exibição de detalhes e ações mais complexas.
 
 ### Consolidated Status Logic
-O balanço de adimplência exibido nos mini-cards da `ResumoTab` consolida obrigações da "Casa" e dívidas do "Cartão". A matemática é unificada no `FinancorpEngine`, e o card apenas seleciona seu extrato `ref.watch(financeEngineProvider.select((s) => s.resumo[pessoa]))`.
+O balanço de adimplência exibido nos mini-cards da `ResumoTab` consolida obrigações da "Casa" e dívidas do "Cartão". A matemática é unificada no `DiviEngine`, e o card apenas seleciona seu extrato `ref.watch(diviEngineProvider.select((s) => s.resumo[pessoa]))`.
 
 ### Form UX (Bottom Sheets)
 Os formulários (`AddExpenseSheet` e `AddPurchaseSheet`) são Bottom Sheets responsivos com `isScrollControlled: true` para lidar dinamicamente com aberturas de teclado virtual (`viewInsets.bottom`).
@@ -101,7 +101,7 @@ Os formulários (`AddExpenseSheet` e `AddPurchaseSheet`) são Bottom Sheets resp
 
 ## Component Hierarchy
 ```
-CasaApp (MaterialApp + GoogleFonts.interTextTheme)
+DIVI (MaterialApp + GoogleFonts.interTextTheme)
 └── HomeScreen (ConsumerStatefulWidget)
     ├── _buildHeader() -> Header com periodProvider selectors (PhosphorIcons)
     └── IndexedStack (Aba selecionada)
@@ -111,5 +111,5 @@ CasaApp (MaterialApp + GoogleFonts.interTextTheme)
         │   └── DespesaCard × N (.select(despesas[id]) -> tap abre DespesaDetailsSheet)
         ├── CartaoTab (ConsumerWidget leve)
         │   └── CartaoCard × N (.select(compras[id]) -> tap abre CartaoDetailsSheet)
-        └── ResumoTab (Dashboard consumindo totais do FinancorpEngine)
+        └── ResumoTab (Dashboard consumindo totais do DiviEngine)
 ```

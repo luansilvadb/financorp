@@ -33,7 +33,7 @@ class CasaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Casa Transparente',
+      title: 'DIVI',
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(
@@ -146,7 +146,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PhosphorIcon(PhosphorIcons.bank(PhosphorIconsStyle.regular),
+              PhosphorIcon(PhosphorIcons.intersect(PhosphorIconsStyle.regular),
                   color: kPrimaryColor, size: 32),
               Row(
                 children: [
@@ -194,11 +194,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           const SizedBox(height: 12),
           const Text(
-            "Gestão Financeira",
+            "DIVI",
             style: TextStyle(
               color: kSlate900,
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
+              fontSize: 28,
+              fontWeight: FontWeight.w900,
               letterSpacing: -0.5,
             ),
           ),

@@ -37,7 +37,7 @@ class _PersonMiniCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Escuta APENAS a fatia desse usuário no mapa de resumos no motor unificado
     final summary = ref.watch(
-      financeEngineProvider.select((s) => s.resumo[pessoa]),
+      diviEngineProvider.select((s) => s.resumo[pessoa]),
     );
 
     if (summary == null) return const SizedBox();

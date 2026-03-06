@@ -38,14 +38,18 @@ typedef FinanceState = ({
   double totalDespesasCasa,
 });
 
-/// O Motor Central (FinancorpEngine) - Processamento Single-Pass O(N).
-final financeEngineProvider = Provider<FinanceState>((ref) {
+/// O Motor Central (DiviEngine) - Processamento Single-Pass O(N).
+final diviEngineProvider = Provider<FinanceState>((ref) {
   final despesasAsync = ref.watch(despesasProvider);
   final pagamentosAsync = ref.watch(pagamentosProvider);
   final comprasAsync = ref.watch(cartaoProvider);
 
   return switch ((despesasAsync, pagamentosAsync, comprasAsync)) {
-    (AsyncData(value: final despesas), AsyncData(value: final pagamentos), AsyncData(value: final compras)) => 
+    (
+      AsyncData(value: final despesas),
+      AsyncData(value: final pagamentos),
+      AsyncData(value: final compras)
+    ) =>
       _processData(despesas, pagamentos, compras),
     _ => (
         resumo: <String, PersonSummaryRecord>{},
@@ -59,27 +63,26 @@ final financeEngineProvider = Provider<FinanceState>((ref) {
   };
 });
 
-FinanceState _processData(
-  List<Despesa> despesas, 
-  List<Pagamento> pagamentos, 
-  List<CompraCartao> compras
-) {
+FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
+    List<CompraCartao> compras) {
   // 1. Map de indexação de pagamentos para busca O(1)
-  final pagMap = {for (final p in pagamentos) '${p.despesaId}-${p.pessoa}': p.pago};
-  
+  final pagMap = {
+    for (final p in pagamentos) '${p.despesaId}-${p.pessoa}': p.pago
+  };
+
   final despesasIndex = <String, DespesaItemRecord>{};
   final pendenteCasaPessoa = {for (final p in pessoas) p: 0.0};
   double totalDespesasCasa = 0.0;
   double arrecadadoFixo = 0.0;
-  
+
   // 2. Processamento de Despesas Fixas O(N)
   for (final d in despesas) {
     if (d.id == null) continue;
-    
+
     int totalPagos = 0;
     bool luanPago = false;
     final valorPorPessoa = d.valor / 3;
-    
+
     for (final p in pessoas) {
       final isPago = pagMap['${d.id}-$p'] ?? false;
       if (isPago) {
@@ -90,7 +93,7 @@ FinanceState _processData(
         pendenteCasaPessoa[p] = (pendenteCasaPessoa[p] ?? 0.0) + valorPorPessoa;
       }
     }
-    
+
     despesasIndex[d.id!] = (
       despesa: d,
       totalPagos: totalPagos,
@@ -100,7 +103,7 @@ FinanceState _processData(
     );
     totalDespesasCasa += d.valor;
   }
-  
+
   final comprasIndex = <String, CompraCartao>{};
   final comprasPorPessoa = {for (final p in pessoas) p: <CompraCartao>[]};
   final pendenteCartaoPessoa = {for (final p in pessoas) p: 0.0};
@@ -114,19 +117,21 @@ FinanceState _processData(
     comprasIndex[c.id!] = c;
     comprasPorPessoa[c.pessoa]?.add(c);
     totalGeralCompras += c.valor;
-    
+
     if (!c.pago) {
       if (c.pessoa == 'Luan') {
-        pendenteCartaoPessoa['Luan'] = (pendenteCartaoPessoa['Luan'] ?? 0.0) + c.valor;
+        pendenteCartaoPessoa['Luan'] =
+            (pendenteCartaoPessoa['Luan'] ?? 0.0) + c.valor;
       } else {
-        pendenteCartaoPessoa[c.pessoa] = (pendenteCartaoPessoa[c.pessoa] ?? 0.0) + c.valor;
+        pendenteCartaoPessoa[c.pessoa] =
+            (pendenteCartaoPessoa[c.pessoa] ?? 0.0) + c.valor;
         creditoCartaoLuan += c.valor;
       }
     } else {
       arrecadadoCartao += c.valor;
     }
   }
-  
+
   // 4. Agregação Final do Resumo
   final resumo = {
     for (final p in pessoas)
@@ -135,7 +140,9 @@ FinanceState _processData(
         pendenteCartao: pendenteCartaoPessoa[p] ?? 0.0,
         creditoCartao: p == 'Luan' ? creditoCartaoLuan : 0.0,
         totalGeral: p == 'Luan'
-            ? (pendenteCasaPessoa[p]! + pendenteCartaoPessoa[p]! - creditoCartaoLuan)
+            ? (pendenteCasaPessoa[p]! +
+                pendenteCartaoPessoa[p]! -
+                creditoCartaoLuan)
             : (pendenteCasaPessoa[p]! + pendenteCartaoPessoa[p]!),
       )
   };
