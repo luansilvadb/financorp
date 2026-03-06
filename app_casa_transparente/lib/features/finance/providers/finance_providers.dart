@@ -19,20 +19,48 @@ class DespesasNotifier extends AsyncNotifier<List<Despesa>> {
   }
 
   Future<void> addDespesa(Despesa d) async {
-    await ref.read(financeRepositoryProvider).saveDespesa(d);
-    ref.invalidateSelf();
+    final previousState = state;
+    // Optimistic: add with a placeholder (no id yet)
+    state = state.whenData((list) => [...list, d]);
+    try {
+      await ref.read(financeRepositoryProvider).saveDespesa(d);
+      // After server success, re-fetch to get the server-generated ID
+      ref.invalidateSelf();
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
+  }
+
+  Future<void> updateDespesa(Despesa d) async {
+    final previousState = state;
+    state = state.whenData(
+        (list) => list.map((item) => item.id == d.id ? d : item).toList());
+    try {
+      await ref.read(financeRepositoryProvider).saveDespesa(d);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
   }
 
   Future<void> deleteDespesa(String id) async {
-    await ref.read(financeRepositoryProvider).deleteDespesa(id);
-    ref.invalidateSelf();
+    final previousState = state;
+    state =
+        state.whenData((list) => list.where((item) => item.id != id).toList());
+    try {
+      await ref.read(financeRepositoryProvider).deleteDespesa(id);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
   }
 }
 
 final pagamentosProvider =
     AsyncNotifierProvider<PagamentosNotifier, List<Pagamento>>(() {
-      return PagamentosNotifier();
-    });
+  return PagamentosNotifier();
+});
 
 class PagamentosNotifier extends AsyncNotifier<List<Pagamento>> {
   @override
@@ -51,7 +79,6 @@ class PagamentosNotifier extends AsyncNotifier<List<Pagamento>> {
     final period = ref.read(periodProvider);
     final repo = ref.read(financeRepositoryProvider);
 
-    // Simple ID for payment relation: despesaId-pessoa-mes-ano
     final id = '$despesaId-$pessoa-${period.mes}-${period.ano}';
 
     final novoPagamento = Pagamento(
@@ -63,7 +90,24 @@ class PagamentosNotifier extends AsyncNotifier<List<Pagamento>> {
       pago: !currentStatus,
     );
 
-    await repo.upsertPagamento(novoPagamento);
-    ref.invalidateSelf();
+    // Optimistic: update or insert locally
+    final previousState = state;
+    state = state.whenData((list) {
+      final idx = list.indexWhere((p) => p.id == id);
+      if (idx >= 0) {
+        final updated = List<Pagamento>.from(list);
+        updated[idx] = novoPagamento;
+        return updated;
+      } else {
+        return [...list, novoPagamento];
+      }
+    });
+
+    try {
+      await repo.upsertPagamento(novoPagamento);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
   }
 }

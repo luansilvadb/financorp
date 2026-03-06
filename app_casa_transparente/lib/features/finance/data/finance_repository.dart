@@ -7,7 +7,7 @@ class FinanceRepository {
 
   Future<List<Despesa>> getDespesas() async {
     final response = await _supabase.from('despesas').select();
-    return (response as List).map((m) => Despesa.fromMap(m)).toList();
+    return (response as List).map((m) => Despesa.fromJson(m)).toList();
   }
 
   Future<List<Pagamento>> getPagamentos(int mes, int ano) async {
@@ -16,15 +16,15 @@ class FinanceRepository {
         .select()
         .eq('mes', mes)
         .eq('ano', ano);
-    return (response as List).map((m) => Pagamento.fromMap(m)).toList();
+    return (response as List).map((m) => Pagamento.fromJson(m)).toList();
   }
 
   Future<void> upsertPagamento(Pagamento pagamento) async {
-    await _supabase.from('pagamentos').upsert(pagamento.toMap());
+    await _supabase.from('pagamentos').upsert(pagamento.toJson());
   }
 
   Future<void> saveDespesa(Despesa despesa) async {
-    await _supabase.from('despesas').upsert(despesa.toMap());
+    await _supabase.from('despesas').upsert(despesa.toJson());
   }
 
   Future<void> deleteDespesa(String id) async {

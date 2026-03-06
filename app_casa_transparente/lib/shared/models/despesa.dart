@@ -1,32 +1,17 @@
-class Despesa {
-  final String? id; // Opcional para deixarmos o Supabase gerar
-  final String nome;
-  final int diaVencimento;
-  final double valor;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Despesa({
-    this.id,
-    required this.nome,
-    required this.diaVencimento,
-    required this.valor,
-  });
+part 'despesa.freezed.dart';
+part 'despesa.g.dart';
 
-  Map<String, dynamic> toMap() {
-    final map = <String, dynamic>{
-      'nome': nome,
-      'dia_vencimento': diaVencimento,
-      'valor': valor,
-    };
-    if (id != null) map['id'] = id;
-    return map;
-  }
+@freezed
+class Despesa with _$Despesa {
+  const factory Despesa({
+    String? id,
+    required String nome,
+    @JsonKey(name: 'dia_vencimento') required int diaVencimento,
+    required double valor,
+  }) = _Despesa;
 
-  factory Despesa.fromMap(Map<String, dynamic> map) {
-    return Despesa(
-      id: map['id']?.toString(),
-      nome: map['nome'] ?? '',
-      diaVencimento: (map['dia_vencimento'] as num?)?.toInt() ?? 0,
-      valor: (map['valor'] as num?)?.toDouble() ?? 0.0,
-    );
-  }
+  factory Despesa.fromJson(Map<String, dynamic> json) =>
+      _$DespesaFromJson(json);
 }

@@ -40,6 +40,7 @@ class CasaApp extends StatelessWidget {
     return MaterialApp(
       title: 'Casa Transparente',
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
         scaffoldBackgroundColor: kBackgroundLight,

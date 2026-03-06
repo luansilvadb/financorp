@@ -20,18 +20,52 @@ class CartaoNotifier extends AsyncNotifier<List<CompraCartao>> {
   }
 
   Future<void> addCompra(CompraCartao c) async {
-    await ref.read(cartaoRepositoryProvider).saveCompra(c);
-    ref.invalidateSelf();
+    final previousState = state;
+    state = state.whenData((list) => [...list, c]);
+    try {
+      await ref.read(cartaoRepositoryProvider).saveCompra(c);
+      // Re-fetch to get the server-generated UUID
+      ref.invalidateSelf();
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
+  }
+
+  Future<void> updateCompra(CompraCartao c) async {
+    final previousState = state;
+    state = state.whenData(
+        (list) => list.map((item) => item.id == c.id ? c : item).toList());
+    try {
+      await ref.read(cartaoRepositoryProvider).saveCompra(c);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
   }
 
   Future<void> deleteCompra(String id) async {
-    await ref.read(cartaoRepositoryProvider).deleteCompra(id);
-    ref.invalidateSelf();
+    final previousState = state;
+    state =
+        state.whenData((list) => list.where((item) => item.id != id).toList());
+    try {
+      await ref.read(cartaoRepositoryProvider).deleteCompra(id);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
   }
 
   Future<void> togglePagamento(CompraCartao c) async {
     final updated = c.copyWith(pago: !c.pago);
-    await ref.read(cartaoRepositoryProvider).saveCompra(updated);
-    ref.invalidateSelf();
+    final previousState = state;
+    state = state.whenData((list) =>
+        list.map((item) => item.id == c.id ? updated : item).toList());
+    try {
+      await ref.read(cartaoRepositoryProvider).saveCompra(updated);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
   }
 }

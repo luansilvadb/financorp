@@ -10,11 +10,11 @@ class CartaoRepository {
         .select()
         .eq('mes', mes)
         .eq('ano', ano);
-    return (response as List).map((m) => CompraCartao.fromMap(m)).toList();
+    return (response as List).map((m) => CompraCartao.fromJson(m)).toList();
   }
 
   Future<void> saveCompra(CompraCartao compra) async {
-    await _supabase.from('compras_cartao').upsert(compra.toMap());
+    await _supabase.from('compras_cartao').upsert(compra.toJson());
   }
 
   Future<void> deleteCompra(String id) async {

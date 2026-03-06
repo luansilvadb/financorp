@@ -15,8 +15,8 @@ The household of Luan, Luciana, and Giovanna suffers from:
 
 ## How It Should Work
 - Open the app → see your current status immediately (how much you owe, what's paid).
-- **Despesas tab**: View/add fixed bills, input monthly values, toggle payment status per person. Adds open via a dedicated Bottom Sheet for better UX.
-- **Cartão tab**: Log credit card purchases with date, description, value, and who made them. Mark purchases as paid once reimbursed. Adds open via a dedicated Bottom Sheet.
+- **Despesas tab**: Lista compacta de alta densidade mostrando nome, valor e status de pagamento consolidado (X/3 pagos). Toque no card abre um Bottom Sheet de detalhes com status por pessoa e botões de Editar/Excluir. Adições via FAB que abre Bottom Sheet dedicado.
+- **Cartão tab**: Lista compacta com descrição, pessoa, data e valor. Toque no ícone de status (trailing) alterna pago/pendente instantaneamente com feedback tátil. Toque no corpo do card abre Bottom Sheet de detalhes com Editar/Excluir. Adições via FAB.
 - **Resumo tab**: Full monthly breakdown per person — expenses, paid, pending, card debts.
 - Month/year selector in the header allows navigating between periods. Inclui navegação de ano explícita, transição inteligente (ex: Dez -> Jan avança o ano) e botão "Hoje" para retorno rápido ao mês corrente.
 

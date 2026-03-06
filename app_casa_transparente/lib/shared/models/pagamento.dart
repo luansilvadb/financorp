@@ -1,39 +1,19 @@
-class Pagamento {
-  final String id;
-  final String despesaId;
-  final String pessoa;
-  final int mes;
-  final int ano;
-  final bool pago;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Pagamento({
-    required this.id,
-    required this.despesaId,
-    required this.pessoa,
-    required this.mes,
-    required this.ano,
-    required this.pago,
-  });
+part 'pagamento.freezed.dart';
+part 'pagamento.g.dart';
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'despesa_id': despesaId,
-      'pessoa': pessoa,
-      'mes': mes,
-      'ano': ano,
-      'pago': pago,
-    };
-  }
+@freezed
+class Pagamento with _$Pagamento {
+  const factory Pagamento({
+    required String id,
+    @JsonKey(name: 'despesa_id') required String despesaId,
+    required String pessoa,
+    required int mes,
+    required int ano,
+    required bool pago,
+  }) = _Pagamento;
 
-  factory Pagamento.fromMap(Map<String, dynamic> map) {
-    return Pagamento(
-      id: map['id'] ?? '',
-      despesaId: map['despesa_id'] ?? '',
-      pessoa: map['pessoa'] ?? '',
-      mes: (map['mes'] as num?)?.toInt() ?? 0,
-      ano: (map['ano'] as num?)?.toInt() ?? 0,
-      pago: map['pago'] ?? false,
-    );
-  }
+  factory Pagamento.fromJson(Map<String, dynamic> json) =>
+      _$PagamentoFromJson(json);
 }
