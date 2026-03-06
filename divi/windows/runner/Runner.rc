@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.financorp" "\0"
-            VALUE "FileDescription", "app_casa_transparente" "\0"
+            VALUE "FileDescription", "divi" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "app_casa_transparente" "\0"
+            VALUE "InternalName", "divi" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.financorp. All rights reserved." "\0"
-            VALUE "OriginalFilename", "app_casa_transparente.exe" "\0"
-            VALUE "ProductName", "app_casa_transparente" "\0"
+            VALUE "OriginalFilename", "divi.exe" "\0"
+            VALUE "ProductName", "divi" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
