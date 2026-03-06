@@ -21,6 +21,7 @@
 - **Densidade em UI State**: Uso agressivo de **Dart 3 Records** nos Providers granulares, reduzindo o build-time e consumo de HEAP.
 - [x] **Isolamento Total de Rebuilds**: Cards escutam estritamente modificações em seu próprio UUID em tempo `O(1)` no motor.
 - [x] **Premium Bottom Navigation**: Barra de navegação com glassmorphism avançado, indicador "gooey" (liquid movement) e micro-interações táteis.
+- [x] **Splash Screen Premium**: Entrada animada com orquestração de inicialização do Supabase e transição via Fade.
 
 ## What's Left to Build 🔲
 - [ ] **User Authentication** — Login individual via Supabase Auth.
@@ -32,7 +33,7 @@
 ## Current Status
 **Phase**: Performance & Density Engine  
 **Version**: 3.0.0 (FinancorpEngine)  
-**Last delivered change**: `improve-bottom-nav-ux` — Upgrade da barra de navegação para estética premium com animações orgânicas.
+**Last delivered change**: `splash-screen-premium` — Splash Screen animada com orquestração de inicialização.
 
 ## Known Issues
 1. **Public Anon Access**: RLS aberto para `anon`. Requer Auth.

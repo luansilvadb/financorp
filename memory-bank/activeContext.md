@@ -19,6 +19,7 @@ The app has undergone a **performance engine optimization**, centralizing all fi
 13. **Optimistic UI** — Mutação local instantânea estado via `.copyWith()` combinada com fallback de erro global (SnackBar).
 14. **Performance Engine (O(N))** — Processamento centralizado "single-pass" (`FinancorpEngine`) substituindo loops O(P*N) espalhados, acoplado com Dart 3 Records para estados UI (zero boilerplate).
 15. **Premium Bottom Nav** — Upgrade para barra de navegação "gooey" com glassmorphism e micro-animações táteis.
+16. **Splash Screen Premium** — Implementação de splash screen animada com transição suave e orquestração de inicialização assíncrona.
 
 ## What Was Done (Archived Changes via OpenSpec)
 As seguintes mudanças foram propostas, implementadas e arquivadas:
@@ -41,7 +42,8 @@ As seguintes mudanças foram propostas, implementadas e arquivadas:
 17. `high-density-cards` — Cards compactos de alta densidade com Detail Sheets e one-tap payment.
 18. `optimistic-ui-and-freezed` — Migração de modelos de dados para Freezed e implementação de testes e Optimistic UI.
 19. `performance-engine-optimization` — Motor unificado O(N) (FinancorpEngine), substituição de UI states freezed por Records e reatividade granular extrema.
-20. `improve-bottom-nav-ux` — Rebrand premium da Bottom Navigation com animações orgânicas (gooey movement).
+20. `improve-bottom-nav-ux` — Rebrand premium da Bottom Navigation com animações orgânicas.
+21. `splash-screen-premium` — Splash Screen animada com orquestração de inicialização.
 
 ## Active Change (In Progress)
 Nenhuma mudança ativa no momento.

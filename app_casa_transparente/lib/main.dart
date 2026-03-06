@@ -16,22 +16,14 @@ import 'features/finance/views/resumo_tab.dart';
 import 'features/finance/views/widgets/add_expense_sheet.dart';
 import 'features/cartao/views/widgets/add_purchase_sheet.dart';
 import 'shared/widgets/premium_bottom_nav.dart';
+import 'core/views/splash_screen.dart';
 
 // ============================================================
 // App Entry
 // ============================================================
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Load environment variables
-  await dotenv.load(fileName: ".env");
-
-  await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL'] ?? '',
-    anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
-  );
-
   runApp(const ProviderScope(child: CasaApp()));
 }
 
@@ -49,7 +41,23 @@ class CasaApp extends StatelessWidget {
         scaffoldBackgroundColor: kBackgroundLight,
         colorScheme: ColorScheme.fromSeed(seedColor: kPrimaryColor),
       ),
-      home: const HomeScreen(),
+      home: SplashScreen(
+        initializationFuture: _initialize(),
+        onInitialized: () {
+          // Navigator is already available within the child context of SplashScreen's Material parent
+          // but we'll use the local context in the SplashScreen or a global key if needed.
+        },
+      ),
+    );
+  }
+
+  Future<void> _initialize() async {
+    // Load environment variables
+    await dotenv.load(fileName: ".env");
+
+    await Supabase.initialize(
+      url: dotenv.env['SUPABASE_URL'] ?? '',
+      anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
     );
   }
 }
