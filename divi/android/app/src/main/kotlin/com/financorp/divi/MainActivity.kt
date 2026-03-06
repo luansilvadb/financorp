@@ -1,4 +1,4 @@
-package com.financorp.app_casa_transparente
+package com.financorp.divi
 
 import io.flutter.embedding.android.FlutterActivity
 
