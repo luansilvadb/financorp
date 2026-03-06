@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../../shared/widgets/card_skeleton.dart';
 import '../../../shared/providers/month_year_provider.dart';
-import '../../../shared/widgets/person_summary_row.dart';
 import '../../../shared/constants.dart';
 
 import '../../../core/utils/formatters.dart';
 import '../providers/finance_providers.dart';
-import '../providers/resumo_provider.dart';
+import '../../../core/engine/finance_engine.dart';
 
-import 'widgets/add_expense_sheet.dart';
 import 'widgets/despesa_card.dart';
 
 class DespesasTab extends ConsumerWidget {
@@ -20,31 +18,14 @@ class DespesasTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final despesasAsync = ref.watch(despesasProvider);
     final period = ref.watch(periodProvider);
-    final totalCasa = ref.watch(totalDespesasCasaProvider);
+    final totalCasa = ref.watch(financeEngineProvider.select((s) => s.totalDespesasCasa));
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) => const AddExpenseSheet(),
-          );
-        },
-        backgroundColor: kPrimaryColor,
-        shape: const CircleBorder(),
-        elevation: 6,
-        child: PhosphorIcon(PhosphorIcons.plus(PhosphorIconsStyle.bold),
-            color: Colors.white, size: 32),
-      ),
       body: despesasAsync.when(
         data: (despesas) => ListView(
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 200),
           children: [
-            const PersonSummaryRow(),
-            const SizedBox(height: 32),
             // Expenses List Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,10 +76,17 @@ class DespesasTab extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             // Despesas Fixas — cada card é um ConsumerWidget isolado
-            ...despesas.map((d) => DespesaCard(despesa: d)),
+            ...despesas.where((d) => d.id != null).map((d) => DespesaCard(despesaId: d.id!)),
           ],
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => ListView(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 200),
+          children: const [
+            CardSkeleton(),
+            CardSkeleton(),
+            CardSkeleton(),
+          ],
+        ),
         error: (e, st) => Center(child: Text("Erro: $e")),
       ),
     );

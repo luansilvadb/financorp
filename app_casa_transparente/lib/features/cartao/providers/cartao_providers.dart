@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/cartao_repository.dart';
 import '../../../shared/models/compra_cartao.dart';
+import '../../../core/engine/finance_engine.dart';
 import '../../../shared/providers/month_year_provider.dart';
 
 final cartaoRepositoryProvider = Provider((ref) => CartaoRepository());
@@ -13,6 +14,7 @@ final cartaoProvider =
 class CartaoNotifier extends AsyncNotifier<List<CompraCartao>> {
   @override
   Future<List<CompraCartao>> build() async {
+    ref.keepAlive();
     final period = ref.watch(periodProvider);
     return ref
         .read(cartaoRepositoryProvider)
@@ -69,3 +71,14 @@ class CartaoNotifier extends AsyncNotifier<List<CompraCartao>> {
     }
   }
 }
+
+/// Provider granular que utiliza o motor central (O(1) access).
+final compraItemProvider = Provider.family<CompraItemRecord?, String>((ref, id) {
+  final compra = ref.watch(financeEngineProvider.select((s) => s.compras[id]));
+  if (compra == null) return null;
+
+  return (
+    compra: compra,
+    isLuan: compra.pessoa == 'Luan',
+  );
+});

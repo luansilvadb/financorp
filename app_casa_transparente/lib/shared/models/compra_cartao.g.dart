@@ -20,7 +20,7 @@ _$CompraCartaoImpl _$$CompraCartaoImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$CompraCartaoImplToJson(_$CompraCartaoImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      if (instance.id case final value?) 'id': value,
       'data': instance.data,
       'descricao': instance.descricao,
       'valor': instance.valor,

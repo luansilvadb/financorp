@@ -11,27 +11,28 @@
 - **Controle de Pagamentos (Cartão)**: Compras individuais no cartão podem ser marcadas como pagas e são abatidas do resumo geral instantaneamente.
 - **Cálculo de Resumo**: Dashboard dinâmico com barra de progresso do "Pote da Casa".
 - **Formatação BRL**: Máscaras de input e exibição profissional de moeda.
-- **UI/UX Moderna**: Rebrand completo das telas principais (Despesas, Cartão, Resumo) adotando a fonte Inter (via google_fonts), ícones PhosphorIcons e layout focado em usabilidade e clareza.
-- **Formulários Acessíveis**: Formulários com foco automático inteligente (Auto-scroll), botões flutuantes (FABs) e elementos responsivos para mobile-first.
-- **Navegação Inteligente de Período**: Correção da virada de ano (Dez/Jan), navegação de ano explícita e botão "Hoje".
-- **Formulários em Bottom Sheets**: Refatoração estética e funcional para melhorar a UX, desacoplando formulários das listas principais.
-- **Separação Estrita**: Aba de Despesas focada puramente no rateio da casa.
-- **FinTech Premium Rebrand**: Fonte Inter + PhosphorIcons em todas as views, nav bar e bottom sheets. Traço fino e uniforme, com alternância regular/fill para estados.
-- **High-Density Cards**: Cards de lista como `ConsumerWidget` compactos com Bottom Sheets de detalhe.
-- **Modelos Imutáveis (Freezed)**: Geração de serialização JSON e operador `copyWith` super rápido evitando problemas de reatividades residuais e bugs de igualdade (`==`).
-- **Optimistic UI**: Interface 0-lags e fluidas. Mutações e ações como deletar ou marcar pendências alteram os dados num piscar de olhos, garantindo UX Premium (Falhas acionam um rollback safe via Error global da Scaffold).
+- **UI/UX Moderna**: Rebrand completo com fonte Inter e ícones PhosphorIcons.
+- **Formulários Acessíveis**: Formulários com foco automático inteligente em Bottom Sheets.
+- **Navegação Inteligente de Período**: Correção da virada de ano e botão "Hoje".
+- **High-Density Cards**: Cards de lista como `ConsumerWidget` compactos com ações baseadas em Detail Sheets secundários.
+- **Modelos Imutáveis (Freezed)**: Core data protegido com geradores automáticos para `copyWith` e JSON serialization.
+- **Optimistic UI**: Mutação zero-lag com fallback automático global via SnackBar.
+- **Motor de Alta Performance (O(N))**: `FinancorpEngine` processando agregados e resumos em single-pass.
+- **Densidade em UI State**: Uso agressivo de **Dart 3 Records** nos Providers granulares, reduzindo o build-time e consumo de HEAP.
+- [x] **Isolamento Total de Rebuilds**: Cards escutam estritamente modificações em seu próprio UUID em tempo `O(1)` no motor.
+- [x] **Premium Bottom Navigation**: Barra de navegação com glassmorphism avançado, indicador "gooey" (liquid movement) e micro-interações táteis.
 
 ## What's Left to Build 🔲
 - [ ] **User Authentication** — Login individual via Supabase Auth.
 - [ ] **Receipt Image Upload** — Salvar fotos de notas fiscais no Supabase Storage.
 - [ ] **Offline Cache** — Cache local para funcionamento sem internet.
 - [ ] **Push Notifications** — Avisos de novas despesas ou cobranças amigáveis.
-- [ ] **Validação de Formulários**: Snackbars de erro para campos vazios ou falhas de rede.
+- [ ] **Validação de Formulários**: Refinamento adicional de validações cliente-side.
 
 ## Current Status
-**Phase**: Optimistic UI & Freezed Migration  
-**Version**: 2.8.0 (Optimistic State)  
-**Last delivered change**: `optimistic-ui-and-freezed` — Modelos mudaram para Freezed, UI reage em 0ms c/ Optimistic UI.
+**Phase**: Performance & Density Engine  
+**Version**: 3.0.0 (FinancorpEngine)  
+**Last delivered change**: `improve-bottom-nav-ux` — Upgrade da barra de navegação para estética premium com animações orgânicas.
 
 ## Known Issues
 1. **Public Anon Access**: RLS aberto para `anon`. Requer Auth.
@@ -46,10 +47,10 @@
 | **Database Identity** | Timestamp IDs | **Server-side UUIDs** | Relational best practices |
 | **Security** | Hardcoded Keys | **Dotenv (.env)** | Security best practices |
 | **Tesouraria** | Luan Paga Tudo | **Virtual Treasury** | Transparency for Luan's own share |
-| **Typography** | Manrope | **Inter (google_fonts)** | FinTech premium feel, precise number rendering |
-| **Icon Library** | Material Icons | **PhosphorIcons** | Unified thin stroke, premium FinTech aesthetic |
-| **Widget Granularity** | `_build` methods in Tabs | **Isolated ConsumerWidgets** | Prevent full-page rebuilds on single-item changes |
-| **Resumo Rendering** | Single `ref.watch(resumoProvider)` | **`.select()` per person** | Rebuild only the affected mini-card |
-| **Card Interaction** | Expandable accordion cards | **High-Density + Detail Sheets** | No layout shift, compact list, actions via Bottom Sheet |
-| **Data Models** | Maps e classes simples | **Anotações `@freezed`** | Tipagem rigorosa, métodos gerados, imutabilidade fácil |
+| **Typography** | Manrope | **Inter (google_fonts)** | FinTech premium feel |
+| **Icon Library** | Material Icons | **PhosphorIcons** | Unified thin stroke, premium aesthetic |
+| **Widget Granularity** | `_build` methods in Tabs | **Isolated `.select()` per ID** | Prevent full-page rebuilds |
+| **Data Models** | Maps e classes simples | **Anotações `@freezed`** | Tipagem rigorosa para Database Models |
+| **UI Item States** | Classes `@freezed` gen. | **Dart 3 Records** | Performance absoluta e zero-boilerplate para view-models |
+| **Data Processing** | Múltiplos Providers | **Single-Pass O(N) Engine** | Eliminar repetitivos loops O(P*N) nos resumos |
 | **Data Synchronization**| Pessimista (`ref.invalidate()`) | **Optimistic UI local state** | UX ágil, latência instantânea (0ms). |

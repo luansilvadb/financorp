@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/finance_repository.dart';
 import '../../../shared/models/despesa.dart';
 import '../../../shared/models/pagamento.dart';
+import '../../../core/engine/finance_engine.dart';
+
 import '../../../shared/providers/month_year_provider.dart';
 
 final financeRepositoryProvider = Provider((ref) => FinanceRepository());
@@ -65,6 +67,7 @@ final pagamentosProvider =
 class PagamentosNotifier extends AsyncNotifier<List<Pagamento>> {
   @override
   Future<List<Pagamento>> build() async {
+    ref.keepAlive();
     final period = ref.watch(periodProvider);
     return ref
         .read(financeRepositoryProvider)
@@ -111,3 +114,9 @@ class PagamentosNotifier extends AsyncNotifier<List<Pagamento>> {
     }
   }
 }
+
+/// Provider granular que utiliza o motor central (O(1) access).
+/// Isso isola a reconstrução do widget do card apenas para mudanças relevantes a este ID.
+final despesaItemProvider = Provider.family<DespesaItemRecord?, String>((ref, id) {
+  return ref.watch(financeEngineProvider.select((s) => s.despesas[id]));
+});

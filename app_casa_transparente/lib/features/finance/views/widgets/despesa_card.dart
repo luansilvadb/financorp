@@ -3,29 +3,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../shared/constants.dart';
-import '../../../../shared/models/despesa.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../providers/finance_providers.dart';
 
 import 'despesa_details_sheet.dart';
 
 class DespesaCard extends ConsumerWidget {
-  final Despesa despesa;
+  final String despesaId;
 
-  const DespesaCard({super.key, required this.despesa});
+  const DespesaCard({super.key, required this.despesaId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagamentos = ref.watch(pagamentosProvider).value ?? [];
+    // Escuta APENAS as mudanças relevantes para esta despesa específica
+    final itemState = ref.watch(despesaItemProvider(despesaId));
 
-    // Count how many of the 3 people have paid
-    final totalPago = pessoas
-        .where((p) => pagamentos.any(
-              (pag) =>
-                  pag.despesaId == despesa.id && pag.pessoa == p && pag.pago,
-            ))
-        .length;
-    final allPaid = totalPago == pessoas.length;
+    // Se o estado ainda não estiver carregado ou a despesa não existir
+    if (itemState == null) return const SizedBox.shrink();
+
+    final despesa = itemState.despesa;
+    final totalPago = itemState.totalPagos;
+    final allPaid = itemState.allPaid;
 
     return GestureDetector(
       onTap: () {
@@ -88,7 +86,7 @@ class DespesaCard extends ConsumerWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        "${fmt(despesa.valor / 3)} /pessoa",
+                        "${fmt(itemState.valorPorPessoa)} /pessoa",
                         style: const TextStyle(
                           fontSize: 12,
                           color: kSlate400,

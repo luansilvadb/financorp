@@ -196,7 +196,8 @@ class __$$CompraCartaoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(includeIfNull: false)
 class _$CompraCartaoImpl implements _CompraCartao {
   const _$CompraCartaoImpl(
       {this.id,

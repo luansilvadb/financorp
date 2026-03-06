@@ -13,6 +13,9 @@ import 'shared/constants.dart';
 import 'features/finance/views/despesas_tab.dart';
 import 'features/cartao/views/cartao_tab.dart';
 import 'features/finance/views/resumo_tab.dart';
+import 'features/finance/views/widgets/add_expense_sheet.dart';
+import 'features/cartao/views/widgets/add_purchase_sheet.dart';
+import 'shared/widgets/premium_bottom_nav.dart';
 
 // ============================================================
 // App Entry
@@ -64,6 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: Column(
         children: [
           _buildHeader(),
@@ -75,23 +79,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.8),
-          border: const Border(top: BorderSide(color: kSlate200)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _navBtn(0, PhosphorIcons.receipt(PhosphorIconsStyle.regular),
-                PhosphorIcons.receipt(PhosphorIconsStyle.fill), "Despesas"),
-            _navBtn(1, PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
-                PhosphorIcons.creditCard(PhosphorIconsStyle.fill), "Cartão"),
-            _navBtn(2, PhosphorIcons.chartBar(PhosphorIconsStyle.regular),
-                PhosphorIcons.chartBar(PhosphorIconsStyle.fill), "Resumo"),
-          ],
-        ),
+      floatingActionButton: _aba == 2
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => _aba == 0
+                      ? const AddExpenseSheet()
+                      : const AddPurchaseSheet(),
+                );
+              },
+              backgroundColor: kPrimaryColor,
+              shape: const CircleBorder(),
+              elevation: 4,
+              child: PhosphorIcon(PhosphorIcons.plus(PhosphorIconsStyle.bold),
+                  color: Colors.white, size: 32),
+            ),
+      bottomNavigationBar: PremiumBottomNav(
+        currentIndex: _aba,
+        onTap: (index) => setState(() => _aba = index),
+        items: [
+          PremiumNavItem(
+            iconRegular: PhosphorIcons.receipt(PhosphorIconsStyle.regular),
+            iconFill: PhosphorIcons.receipt(PhosphorIconsStyle.fill),
+            label: "Despesas",
+          ),
+          PremiumNavItem(
+            iconRegular: PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
+            iconFill: PhosphorIcons.creditCard(PhosphorIconsStyle.fill),
+            label: "Cartão",
+          ),
+          PremiumNavItem(
+            iconRegular: PhosphorIcons.chartBar(PhosphorIconsStyle.regular),
+            iconFill: PhosphorIcons.chartBar(PhosphorIconsStyle.fill),
+            label: "Resumo",
+          ),
+        ],
       ),
     );
   }
@@ -296,47 +322,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _navBtn(int idx, PhosphorIconData iconRegular,
-      PhosphorIconData iconFill, String label) {
-    final selected = _aba == idx;
-    return GestureDetector(
-      onTap: () => setState(() => _aba = idx),
-      behavior: HitTestBehavior.opaque,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (selected)
-            Container(
-              width: 4,
-              height: 4,
-              decoration: const BoxDecoration(
-                color: kPrimaryColor,
-                shape: BoxShape.circle,
-              ),
-            )
-          else
-            const SizedBox(height: 4),
-          const SizedBox(height: 2),
-          PhosphorIcon(
-            selected ? iconFill : iconRegular,
-            color: selected ? kPrimaryColor : kSlate400,
-            size: 24,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label.toUpperCase(),
-            style: TextStyle(
-              fontSize: 10,
-              color: selected ? kPrimaryColor : kSlate400,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.5,
-            ),
-          ),
-        ],
       ),
     );
   }

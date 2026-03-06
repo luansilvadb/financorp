@@ -4,14 +4,13 @@
 | Layer           | Technology                                  |
 |-----------------|---------------------------------------------|
 | Framework       | Flutter (Dart SDK ^3.1.0)                   |
-| State Mgmt      | **Flutter Riverpod (2.6.1)**               |
+| State Mgmt      | **Flutter Riverpod (2.6.1)**                |
 | Backend / DB    | **Supabase (PostgreSQL)**                   |
 | Env Management  | **flutter_dotenv (^6.0.0)**                 |
 | Schema Mgmt     | **Supabase CLI (Migrations)**               |
-| UI Library      | Material Design 3                           |
 | Typography      | **Google Fonts — Inter** (`google_fonts`)   |
 | Icon Library    | **Phosphor Icons** (`phosphor_flutter`)     |
-| Localization    | intl (BRL formatting)                       |
+| Code Generation | **Freezed** & **Json Serializable**         |
 
 ## Project Structure
 A estrutura foi modernizada para suportar múltiplos arquivos e separação de camadas.
@@ -22,53 +21,46 @@ d:\financorp\app_casa_transparente\
 │   └── migrations\             # Scripts SQL versionados
 ├── lib\
 │   ├── main.dart               # Entry point e orquestração de abas
-│   ├── core\                   # Utils e formatadores globais
-│   ├── shared\                 # Modelos, constantes e providers globais
-│   │   └── widgets\            # Widgets compartilhados (PersonSummaryRow)
+│   ├── core\                   # Utils, formatadores e o Motor Central (FinancorpEngine)
+│   ├── shared\                 # Modelos (Freezed), constantes e provedor de período
+│   │   └── widgets\            # Widgets compartilhados (PersonSummaryRow, Skeletons)
 │   └── features\               # Módulos de negócio (finance, cartao)
 │       └── [feature]\
 │           ├── data\           # Repositórios Supabase
-│           ├── providers\      # Notifiers Riverpod
-│           └── views\          # Telas e widgets
-│               └── widgets\    # Widgets isolados (DespesaCard, CartaoCard, Bottom Sheets)
-├── pubspec.yaml                # Dependências atualizadas
-└── .gitignore                  # Configurado para ignorar .env
+│           ├── providers\      # Notifiers Riverpod para CRUD e Optimistic UI
+│           └── views\          # Telas e widgets filhos
+├── pubspec.yaml                # Dependências
+└── .gitignore                  # Configurado para ignorar .env e arquivos gerados locais
 ```
 
 ## Dependencies (Updated)
-- `flutter_riverpod`: Gestão de estado reativa.
+- `flutter_riverpod`: Gestão de estado reativa de alta performance.
 - `supabase_flutter`: Cliente oficial para banco de dados assíncrono.
 - `flutter_dotenv`: Carregamento seguro de chaves de API.
 - `intl`: Formatação de data e moeda brasileira.
-- `google_fonts`: Fornece a fonte **Inter** via `GoogleFonts.interTextTheme()` no ThemeData global.
+- `google_fonts`: Fornece a fonte **Inter**.
 - `phosphor_flutter`: Ícones **PhosphorIcons** para visual FinTech premium.
-- `freezed_annotation` / `json_annotation`: Anotações para código gerado para modelos imutáveis e serialização. (Usados junto com `freezed`, `build_runner` e `json_serializable` em `dev_dependencies`).
+- `freezed_annotation` / `json_annotation`: Anotações para modelos imutáveis com serialização em conjunto com o pacote `build_runner`.
 
 ## Development Setup
 - **CLI**: Supabase CLI instalado para gerenciamento de migrations.
 - **Run command**: `flutter run`
 - **Migration command**: `npx supabase db push`
+- **Build runner**: `dart run build_runner build --delete-conflicting-outputs` (gerar/atualizar arquivos `.freezed.dart` e `.g.dart`).
 
 ## Technical Constraints (Resolved)
 - ~~Persistence~~: **Implementada** via Supabase.
 - ~~Single-file architecture~~: **Refatorada** para estrutura modular.
+- ~~Rebuilds monolíticos e lógicas repetidas~~: **Resolvido** — Implementado o `FinancorpEngine` com mapeamento O(N) e acesso O(1) combinados com `.select()` do Riverpod, além do uso extensivo de Dart 3 Records.
+- ~~Ícones genéricos / Fonte padrão~~: **Resolvido** — Substituídos por PhosphorIcons e Inter.
 - ~~Auth~~: **Semi-implementada** (Uso de chave `anon` com RLS liberado. Próximo passo é login individual).
-- ~~Ícones genéricos~~: **Resolvido** — Todos os Material Icons substituídos por PhosphorIcons para visual FinTech premium.
-- ~~Fonte padrão~~: **Resolvido** — Manrope substituída por Inter via google_fonts.
-- ~~Rebuilds monolíticos~~: **Resolvido** — Cards de alta densidade como `ConsumerWidget` + Detail Sheets + `.select()` nos resumos.
 
 ## Storage Decisions
-- **UUIDs**: Gerenciados diretamente pelo servidor PostgreSQL para garantir unicidade sem colisões locais.
-- **Relational Integrity**: Uso de `REFERENCES` with `ON DELETE CASCADE` para garantir que pagamentos sejam limpos se uma despesa for removida.
-- **Security**: RLS ativo nas tabelas com políticas permitindo acesso público (chave anon) para simplificação inicial.
+- **UUIDs**: Gerenciados diretamente pelo servidor PostgreSQL.
+- **Relational Integrity**: Uso de `REFERENCES` with `ON DELETE CASCADE`.
+- **Security**: RLS ativo nas tabelas com políticas permitindo acesso público temporário (anon).
 
-## Icon/Font Migration Notes
-- `PhosphorIconData` extends `IconData`, portanto é compatível com parâmetros `IconData`. Porém, para renderização correta, sempre usar `PhosphorIcon(...)` widget em vez de `Icon(...)`.
-- `PhosphorIcons.xxx(PhosphorIconsStyle.regular)` é uma chamada de método, **não pode** ser usada em expressões `const`. Remover `const` de widgets pai quando necessário.
-- A NavBar usa alternância `regular`/`fill` para indicar estado ativo vs inativo.
-
-## Performance Optimization Notes
-- **Widgets de lista de alta densidade**: `DespesaCard` e `CartaoCard` são `ConsumerWidget` sem estado local. Toque no corpo abre Detail Sheet; toque no ícone (no Cartão) alterna estado de pagamento.
-- **Optimistic UI em Providers**: Notifiers modificam o `state.whenData()` localmente logo após a ação, aplicando feedback instantâneo sem depender da latência da requisição HTTP (`ref.invalidateSelf()` não é usado exceto se precisamos sincronizar o DB). Rollbacks ocorrem apenas em cenários de erro via `try-catch`.
-- **Tabs leves e .select()**: `DespesasTab`/`CartaoTab` são `ConsumerWidget`. `PersonSummaryRow` escuta seletivamente as changes dos stats de resumo. 
-- **Detail Bottom Sheets**: Menus contextuais com ações de Editar/Excluir, mantendo as listas visualmente simples.
+## Performance Optimization Notes (FinancorpEngine)
+- O **FinancorpEngine** varre todos os dados brutos de Despesas, Pagamentos e Compras uma única vez em tempo linear **O(N)**.
+- O Motor dispensa inteiramente o uso de listas dentro dos widgets, fornecendo **Mapas** estritamente tipados baseados em Dart 3 **Records**. Isso permite seleções pontuais (O(1) Access) usando Riverpod (`ref.watch(financeEngineProvider.select((s) => s.despesas[id]))`), mantendo o framerate cravado em **60fps** em telas com alto volume de interações "Optimistic".
+- Classes `freezed` para representar estados visuais voláteis foram substituídas por **Records** com campos nomeados, que eliminam o tempo do build runner e oferecem o mesmo nível de imutabilidade sem custos de runtime de POO tradicionais.

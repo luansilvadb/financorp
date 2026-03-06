@@ -16,7 +16,7 @@ _$DespesaImpl _$$DespesaImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$DespesaImplToJson(_$DespesaImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      if (instance.id case final value?) 'id': value,
       'nome': instance.nome,
       'dia_vencimento': instance.diaVencimento,
       'valor': instance.valor,

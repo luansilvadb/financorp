@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import '../../features/finance/providers/resumo_provider.dart';
+import '../../core/engine/finance_engine.dart';
 import '../../core/utils/formatters.dart';
 import '../constants.dart';
 
@@ -35,9 +35,9 @@ class _PersonMiniCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Escuta APENAS a fatia desse usuário no mapa de resumos
+    // Escuta APENAS a fatia desse usuário no mapa de resumos no motor unificado
     final summary = ref.watch(
-      resumoProvider.select((summaries) => summaries[pessoa]),
+      financeEngineProvider.select((s) => s.resumo[pessoa]),
     );
 
     if (summary == null) return const SizedBox();

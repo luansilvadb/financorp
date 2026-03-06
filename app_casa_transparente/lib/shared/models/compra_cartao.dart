@@ -5,6 +5,7 @@ part 'compra_cartao.g.dart';
 
 @freezed
 class CompraCartao with _$CompraCartao {
+  @JsonSerializable(includeIfNull: false)
   const factory CompraCartao({
     String? id,
     required String data,

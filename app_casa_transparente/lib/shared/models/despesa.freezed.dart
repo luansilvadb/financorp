@@ -142,7 +142,8 @@ class __$$DespesaImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(includeIfNull: false)
 class _$DespesaImpl implements _Despesa {
   const _$DespesaImpl(
       {this.id,

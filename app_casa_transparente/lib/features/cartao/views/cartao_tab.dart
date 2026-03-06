@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import '../../../shared/widgets/card_skeleton.dart';
 import '../../../shared/providers/month_year_provider.dart';
 import '../../../shared/constants.dart';
-import '../../../shared/models/compra_cartao.dart';
+
 import '../../../core/utils/formatters.dart';
 import '../providers/cartao_providers.dart';
+import '../../../core/engine/finance_engine.dart';
 
-import 'widgets/add_purchase_sheet.dart';
 import 'widgets/cartao_card.dart';
 
 class CartaoTab extends ConsumerWidget {
@@ -17,117 +17,54 @@ class CartaoTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final comprasAsync = ref.watch(cartaoProvider);
     final period = ref.watch(periodProvider);
+    // Consome os dados já agrupados e indexados pelo motor (O(1) access na View)
+    final grouped = ref.watch(financeEngineProvider.select((s) => s.comprasPorPessoa));
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) => const AddPurchaseSheet(),
+      body: comprasAsync.when(
+        data: (compras) {
+
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 200),
+            children: [
+              _buildLancamentosHeader(period),
+              const SizedBox(height: 16),
+              // Renderizar grupos filtrando quem não tem lançamentos
+              ...grouped.entries.where((e) => e.value.isNotEmpty).expand((entry) {
+                final pessoa = entry.key;
+                final itens = entry.value;
+                final subtotal = itens.fold(0.0, (acc, c) => acc + c.valor);
+
+                return [
+                  _buildGroupHeader(pessoa, subtotal),
+                  ...itens.where((c) => c.id != null).map((c) => CartaoCard(compraId: c.id!)),
+                  const SizedBox(height: 16),
+                ];
+              }),
+              if (compras.isEmpty)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 40),
+                    child: Text(
+                      "Nenhum lançamento este mês",
+                      style: TextStyle(color: kSlate400, fontSize: 14),
+                    ),
+                  ),
+                ),
+            ],
           );
         },
-        backgroundColor: kPrimaryColor,
-        shape: const CircleBorder(),
-        elevation: 6,
-        child: PhosphorIcon(PhosphorIcons.plus(PhosphorIconsStyle.bold),
-            color: Colors.white, size: 32),
-      ),
-      body: comprasAsync.when(
-        data: (compras) => ListView(
+        loading: () => ListView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 200),
-          children: [
-            _buildSummary(compras),
-            const SizedBox(height: 32),
-            _buildLancamentosHeader(period),
-            const SizedBox(height: 16),
-            // Cada compra é agora um ConsumerStatefulWidget isolado
-            ...compras.map((c) => CartaoCard(compra: c)),
+          children: const [
+            CardSkeleton(),
+            CardSkeleton(),
+            CardSkeleton(),
           ],
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text("Erro: $e")),
       ),
-    );
-  }
-
-  Widget _buildSummary(List<CompraCartao> compras) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "RESUMO DE DÍVIDAS",
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w900,
-            color: kSlate400,
-            letterSpacing: 1.2,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: ["Luciana", "Giovanna"].map((p) {
-            // Filtrar apenas compras não pagas para o resumo de dívidas
-            final total = compras
-                .where((c) => c.pessoa == p && !c.pago)
-                .fold(0.0, (a, b) => a + b.valor);
-            final hasDebt = total > 0;
-
-            return Expanded(
-              child: Container(
-                margin: EdgeInsets.only(
-                  right: p == "Luciana" ? 12 : 0,
-                ),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: kSlate100),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      p,
-                      style: const TextStyle(
-                        color: kSlate500,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Text(
-                      fmt(total),
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: hasDebt ? kPrimaryColor : kSlate400,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      hasDebt ? "Pendente" : "Sem pendências",
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: kSlate400,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
     );
   }
 
@@ -153,6 +90,47 @@ class CartaoTab extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildGroupHeader(String pessoa, double subtotal) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12, left: 4, right: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 4,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: coresPessoa[pessoa] ?? kPrimaryColor,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                pessoa.toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w900,
+                  color: kSlate900,
+                  letterSpacing: 1.0,
+                ),
+              ),
+            ],
+          ),
+          Text(
+            fmt(subtotal),
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+              color: coresPessoa[pessoa]?.withOpacity(0.8) ?? kPrimaryColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@ part 'despesa.g.dart';
 
 @freezed
 class Despesa with _$Despesa {
+  @JsonSerializable(includeIfNull: false)
   const factory Despesa({
     String? id,
     required String nome,
