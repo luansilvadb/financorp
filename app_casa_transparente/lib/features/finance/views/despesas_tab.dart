@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../shared/providers/month_year_provider.dart';
 import '../../../shared/widgets/person_summary_row.dart';
@@ -49,7 +50,8 @@ class _DespesasTabState extends ConsumerState<DespesasTab> {
         backgroundColor: kPrimaryColor,
         shape: const CircleBorder(),
         elevation: 6,
-        child: const Icon(Icons.add_rounded, color: Colors.white, size: 32),
+        child: PhosphorIcon(PhosphorIcons.plus(PhosphorIconsStyle.bold),
+            color: Colors.white, size: 32),
       ),
       body: despesasAsync.when(
         data: (despesas) => ListView(
@@ -149,8 +151,8 @@ class _DespesasTabState extends ConsumerState<DespesasTab> {
             onTap: () => setState(() => expandedId = isExpanded ? null : d.id),
             behavior: HitTestBehavior.opaque,
             child: Container(
-              decoration: BoxDecoration(
-                border: const Border(
+              decoration: const BoxDecoration(
+                border: Border(
                   left: BorderSide(
                     color: Colors.transparent,
                     width: 4,
@@ -269,7 +271,11 @@ class _DespesasTabState extends ConsumerState<DespesasTab> {
                                 ),
                                 const SizedBox(height: 4),
                                 Icon(
-                                  pago ? Icons.check_circle : Icons.cancel,
+                                  pago
+                                      ? PhosphorIcons.checkCircle(
+                                          PhosphorIconsStyle.fill)
+                                      : PhosphorIcons.xCircle(
+                                          PhosphorIconsStyle.fill),
                                   color: color,
                                   size: 20,
                                 ),
@@ -293,7 +299,10 @@ class _DespesasTabState extends ConsumerState<DespesasTab> {
                               builder: (context) => AddExpenseSheet(expense: d),
                             );
                           },
-                          icon: const Icon(Icons.edit_outlined, size: 18),
+                          icon: PhosphorIcon(
+                              PhosphorIcons.pencilSimple(
+                                  PhosphorIconsStyle.regular),
+                              size: 18),
                           label: const Text(
                             "Editar",
                             style: TextStyle(
@@ -319,7 +328,9 @@ class _DespesasTabState extends ConsumerState<DespesasTab> {
                           onPressed: () => ref
                               .read(despesasProvider.notifier)
                               .deleteDespesa(d.id!),
-                          icon: const Icon(Icons.delete_outline, size: 18),
+                          icon: PhosphorIcon(
+                              PhosphorIcons.trash(PhosphorIconsStyle.regular),
+                              size: 18),
                           label: const Text(
                             "Excluir",
                             style: TextStyle(
@@ -346,6 +357,4 @@ class _DespesasTabState extends ConsumerState<DespesasTab> {
       ),
     );
   }
-
 }
-

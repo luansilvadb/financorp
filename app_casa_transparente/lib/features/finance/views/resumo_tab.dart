@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../shared/constants.dart';
 import '../../../core/utils/formatters.dart';
 import '../providers/resumo_provider.dart';
@@ -65,8 +66,10 @@ class ResumoTab extends ConsumerWidget {
                   color: kPrimaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.savings_outlined,
-                    color: kPrimaryColor, size: 28),
+                child: PhosphorIcon(
+                    PhosphorIcons.piggyBank(PhosphorIconsStyle.regular),
+                    color: kPrimaryColor,
+                    size: 28),
               ),
               const SizedBox(width: 12),
               const Column(
@@ -327,15 +330,15 @@ class ResumoTab extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.info_outline, color: kPrimaryColor, size: 20),
+          PhosphorIcon(PhosphorIcons.info(PhosphorIconsStyle.regular),
+              color: kPrimaryColor, size: 20),
           const SizedBox(width: 8),
           RichText(
             text: TextSpan(
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: kSlate600,
-                fontFamily: 'Manrope',
               ),
               children: [
                 const TextSpan(text: "Custo Total da Casa: "),

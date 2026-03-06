@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 // Core & Shared
 import 'shared/providers/month_year_provider.dart';
@@ -39,7 +41,7 @@ class CasaApp extends StatelessWidget {
       title: 'Casa Transparente',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'Manrope',
+        textTheme: GoogleFonts.interTextTheme(),
         scaffoldBackgroundColor: kBackgroundLight,
         colorScheme: ColorScheme.fromSeed(seedColor: kPrimaryColor),
       ),
@@ -81,9 +83,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _navBtn(0, Icons.receipt_long, "Despesas"),
-            _navBtn(1, Icons.credit_card, "Cartão"),
-            _navBtn(2, Icons.analytics, "Resumo"),
+            _navBtn(0, PhosphorIcons.receipt(PhosphorIconsStyle.regular),
+                PhosphorIcons.receipt(PhosphorIconsStyle.fill), "Despesas"),
+            _navBtn(1, PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
+                PhosphorIcons.creditCard(PhosphorIconsStyle.fill), "Cartão"),
+            _navBtn(2, PhosphorIcons.chartBar(PhosphorIconsStyle.regular),
+                PhosphorIcons.chartBar(PhosphorIconsStyle.fill), "Resumo"),
           ],
         ),
       ),
@@ -106,7 +111,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Icons.home_outlined, color: kPrimaryColor, size: 32),
+              PhosphorIcon(PhosphorIcons.bank(PhosphorIconsStyle.regular),
+                  color: kPrimaryColor, size: 32),
               Row(
                 children: [
                   if (period.mes != (DateTime.now().month - 1) ||
@@ -114,7 +120,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     TextButton.icon(
                       onPressed: () =>
                           ref.read(periodProvider.notifier).resetToToday(),
-                      icon: const Icon(Icons.today, size: 18, color: kPrimaryColor),
+                      icon: PhosphorIcon(
+                          PhosphorIcons.calendarBlank(
+                              PhosphorIconsStyle.regular),
+                          size: 18,
+                          color: kPrimaryColor),
                       label: const Text(
                         "HOJE",
                         style: TextStyle(
@@ -134,7 +144,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const SizedBox(width: 8),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.search, color: kSlate900),
+                    icon: PhosphorIcon(
+                        PhosphorIcons.magnifyingGlass(
+                            PhosphorIconsStyle.regular),
+                        color: kSlate900),
                     style: IconButton.styleFrom(
                       backgroundColor: kSlate100,
                       padding: const EdgeInsets.all(8),
@@ -182,9 +195,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           InkWell(
             onTap: () => ref.read(periodProvider.notifier).prevYear(),
             borderRadius: BorderRadius.circular(8),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 4),
-              child: Icon(Icons.chevron_left, size: 18, color: kSlate400),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: PhosphorIcon(
+                  PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
+                  size: 18,
+                  color: kSlate400),
             ),
           ),
           Center(
@@ -200,9 +216,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           InkWell(
             onTap: () => ref.read(periodProvider.notifier).nextYear(),
             borderRadius: BorderRadius.circular(8),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 4),
-              child: Icon(Icons.chevron_right, size: 18, color: kSlate400),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: PhosphorIcon(
+                  PhosphorIcons.caretRight(PhosphorIconsStyle.bold),
+                  size: 18,
+                  color: kSlate400),
             ),
           ),
           const SizedBox(width: 4),
@@ -222,7 +241,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (targetMonth < 0) targetMonth = 11;
     if (targetMonth > 11) targetMonth = 0;
 
-    final isActualToday = ref.watch(periodProvider.notifier).isToday(targetMonth);
+    final isActualToday =
+        ref.watch(periodProvider.notifier).isToday(targetMonth);
 
     return Expanded(
       child: GestureDetector(
@@ -279,8 +299,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-
-  Widget _navBtn(int idx, IconData icon, String label) {
+  Widget _navBtn(int idx, PhosphorIconData iconRegular,
+      PhosphorIconData iconFill, String label) {
     final selected = _aba == idx;
     return GestureDetector(
       onTap: () => setState(() => _aba = idx),
@@ -300,11 +320,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           else
             const SizedBox(height: 4),
           const SizedBox(height: 2),
-          Icon(
-            icon,
+          PhosphorIcon(
+            selected ? iconFill : iconRegular,
             color: selected ? kPrimaryColor : kSlate400,
             size: 24,
-            fill: selected ? 1.0 : 0.0,
           ),
           const SizedBox(height: 4),
           Text(

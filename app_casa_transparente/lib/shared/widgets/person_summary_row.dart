@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../features/finance/providers/resumo_provider.dart';
 import '../../core/utils/formatters.dart';
 import '../constants.dart';
@@ -58,8 +59,11 @@ class PersonSummaryRow extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    Icon(
-                      ok ? Icons.check_circle : Icons.error,
+                    PhosphorIcon(
+                      ok
+                          ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
+                          : PhosphorIcons.warningCircle(
+                              PhosphorIconsStyle.fill),
                       color: ok ? kGreen500 : kRed500,
                       size: 16,
                     ),

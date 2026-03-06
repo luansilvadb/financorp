@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../shared/constants.dart';
 import '../../../../shared/models/despesa.dart';
@@ -78,8 +79,12 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
                     color: kPrimaryColor.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                      isEditing ? Icons.edit_note_rounded : Icons.add_task_rounded,
+                  child: PhosphorIcon(
+                      isEditing
+                          ? PhosphorIcons.pencilSimple(
+                              PhosphorIconsStyle.regular)
+                          : PhosphorIcons.plusCircle(
+                              PhosphorIconsStyle.regular),
                       color: kPrimaryColor,
                       size: 24),
                 ),
@@ -95,13 +100,14 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
               ],
             ),
             const SizedBox(height: 24),
-            _field("NOME DA CONTA", _nomeCtrl, Icons.description_outlined,
+            _field("NOME DA CONTA", _nomeCtrl,
+                PhosphorIcons.textAlignLeft(PhosphorIconsStyle.regular),
                 placeholder: "Ex: Aluguel, Luz..."),
             const SizedBox(height: 20),
             _field(
               "VALOR TOTAL",
               _valorCtrl,
-              Icons.payments_outlined,
+              PhosphorIcons.currencyDollar(PhosphorIconsStyle.regular),
               placeholder: "0,00",
               keyboardType: TextInputType.number,
               formatters: [BrlCurrencyInputFormatter()],
@@ -110,7 +116,7 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
             _field(
               "DIA DO VENCIMENTO",
               _vencCtrl,
-              Icons.calendar_month_outlined,
+              PhosphorIcons.calendarBlank(PhosphorIconsStyle.regular),
               placeholder: "Ex: 5",
               keyboardType: TextInputType.number,
             ),
@@ -215,9 +221,8 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
           decoration: InputDecoration(
             hintText: placeholder,
             hintStyle: TextStyle(
-                color: kSlate400.withOpacity(0.6),
-                fontWeight: FontWeight.w500),
-            prefixIcon: Icon(icon, color: kPrimaryColor, size: 22),
+                color: kSlate400.withOpacity(0.6), fontWeight: FontWeight.w500),
+            prefixIcon: PhosphorIcon(icon, color: kPrimaryColor, size: 22),
             filled: true,
             fillColor: kSlate100,
             enabledBorder: OutlineInputBorder(

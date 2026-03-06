@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../shared/providers/month_year_provider.dart';
 import '../../../shared/constants.dart';
 import '../../../shared/models/compra_cartao.dart';
@@ -44,7 +45,8 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
         backgroundColor: kPrimaryColor,
         shape: const CircleBorder(),
         elevation: 6,
-        child: const Icon(Icons.add_rounded, color: Colors.white, size: 32),
+        child: PhosphorIcon(PhosphorIcons.plus(PhosphorIconsStyle.bold),
+            color: Colors.white, size: 32),
       ),
       body: comprasAsync.when(
         data: (compras) => ListView(
@@ -214,8 +216,10 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
                       color: color.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      c.pago ? Icons.check_circle : Icons.restaurant,
+                    child: PhosphorIcon(
+                      c.pago
+                          ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
+                          : PhosphorIcons.forkKnife(PhosphorIconsStyle.regular),
                       color: color,
                       size: 20,
                     ),
@@ -288,7 +292,10 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
                   const SizedBox(height: 16),
                   _buildActionBtn(
                     label: c.pago ? "Marcar Pendente" : "Marcar como Pago",
-                    icon: c.pago ? Icons.undo : Icons.check_circle_outline,
+                    icon: c.pago
+                        ? PhosphorIcons.arrowCounterClockwise(
+                            PhosphorIconsStyle.regular)
+                        : PhosphorIcons.checkCircle(PhosphorIconsStyle.regular),
                     color: c.pago ? kSlate600 : kGreen500,
                     onTap: () {
                       ref.read(cartaoProvider.notifier).togglePagamento(c);
@@ -302,14 +309,16 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
                       Expanded(
                         child: _buildActionBtn(
                           label: "Editar",
-                          icon: Icons.edit_outlined,
+                          icon: PhosphorIcons.pencilSimple(
+                              PhosphorIconsStyle.regular),
                           color: kPrimaryColor,
                           onTap: () {
                             showModalBottomSheet(
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
-                              builder: (context) => AddPurchaseSheet(purchase: c),
+                              builder: (context) =>
+                                  AddPurchaseSheet(purchase: c),
                             );
                           },
                         ),
@@ -318,7 +327,7 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
                       Expanded(
                         child: _buildActionBtn(
                           label: "Excluir",
-                          icon: Icons.delete_outline,
+                          icon: PhosphorIcons.trash(PhosphorIconsStyle.regular),
                           color: kRed500,
                           onTap: () {
                             ref
@@ -357,7 +366,7 @@ class _CartaoTabState extends ConsumerState<CartaoTab> {
         ),
         child: Column(
           children: [
-            Icon(icon, color: color, size: 20),
+            PhosphorIcon(icon, color: color, size: 20),
             const SizedBox(height: 4),
             Text(
               label,
