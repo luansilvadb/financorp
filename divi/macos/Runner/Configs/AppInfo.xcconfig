@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = app_casa_transparente
+PRODUCT_NAME = divi
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.financorp.appCasaTransparente
+PRODUCT_BUNDLE_IDENTIFIER = com.financorp.divi
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2026 com.financorp. All rights reserved.

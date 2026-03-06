@@ -15,7 +15,7 @@
 ## Project Structure
 A estrutura foi modernizada para suportar múltiplos arquivos e separação de camadas.
 ```
-d:\financorp\app_casa_transparente\
+d:\financorp\divi\
 ├── .env                        # Chaves do Supabase (ignorado no git)
 ├── supabase\                   # Configuração e Migrations do DB
 │   └── migrations\             # Scripts SQL versionados
