@@ -50,14 +50,22 @@ const avataresPessoa = {
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDnIzmHTTjmIjsYpMJNrP7AmMFitdfOqNNMZIqSGVe6B9DtUPrnNhO4nOylR2pGKD9s4tUO9rfdG_oEGlUHEQDnl3BZeEdeMnBr100NO-Awv2LmZgy-jHzicfHYWgwtGmy5fAHwNXIaeTG2yPEF0U4y9UfQVloa176F1PQFC4jmbozRDWuTR5y-IPO5e4fuJtnjerft8z-0mAo4Si3QiZuNk20eYVkHBjAkB_rgc6Tq10N8B1dWvDw3OvgYoGNB6Sa8o_KbQJhlHNs",
 };
 
-const kPrimaryColor = Color(0xFF195de6);
-const kBackgroundLight = Color(0xFFF6F6F8);
-const kBackgroundDark = Color(0xFF111621);
-const kSlate900 = Color(0xFF0F172A);
-const kSlate600 = Color(0xFF475569);
-const kSlate500 = Color(0xFF64748B);
-const kSlate400 = Color(0xFF94A3B8);
-const kSlate200 = Color(0xFFE2E8F0);
-const kSlate100 = Color(0xFFF1F5F9);
-const kGreen500 = Color(0xFF22C55E);
-const kRed500 = Color(0xFFEF4444);
+const kPrimaryColor = Color(0xFFE63819); // Primary / Debt
+const kPaper = Color(0xFFF4F1EA); // Warm off-white
+const kInk = Color(0xFF2C2C2C); // Black toner
+const kInkFaded = Color(0xFF6B6B6B);
+const kLine = Color(0xFFD1CDC5);
+const kPaid = Color(0xFF2A7F62);
+const kHighlight = Color(0xFFFCEDA8);
+
+// Remaining values for compatibility until removed
+const kBackgroundLight = kPaper;
+const kBackgroundDark = kInk;
+const kSlate900 = kInk;
+const kSlate600 = kInkFaded;
+const kSlate500 = kInkFaded;
+const kSlate400 = kLine;
+const kSlate200 = kLine;
+const kSlate100 = Color(0xFFFFFFFF); // White paper layer
+const kGreen500 = kPaid;
+const kRed500 = kPrimaryColor;

@@ -14,14 +14,16 @@ DIVI ("Divida sem Dívida") is a Flutter mobile application for transparent fina
 - Provide real-time transparency so everyone sees their obligations clearly.
 - Keep the UI simple and accessible for non-tech-savvy users (Luciana and Giovanna).
 - Inhibit late/missing payments through visibility and accountability.
+- Deliver a responsive, premium "FinTech" aesthetic with immediate (optimistic) network interactions for a zero-friction experience.
 
-## Tech Stack (v2.0)
-- **Framework**: Flutter (Dart SDK ^3.0.0)
+## Tech Stack (v3.2.0)
+- **Framework**: Flutter (Dart SDK ^3.1.0)
 - **Backend**: Supabase (PostgreSQL + Auth + Storage)
-- **State Management**: Riverpod (^3.2.1)
-- **Env Management**: flutter_dotenv (^5.1.0)
-- **Methodology**: Feature-First Modular Architecture
+- **State Management**: Riverpod (2.6.1)
+- **Env Management**: flutter_dotenv (^6.0.0)
+- **Methodology**: Feature-First Modular Architecture, Single-Pass Engine (O(N)), Optimistic UI
 - **Change Management**: OpenSpec workflow
+- **UI/UX System**: FinTech Premium Aesthetic (Inter Font, PhosphorIcons, Glassmorphism)
 
 ## Users
 | User      | Role                                            |

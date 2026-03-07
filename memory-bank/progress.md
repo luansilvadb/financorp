@@ -20,7 +20,7 @@
 - [x] **Motor de Alta Performance (O(N))**: `DiviEngine` processando agregados e resumos em single-pass.
 - [x] **Densidade em UI State**: Uso agressivo de **Dart 3 Records** nos Providers granulares, reduzindo o build-time e consumo de HEAP.
 - [x] **Isolamento Total de Rebuilds**: Cards escutam estritamente modificações em seu próprio UUID em tempo `O(1)` no motor.
-- [x] **Premium Bottom Navigation**: Barra de navegação com glassmorphism avançado, indicador "gooey" (liquid movement) e micro-interações táteis.
+- [x] **Premium Bottom Navigation**: Barra de navegação com glassmorphism avançado e morph independente (Fade/Scale) por aba ativa.
 - [x] **Splash Screen Premium**: Entrada animada com orquestração de inicialização do Supabase e transição via Fade.
 - [x] **Rebrand DIVI**: Mudança de nome para "DIVI" e slogan "Divida sem Dívida", com nova identidade visual baseada no ícone Intersect.
 
@@ -33,8 +33,8 @@
 
 ## Current Status
 **Phase**: Production Ready Branding & Engine
-**Version**: 3.1.0 (DIVI Rebrand)
-**Last delivered change**: `rebrand-to-divi` — Rebrand completo para DIVI ("Divida sem Dívida").
+**Version**: 3.2.0 (Premium Nav)
+**Last delivered change**: `premium-bottom-nav-morph` — Transição do Bottom Nav de Gooey global para indicadores autônomos Morph individuais.
 
 ## Known Issues
 1. **Public Anon Access**: RLS aberto para `anon`. Requer Auth.
@@ -56,3 +56,4 @@
 | **UI Item States** | Classes `@freezed` gen. | **Dart 3 Records** | Performance absoluta e zero-boilerplate para view-models |
 | **Data Processing** | Múltiplos Providers | **Single-Pass O(N) Engine** | Eliminar repetitivos loops O(P*N) nos resumos (`DiviEngine`) |
 | **Data Synchronization**| Pessimista (`ref.invalidate()`) | **Optimistic UI local state** | UX ágil, latência instantânea (0ms). |
+| **Bottom Navigation Indicator**| Barra "Gooey" Deslizante (X) | **Fade/Scale Morph Autônomo** | Interações finas precisas (Fintech Premium UX) |

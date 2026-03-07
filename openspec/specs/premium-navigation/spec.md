@@ -23,13 +23,13 @@ O fundo da barra de navegação SHALL utilizar um efeito de desfoque (BackdropFi
 - **THEN** os itens da lista são visíveis de forma desfocada através do fundo da barra de navegação enquanto passam por trás dela.
 
 ### Requirement: Indicador de Aba Ativa com Animação Glide
-O sistema SHALL utilizar um indicador visual animado que desliza suavemente entre as posições das abas quando o usuário alterna a navegação.
-- O indicador deve ser uma "pílula" (pill) de fundo ou uma linha estilizada que utiliza animações implícitas para a transição de posição.
-- A animação deve ter uma curva de velocidade suave (ex: easeOutCubic ou elasticOut).
+O sistema SHALL utilizar um indicador visual expansivo contido de forma isolada dentro de cada item da barra, esvanecendo a marcação na aba desativada e simultaneamente expandindo (ou materializando) na aba selecionada por meio de transições de fade e scale.
+- O background ativo do item em foco deve animar na própria posição sem contato com os adjacentes (destransformar no ícone atual / transformar no novo ícone selecionado).
+- Fica proibido o uso de um único indicador deslizando horizontalmente entre as opções.
 
-#### Scenario: Transição suave entre abas
-- **WHEN** o usuário toca no ícone de "Cartão" estando na aba "Despesas"
-- **THEN** o indicador visual desliza da posição atual para a nova posição em uma transição contínua e fluida.
+#### Scenario: Transição independente de foco entre itens
+- **WHEN** o usuário toca no ícone de "Cartão" estando atualmente na aba "Despesas"
+- **THEN** a marcação visual de fundo associada à "Despesas" some progressivamente encolhendo em seu centro (fade-out e redução), enquanto a marcação do "Cartão" cresce de seu centro até englobar o ícone, atingindo também opacidade máxima.
 
 ### Requirement: Feedback Háptico na Navegação
 O sistema SHALL fornecer um feedback tátil (vibração) leve ao usuário sempre que uma nova aba for selecionada.

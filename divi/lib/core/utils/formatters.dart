@@ -36,3 +36,7 @@ double parseBrl(String text) {
 String fmt(double v) {
   return NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$').format(v);
 }
+
+String formatBrl(double v) {
+  return NumberFormat.currency(locale: 'pt_BR', symbol: '').format(v).trim();
+}

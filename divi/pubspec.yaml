@@ -40,9 +40,11 @@ dependencies:
   flutter_dotenv: ^6.0.0
   app_links: ^6.4.1
   google_fonts: ^6.3.0
+  dotted_line: ^3.2.3
   phosphor_flutter: ^2.1.0
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
+  animations: ^2.0.11
 
 dev_dependencies:
   flutter_test:

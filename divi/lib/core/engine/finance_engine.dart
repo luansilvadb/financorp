@@ -21,6 +21,7 @@ typedef DespesaItemRecord = ({
   bool allPaid,
   bool luanPago,
   double valorPorPessoa,
+  Map<String, bool> pagosPorPessoa,
 });
 
 typedef CompraItemRecord = ({
@@ -44,23 +45,23 @@ final diviEngineProvider = Provider<FinanceState>((ref) {
   final pagamentosAsync = ref.watch(pagamentosProvider);
   final comprasAsync = ref.watch(cartaoProvider);
 
-  return switch ((despesasAsync, pagamentosAsync, comprasAsync)) {
-    (
-      AsyncData(value: final despesas),
-      AsyncData(value: final pagamentos),
-      AsyncData(value: final compras)
-    ) =>
-      _processData(despesas, pagamentos, compras),
-    _ => (
-        resumo: <String, PersonSummaryRecord>{},
-        despesas: <String, DespesaItemRecord>{},
-        compras: <String, CompraCartao>{},
-        comprasPorPessoa: <String, List<CompraCartao>>{},
-        totalGeral: 0.0,
-        arrecadadoCasa: 0.0,
-        totalDespesasCasa: 0.0,
-      ),
-  };
+  final despesas = despesasAsync.valueOrNull;
+  final pagamentos = pagamentosAsync.valueOrNull;
+  final compras = comprasAsync.valueOrNull;
+
+  if (despesas != null && pagamentos != null && compras != null) {
+    return _processData(despesas, pagamentos, compras);
+  }
+
+  return (
+    resumo: <String, PersonSummaryRecord>{},
+    despesas: <String, DespesaItemRecord>{},
+    compras: <String, CompraCartao>{},
+    comprasPorPessoa: <String, List<CompraCartao>>{},
+    totalGeral: 0.0,
+    arrecadadoCasa: 0.0,
+    totalDespesasCasa: 0.0,
+  );
 });
 
 FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
@@ -94,12 +95,17 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
       }
     }
 
+    final pagosPorPessoa = {
+      for (final p in pessoas) p: pagMap['${d.id}-$p'] ?? false
+    };
+
     despesasIndex[d.id!] = (
       despesa: d,
       totalPagos: totalPagos,
       allPaid: totalPagos == pessoas.length,
       luanPago: luanPago,
       valorPorPessoa: valorPorPessoa,
+      pagosPorPessoa: pagosPorPessoa,
     );
     totalDespesasCasa += d.valor;
   }
@@ -139,11 +145,7 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
         pendenteCasa: pendenteCasaPessoa[p] ?? 0.0,
         pendenteCartao: pendenteCartaoPessoa[p] ?? 0.0,
         creditoCartao: p == 'Luan' ? creditoCartaoLuan : 0.0,
-        totalGeral: p == 'Luan'
-            ? (pendenteCasaPessoa[p]! +
-                pendenteCartaoPessoa[p]! -
-                creditoCartaoLuan)
-            : (pendenteCasaPessoa[p]! + pendenteCartaoPessoa[p]!),
+        totalGeral: (pendenteCasaPessoa[p]! + pendenteCartaoPessoa[p]!),
       )
   };
 

@@ -17,7 +17,7 @@ The app has undergone a **rebrand to DIVI**, adopting the slogan **"Divida sem D
 12. **Modelos Imutáveis (Freezed)** — Mapeamento manual `toMap`/`fromMap` substituído completamente por classes `@freezed` geradas via `build_runner`.
 13. **Optimistic UI** — Mutação local instantânea estado via `.copyWith()` combinada com fallback de erro global (SnackBar).
 14. **Performance Engine (O(N))** — Processamento centralizado "single-pass" (`FinancorpEngine`) substituindo loops O(P*N) espalhados, acoplado com Dart 3 Records para estados UI (zero boilerplate).
-15. **Premium Bottom Nav** — Upgrade para barra de navegação "gooey" com glassmorphism e micro-animações táteis.
+15. **Premium Bottom Nav (Morph)** — Upgrade para barra de navegação individual com Fade/Scale morphing.
 16. **Splash Screen Premium** — Implementação de splash screen animada com transição suave e orquestração de inicialização assíncrona.
 17. **Rebrand DIVI** — Mudança de nome e slogan para "Divida sem Dívida" e atualização de identidade visual.
 
@@ -44,6 +44,8 @@ As seguintes mudanças foram propostas, implementadas e arquivadas:
 19. `performance-engine-optimization` — Motor unificado O(N) (FinancorpEngine), substituição de UI states freezed por Records e reatividade granular extrema.
 20. `improve-bottom-nav-ux` — Rebrand premium da Bottom Navigation com animações orgânicas.
 21. `splash-screen-premium` — Splash Screen animada com orquestração de inicialização.
+22. `2026-03-07-premium-bottom-nav-morph` — Transição global da UI Premium Nav de "gooey" para fading morph autônomo individual.
+23. `rebrand-to-divi` — Mudança de identidade visual, slogan e marca central para "DIVI".
 
 ## Active Change (In Progress)
 Nenhuma mudança ativa no momento.
