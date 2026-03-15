@@ -1,14 +1,10 @@
-# Specifications: Consolidated Expense List
-
-Esta especificação define como a lista de despesas da aba principal unifica contas fixas e gastos no cartão.
-
-## ADDED Requirements
+## MODIFIED Requirements
 
 ### Requirement: Exibição Unificada de Despesas
-O sistema SHALL exibir na aba principal (Contas) uma lista consolidada contendo despesas fixas e compras de cartão do período selecionado, permitindo acesso a ações de edição. Cada item da lista SHALL exibir o avatar unificado (DiviAvatar) do responsável.
+O sistema SHALL exibir na aba principal (Despesas) uma lista consolidada contendo despesas fixas e compras de cartão do período selecionado, permitindo acesso a ações de edição. Cada item da lista SHALL exibir o avatar unificado (DiviAvatar) do responsável.
 
 #### Scenario: Visualização da lista mista
-- **WHEN** o usuário abre a aba de Contas
+- **WHEN** o usuário abre a aba de Despesas
 - **THEN** o sistema exibe tanto os cards de despesas fixas quanto as compras de cartão realizadas naquele mês
 - **THEN** as compras de cartão devem ser identificadas visualmente (ex: ícone de cartão)
 - **THEN** cada card exibe o DiviAvatar do responsável com sua inicial e cor temática
@@ -21,7 +17,7 @@ O sistema SHALL exibir na aba principal (Contas) uma lista consolidada contendo 
 O card de compra de cartão SHALL exibir claramente quem realizou o gasto, o valor total devido ao Luan e o avatar unificado do responsável.
 
 #### Scenario: Detalhe de compra no cartão por Luciana
-- **WHEN** uma compra de cartão da Luciana aparece na lista de Contas
+- **WHEN** uma compra de cartão da Luciana aparece na lista de despesas
 - **THEN** o card mostra "Mercado (Luciana)" e o valor integral
 - **THEN** o card indica que o valor é 100% devedor ao Luan
 - **THEN** o card exibe o DiviAvatar da Luciana com a inicial "L"

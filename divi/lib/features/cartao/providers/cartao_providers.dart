@@ -70,6 +70,30 @@ class CartaoNotifier extends AsyncNotifier<List<CompraCartao>> {
       rethrow;
     }
   }
+
+  Future<void> markAllAsPaid(String pessoa, int mes, int ano) async {
+    final previousState = state;
+    final currentList = state.valueOrNull ?? [];
+
+    final toUpdate = currentList
+        .where((c) => c.pessoa == pessoa && c.mes == mes && c.ano == ano && !c.pago)
+        .map((c) => c.copyWith(pago: true))
+        .toList();
+
+    if (toUpdate.isEmpty) return;
+
+    state = state.whenData((list) {
+      final updatedMap = {for (var c in toUpdate) c.id: c};
+      return list.map((c) => updatedMap.containsKey(c.id) ? updatedMap[c.id]! : c).toList();
+    });
+
+    try {
+      await ref.read(cartaoRepositoryProvider).saveCompras(toUpdate);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
+  }
 }
 
 /// Provider granular que utiliza o motor central (O(1) access).

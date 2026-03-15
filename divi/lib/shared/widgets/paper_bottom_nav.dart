@@ -66,7 +66,7 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
                   iconActive: PhosphorIcons.receipt(PhosphorIconsStyle.fill),
                   iconInactive:
                       PhosphorIcons.receipt(PhosphorIconsStyle.regular),
-                  label: 'LIVRO',
+                  label: 'CONTAS',
                 ),
                 const SizedBox(width: 48), // Spacer for center FAB
                 _buildItem(

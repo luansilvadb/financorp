@@ -199,7 +199,7 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
                     child: Text(
                       widget.despesa != null || widget.compra != null
                           ? "ATUALIZAR REGISTRO"
-                          : "LANÇAR NO LIVRO",
+                          : "LANÇAR",
                       style: const TextStyle(
                         fontFamily: 'Space Mono',
                         fontSize: 14,

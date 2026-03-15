@@ -41,6 +41,7 @@ const coresPessoa = {
   "Giovanna": Color(0xFF8b5cf6),
 };
 
+/*
 const avataresPessoa = {
   "Luan":
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCLsOdDiVqw1jHYFLTFsZtDtSfKbfAzkdGoHzM4nLWI1WxIb0kP7sqGL2TjNJI8Xuilj8fqvIVG7nX8E5tLBnBM4A0mQ80dPL0Mlqq3ki60WXbQG4fcdsGsXT1d3CPvjro9PA_C9JKGPUJcGuqWFgqHLfBl8Ikg-vKFRDFIp9UKnyiNm2tV74gzMxFuioDe0JrdH-o03dUxOTurDfivq4BYL7y2uXDVLKtKUDe4QM2RnzHP3GHS-UdHywYQ3M47kCEpaKvc-PQhDA4",
@@ -49,6 +50,7 @@ const avataresPessoa = {
   "Giovanna":
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDnIzmHTTjmIjsYpMJNrP7AmMFitdfOqNNMZIqSGVe6B9DtUPrnNhO4nOylR2pGKD9s4tUO9rfdG_oEGlUHEQDnl3BZeEdeMnBr100NO-Awv2LmZgy-jHzicfHYWgwtGmy5fAHwNXIaeTG2yPEF0U4y9UfQVloa176F1PQFC4jmbozRDWuTR5y-IPO5e4fuJtnjerft8z-0mAo4Si3QiZuNk20eYVkHBjAkB_rgc6Tq10N8B1dWvDw3OvgYoGNB6Sa8o_KbQJhlHNs",
 };
+*/
 
 const kPrimaryColor = Color(0xFFE63819); // Primary / Debt
 const kPaper = Color(0xFFF4F1EA); // Warm off-white

@@ -1,11 +1,7 @@
-# Specifications: Consolidated Status Card
+## MODIFIED Requirements
 
-Esta especificação define como o status de adimplência (Em dia/Faltam) é exibido nos mini-cards de resumo dos moradores, consolidando dívidas da casa e do cartão.
-
-## Features & Scenarios
-
-### Feature: Status de Adimplência Consolidado
-O sistema SHALL exibir um status consolidado (Casa + Cartão) nos mini-cards de resumo dos moradores. O status é considerado "Em dia" apenas se a soma de todas as pendências (casa e cartão) for menor ou igual a zero. O card SHALL exibir o avatar unificado (DiviAvatar) do morador. O sistema DEVE garantir que o status "Em dia" seja alcançável através de uma única ação de liquidação total que limpe todas as pendências que compõem o saldo exibido.
+### Requirement: Status de Adimplência Consolidado
+O sistema SHALL exibir um status consolidado (Casa + Cartão) nos mini-cards de resumo dos moradores. O status é considerado "Em dia" apenas se a soma de todas as pendências (casa e cartão) for menor ou igual a zero. O card SHALL exibir o avatar unificado (DiviAvatar) do morador.
 
 #### Scenario: Luciana está em dia com a casa mas deve o cartão
 - **WHEN** Luciana pagou todas as suas despesas de casa (pendenteCasa = 0)
@@ -28,8 +24,3 @@ O sistema SHALL exibir um status consolidado (Casa + Cartão) nos mini-cards de 
 - **THEN** o card do Luan deve exibir "✅ Em dia"
 - **THEN** a cor de destaque do card deve ser verde
 - **THEN** o card deve exibir o DiviAvatar do Luan com a inicial "L" e sua cor temática
-
-#### Scenario: Alcançar status Em dia via liquidação total
-- **WHEN** o usuário clica em "QUITAR TUDO" em sua tela de extrato.
-- **THEN** todas as dívidas que contribuem para o status de pendência são marcadas como pagas.
-- **THEN** o card de status de adimplência na tela de resumo muda instantaneamente para "✅ Em dia".

@@ -113,6 +113,48 @@ class PagamentosNotifier extends AsyncNotifier<List<Pagamento>> {
       rethrow;
     }
   }
+
+  Future<void> markAllAsPaid(
+    String pessoa,
+    int mes,
+    int ano,
+    List<String> despesasIds,
+  ) async {
+    final repo = ref.read(financeRepositoryProvider);
+    final previousState = state;
+
+    final novosPagamentos = despesasIds.map((dId) {
+      final id = '$dId-$pessoa-$mes-$ano';
+      return Pagamento(
+        id: id,
+        despesaId: dId,
+        pessoa: pessoa,
+        mes: mes,
+        ano: ano,
+        pago: true,
+      );
+    }).toList();
+
+    state = state.whenData((list) {
+      final updatedList = List<Pagamento>.from(list);
+      for (final np in novosPagamentos) {
+        final idx = updatedList.indexWhere((p) => p.id == np.id);
+        if (idx >= 0) {
+          updatedList[idx] = np;
+        } else {
+          updatedList.add(np);
+        }
+      }
+      return updatedList;
+    });
+
+    try {
+      await repo.upsertPagamentos(novosPagamentos);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
+  }
 }
 
 /// Provider granular que utiliza o motor central (O(1) access).

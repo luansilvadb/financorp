@@ -17,6 +17,11 @@ class CartaoRepository {
     await _supabase.from('compras_cartao').upsert(compra.toJson());
   }
 
+  Future<void> saveCompras(List<CompraCartao> compras) async {
+    final list = compras.map((c) => c.toJson()).toList();
+    await _supabase.from('compras_cartao').upsert(list);
+  }
+
   Future<void> deleteCompra(String id) async {
     await _supabase.from('compras_cartao').delete().eq('id', id);
   }

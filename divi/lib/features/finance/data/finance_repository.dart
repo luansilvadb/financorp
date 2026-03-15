@@ -23,6 +23,11 @@ class FinanceRepository {
     await _supabase.from('pagamentos').upsert(pagamento.toJson());
   }
 
+  Future<void> upsertPagamentos(List<Pagamento> pagamentos) async {
+    final list = pagamentos.map((p) => p.toJson()).toList();
+    await _supabase.from('pagamentos').upsert(list);
+  }
+
   Future<void> saveDespesa(Despesa despesa) async {
     await _supabase.from('despesas').upsert(despesa.toJson());
   }

@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../../shared/constants.dart';
 import '../../../../shared/models/compra_cartao.dart';
 import '../../../../core/utils/formatters.dart';
+import '../../../../shared/widgets/divi_avatar.dart';
 import '../../providers/cartao_providers.dart';
 
 import 'add_purchase_sheet.dart';
@@ -16,8 +17,6 @@ class CartaoDetailsSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final personColor = coresPessoa[compra.pessoa] ?? kPrimaryColor;
-
     return Container(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 12, bottom: 32),
       decoration: const BoxDecoration(
@@ -41,23 +40,9 @@ class CartaoDetailsSheet extends ConsumerWidget {
           // Header: Avatar + Title + Value
           Row(
             children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: personColor.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    compra.pessoa[0].toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
-                      color: personColor,
-                    ),
-                  ),
-                ),
+              DiviAvatar(
+                pessoa: compra.pessoa,
+                size: 44,
               ),
               const SizedBox(width: 14),
               Expanded(

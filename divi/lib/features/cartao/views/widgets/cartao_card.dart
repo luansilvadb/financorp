@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
+import '../../../../shared/widgets/divi_avatar.dart';
 import '../../providers/cartao_providers.dart';
 
 import 'cartao_details_sheet.dart';
@@ -21,7 +22,6 @@ class CartaoCard extends ConsumerWidget {
     if (itemState == null) return const SizedBox.shrink();
 
     final compra = itemState.compra;
-    final personColor = coresPessoa[compra.pessoa] ?? kPrimaryColor;
 
     return Dismissible(
       key: Key('compra-$compraId'),
@@ -128,23 +128,9 @@ class CartaoCard extends ConsumerWidget {
                   child: Row(
                     children: [
                       // Person avatar initial
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: personColor.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            compra.pessoa[0].toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w900,
-                              color: personColor,
-                            ),
-                          ),
-                        ),
+                      DiviAvatar(
+                        pessoa: compra.pessoa,
+                        size: 36,
                       ),
                       const SizedBox(width: 12),
                       // Description + subtitle

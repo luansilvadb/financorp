@@ -3,35 +3,35 @@
 ## Features & Scenarios
 
 ### Requirement: Add Fixed Expense
-- Luan clicks the Floating Action Button to open the "Nova Despesa" Bottom Sheet.
+- Luan clicks the Floating Action Button to open the "LANÇAR" Bottom Sheet.
 - Luan enters Light bill for "Março", R$ 300. 
 - Type "FIXED". Division is divided by 3 unless specified.
 - The UI automatically creates three split entries (R$ 100).
 - Luan has `status` PAID (since he paid the whole).
 - Luciana and Giovanna have `status` PENDING.
-- **WHEN** user clicks "Adicionar Despesa" button inside the Bottom Sheet
+- **WHEN** user clicks "LANÇAR" button inside the Bottom Sheet
 - **THEN** it is internally stored and calculated correctly as 300.0 without crash
 - **THEN** the Bottom Sheet is closed automatically
 
 #### Scenario: Successful fixed expense addition via Bottom Sheet
-- **WHEN** Luan fills the Light bill details in the Bottom Sheet and clicks "Adicionar Despesa"
+- **WHEN** Luan fills the Light bill details in the Bottom Sheet and clicks "LANÇAR"
 - **THEN** three split entries of R$ 100 are created in Supabase
-- **THEN** the Bottom Sheet disappears and the Despesas list reflects the new item
+- **THEN** the Bottom Sheet disappears and the Contas list reflects the new item
 
 ### Requirement: Add Grocery Expense
-- Luciana clicks the Floating Action Button to open the "Nova Despesa" Bottom Sheet.
+- Luciana clicks the Floating Action Button to open the "LANÇAR" Bottom Sheet.
 - Luciana goes to the bakery. Value R$ 50. Total grocery limit R$ 1200.
 - She inputs R$ 50, selects Category "MERCADO", logs the receipt picture.
 - It subtracts R$ 50 from the global Grocery Limit.
 - Does not create per-person splits because grocery budget is paid upfront. 
-- **WHEN** user clicks "Adicionar Despesa" button inside the Bottom Sheet
+- **WHEN** user clicks "LANÇAR" button inside the Bottom Sheet
 - **THEN** it is internally stored and calculated correctly as 50.0 without crash
 - **THEN** the Bottom Sheet is closed automatically
 
 #### Scenario: Successful grocery expense addition via Bottom Sheet
-- **WHEN** Luciana fills the grocery expense details in the Bottom Sheet and clicks "Adicionar Despesa"
+- **WHEN** Luciana fills the grocery expense details in the Bottom Sheet and clicks "LANÇAR"
 - **THEN** the value is subtracted from the global Grocery Limit in Supabase
-- **THEN** the Bottom Sheet disappears and the Despesas list reflects the new item
+- **THEN** the Bottom Sheet disappears and the Contas list reflects the new item
 ### Feature: Settle Debt (Pagamento Direto)
 - Giovanna clicks on "Luz: Pagar minha parte (R$ 100)".
 - She claims "Paid". This sends a notification to Luan.
@@ -51,8 +51,8 @@ O sistema deve salvar todas as operações de escrita no banco de dados remoto p
 - **THEN** O dado deve ser persistido imediatamente no PostgreSQL do Supabase.
 
 ### Requirement: Sincronização de Estado (Riverpod)
-O estado das abas deve ser gerenciado por providers para evitar inconsistência de dados entre as visualizações (Despesas vs Resumo).
-- **GIVEN** Uma despesa marcada como paga na aba de Despesas.
+O estado das abas deve ser gerenciado por providers para evitar inconsistência de dados entre as visualizações (Contas vs Resumo).
+- **GIVEN** Uma despesa marcada como paga na aba de Contas.
 - **WHEN** O usuário navega para a aba de Resumo.
 - **THEN** O valor pendente da pessoa deve estar atualizado refletindo o pagamento.
 
@@ -85,7 +85,7 @@ A navegação por mês e ano MUST filtrar todos os dados (despesas, compras e pa
 O sistema SHALL permitir que cada registro de compra no cartão possua um status booleano indicando se o valor já foi reembolsado ao Luan.
 - **WHEN** uma nova compra no cartão é cadastrada
 - **THEN** o status `pago` deve ser definido como `FALSE` por padrão
-- **THEN** o registro deve ser persistido no Supabase com este valor inicial
+- **THEN** o registro deve ser persistido no Supabase with este valor inicial
 
 ### Cenário: Toggle de Pagamento
 - **WHEN** Marco "Luan" como pago na despesa "Aluguel".
@@ -112,9 +112,9 @@ Input fields for monetary values MUST format user input as Brazilian Real (BRL) 
 ## Layout UI
 
 ### Requirement: Layout Uniforme dos Cartões de Resumo
-O sistema MUST exibir os cartões de resumo por usuário ("Luan", "Luciana", "Giovanna") na aba de Despesas preenchendo toda a largura da tela de forma igualmente distribuída.
+O sistema MUST exibir os cartões de resumo por usuário ("Luan", "Luciana", "Giovanna") na aba de Contas preenchendo toda a largura da tela de forma igualmente distribuída.
 
 #### Scenario: Visualização dos cartões em dispositivo de tela larga
-- **WHEN** o usuário abre o aplicativo na aba "Despesas"
+- **WHEN** o usuário abre o aplicativo na aba "Contas"
 - **THEN** os três cartões de usuário são renderizados numa única linha horizontal
 - **THEN** cada cartão obtém uma fração idêntica do espaço livre disponível e a linha não possui margem extensa à direita

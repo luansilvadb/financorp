@@ -1,8 +1,4 @@
-# Specifications: Consolidated Status Card
-
-Esta especificação define como o status de adimplência (Em dia/Faltam) é exibido nos mini-cards de resumo dos moradores, consolidando dívidas da casa e do cartão.
-
-## Features & Scenarios
+## MODIFIED Requirements
 
 ### Feature: Status de Adimplência Consolidado
 O sistema SHALL exibir um status consolidado (Casa + Cartão) nos mini-cards de resumo dos moradores. O status é considerado "Em dia" apenas se a soma de todas as pendências (casa e cartão) for menor ou igual a zero. O card SHALL exibir o avatar unificado (DiviAvatar) do morador. O sistema DEVE garantir que o status "Em dia" seja alcançável através de uma única ação de liquidação total que limpe todas as pendências que compõem o saldo exibido.

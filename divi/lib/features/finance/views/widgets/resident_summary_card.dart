@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../../core/engine/finance_engine.dart';
 import '../../../../shared/constants.dart';
+import '../../../../shared/widgets/divi_avatar.dart';
 import '../../../../shared/widgets/skeuomorphic.dart';
 
 class ResidentSummaryCard extends StatefulWidget {
@@ -67,16 +68,9 @@ class _ResidentSummaryCardState extends State<ResidentSummaryCard> {
                 child: Row(
                   children: [
                     // Avatar
-                    CircleAvatar(
-                      radius: 24,
-                      backgroundColor: widget.highlightColor.withOpacity(0.2),
-                      backgroundImage: avataresPessoa[widget.title] != null
-                          ? NetworkImage(avataresPessoa[widget.title]!)
-                          : null,
-                      child: avataresPessoa[widget.title] == null
-                          ? Text(widget.title[0],
-                              style: TextStyle(color: widget.highlightColor))
-                          : null,
+                    DiviAvatar(
+                      pessoa: widget.title,
+                      size: 48,
                     ),
                     const SizedBox(width: 16),
                     // Naming

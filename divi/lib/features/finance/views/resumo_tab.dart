@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../shared/constants.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/engine/finance_engine.dart';
+import '../../../shared/widgets/divi_avatar.dart';
 import 'widgets/pote_status_card.dart';
 
 class ResumoTab extends ConsumerWidget {
@@ -86,7 +87,7 @@ class _PersonSummaryCard extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    _Avatar(pessoa: pessoa),
+                    DiviAvatar(pessoa: pessoa, size: 40),
                     const SizedBox(width: 12),
                     Text(
                       pessoa,
@@ -137,35 +138,6 @@ class _PersonSummaryCard extends ConsumerWidget {
 }
 
 // SUB-COMPONETES PRIVADOS PARA LIMPEZA E DENSIDADE
-
-class _Avatar extends StatelessWidget {
-  final String pessoa;
-  const _Avatar({required this.pessoa});
-
-  @override
-  Widget build(BuildContext context) {
-    final personColor = coresPessoa[pessoa] ?? kPrimaryColor;
-
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: personColor.withOpacity(0.1),
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Text(
-          pessoa[0].toUpperCase(),
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            color: personColor,
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class _StatusBadge extends StatelessWidget {
   final String label;

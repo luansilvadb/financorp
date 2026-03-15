@@ -4,6 +4,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../core/engine/finance_engine.dart';
 import '../../core/utils/formatters.dart';
 import '../constants.dart';
+import 'divi_avatar.dart';
 
 /// Row de mini-cards de resumo por pessoa.
 /// Cada mini-card é um ConsumerWidget isolado que escuta apenas
@@ -71,17 +72,9 @@ class _PersonMiniCard extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: coresPessoa[pessoa]?.withOpacity(0.1),
-                  image: DecorationImage(
-                    image: NetworkImage(avataresPessoa[pessoa]!),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              DiviAvatar(
+                pessoa: pessoa,
+                size: 32,
               ),
               PhosphorIcon(
                 ok
