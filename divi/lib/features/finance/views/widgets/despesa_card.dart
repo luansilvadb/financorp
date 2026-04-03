@@ -1,10 +1,10 @@
+import '../../../../core/engine/finance_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
-import '../../../../core/providers/app_providers.dart';
 
 import 'despesa_details_sheet.dart';
 
@@ -16,7 +16,7 @@ class DespesaCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Escuta APENAS as mudanças relevantes para esta despesa específica
-    final itemState = ref.watch(//despesaItemProvider(despesaId));
+    final itemState = ref.watch(despesaItemProvider(despesaId));
 
     // Se o estado ainda não estiver carregado ou a despesa não existir
     if (itemState == null) return const SizedBox.shrink();
