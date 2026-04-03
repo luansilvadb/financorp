@@ -155,7 +155,7 @@ class CartaoNotifier extends OptimisticNotifier<CompraCartao> {
 
   Future<void> markAllAsPaid(String pessoa, int mes, int ano) async {
     final previousState = state;
-    final currentList = state.valueOrNull ?? [];
+    final currentList = state.value ?? [];
 
     final toUpdate = currentList
         .where((c) => c.pessoa == pessoa && c.mes == mes && c.ano == ano && !c.pago)

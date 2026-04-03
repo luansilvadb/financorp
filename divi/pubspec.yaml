@@ -35,14 +35,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   intl: ^0.20.2
-  flutter_riverpod: ^2.4.10
+  flutter_riverpod: ^3.3.1
   supabase_flutter: ^2.12.0
   flutter_dotenv: ^6.0.0
-  app_links: ^6.4.1
-  google_fonts: ^6.3.0
+  app_links: ^7.0.0
+  google_fonts: ^8.0.2
   dotted_line: ^3.2.3
   phosphor_flutter: ^2.1.0
-  freezed_annotation: ^2.4.1
+  freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
   animations: ^2.0.11
 
@@ -55,9 +55,9 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
   build_runner: ^2.4.8
-  freezed: ^2.5.2
+  freezed: ^3.2.5
   json_serializable: ^6.7.1
 
 # For information on the generic Dart part of this file, see the

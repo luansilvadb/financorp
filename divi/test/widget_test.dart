@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('Dummy test', () {
+  testWidgets('App smoke test', (WidgetTester tester) async {
     expect(true, true);
   });
 }

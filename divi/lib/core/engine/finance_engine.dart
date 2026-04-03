@@ -41,9 +41,9 @@ final diviEngineProvider = Provider<FinanceState>((ref) {
   final pagamentosAsync = ref.watch(pagamentosProvider);
   final comprasAsync = ref.watch(cartaoProvider);
 
-  final despesas = despesasAsync.valueOrNull;
-  final pagamentos = pagamentosAsync.valueOrNull;
-  final compras = comprasAsync.valueOrNull;
+  final despesas = despesasAsync.value;
+  final pagamentos = pagamentosAsync.value;
+  final compras = comprasAsync.value;
 
   if (despesas != null && pagamentos != null && compras != null) {
     return _processData(despesas, pagamentos, compras);
