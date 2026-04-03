@@ -2,12 +2,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../constants.dart';
 
 class PremiumNavItem {
-  final PhosphorIconData iconRegular;
-  final PhosphorIconData iconFill;
+  final IconData iconRegular;
+  final IconData iconFill;
   final String label;
 
   const PremiumNavItem({
@@ -134,7 +134,7 @@ class _PremiumNavItemWidget extends StatelessWidget {
                 scale: isSelected ? 1.2 : 1.0,
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOut,
-                child: PhosphorIcon(
+                child: Icon(
                   isSelected ? item.iconFill : item.iconRegular,
                   color: isSelected ? kPrimaryColor : kSlate400,
                   size: 26,

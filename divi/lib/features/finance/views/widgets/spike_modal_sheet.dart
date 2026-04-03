@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:divi/shared/constants.dart';
 import 'package:divi/shared/models/domain.dart';
@@ -338,8 +338,8 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
                   children: [
                     Icon(
                       _pessoa == opt
-                          ? PhosphorIcons.circle(PhosphorIconsStyle.fill)
-                          : PhosphorIcons.circle(PhosphorIconsStyle.regular),
+                          ? LucideIcons.circle
+                          : LucideIcons.circle,
                       size: 20,
                       color: kInk,
                     ),

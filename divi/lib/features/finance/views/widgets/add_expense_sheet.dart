@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../shared/constants.dart';
 import '../../../../shared/models/domain.dart';
@@ -79,12 +79,10 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
                     color: kPrimaryColor.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: PhosphorIcon(
+                  child: Icon(
                       isEditing
-                          ? PhosphorIcons.pencilSimple(
-                              PhosphorIconsStyle.regular)
-                          : PhosphorIcons.plusCircle(
-                              PhosphorIconsStyle.regular),
+                          ? LucideIcons.pencil
+                          : LucideIcons.plusCircle,
                       color: kPrimaryColor,
                       size: 24),
                 ),
@@ -101,13 +99,13 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
             ),
             const SizedBox(height: 24),
             _field("NOME DA CONTA", _nomeCtrl,
-                PhosphorIcons.textAlignLeft(PhosphorIconsStyle.regular),
+                LucideIcons.alignLeft,
                 placeholder: "Ex: Aluguel, Luz..."),
             const SizedBox(height: 20),
             _field(
               "VALOR TOTAL",
               _valorCtrl,
-              PhosphorIcons.currencyDollar(PhosphorIconsStyle.regular),
+              LucideIcons.dollarSign,
               placeholder: "0,00",
               keyboardType: TextInputType.number,
               formatters: [BrlCurrencyInputFormatter()],
@@ -116,7 +114,7 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
             _field(
               "DIA DO VENCIMENTO",
               _vencCtrl,
-              PhosphorIcons.calendarBlank(PhosphorIconsStyle.regular),
+              LucideIcons.calendar,
               placeholder: "Ex: 5",
               keyboardType: TextInputType.number,
             ),
@@ -222,7 +220,7 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
             hintText: placeholder,
             hintStyle: TextStyle(
                 color: kSlate400.withOpacity(0.6), fontWeight: FontWeight.w500),
-            prefixIcon: PhosphorIcon(icon, color: kPrimaryColor, size: 22),
+            prefixIcon: Icon(icon, color: kPrimaryColor, size: 22),
             filled: true,
             fillColor: kSlate100,
             enabledBorder: OutlineInputBorder(

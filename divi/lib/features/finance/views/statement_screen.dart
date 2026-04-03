@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:divi/shared/constants.dart';
 import 'package:divi/core/engine/finance_engine.dart';
@@ -155,8 +155,8 @@ class _StatementScreenState extends ConsumerState<StatementScreen> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
-              icon: PhosphorIcon(
-                  PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
+              icon: Icon(
+                  LucideIcons.chevronLeft,
                   color: kInk),
               onPressed: () => Navigator.pop(context),
             ),

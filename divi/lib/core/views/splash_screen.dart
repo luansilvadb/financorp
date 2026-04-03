@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../shared/constants.dart';
 import '../../main.dart';
 
@@ -127,8 +127,8 @@ class _SplashScreenState extends State<SplashScreen>
                           width: 1,
                         ),
                       ),
-                      child: PhosphorIcon(
-                        PhosphorIcons.intersect(PhosphorIconsStyle.fill),
+                      child: Icon(
+                        LucideIcons.home,
                         color: Colors.white,
                         size: 80,
                       ),

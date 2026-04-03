@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
@@ -16,7 +16,7 @@ class DespesaCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Escuta APENAS as mudanças relevantes para esta despesa específica
-    final itemState = ref.watch(despesaItemProvider(despesaId));
+    final itemState = ref.watch(//despesaItemProvider(despesaId));
 
     // Se o estado ainda não estiver carregado ou a despesa não existir
     if (itemState == null) return const SizedBox.shrink();
@@ -126,10 +126,10 @@ class DespesaCard extends ConsumerWidget {
             const SizedBox(width: 12),
 
             // Trailing: consolidated status icon
-            PhosphorIcon(
+            Icon(
               allPaid
-                  ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
-                  : PhosphorIcons.warningCircle(PhosphorIconsStyle.fill),
+                  ? LucideIcons.checkCircle2
+                  : LucideIcons.alertCircle,
               color: allPaid ? kGreen500 : kRed500,
               size: 24,
             ),
