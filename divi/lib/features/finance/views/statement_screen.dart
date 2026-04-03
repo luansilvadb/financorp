@@ -7,13 +7,13 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:divi/shared/constants.dart';
 import 'package:divi/core/engine/finance_engine.dart';
 import 'package:divi/shared/widgets/skeuomorphic.dart';
-import 'package:divi/features/cartao/providers/cartao_providers.dart';
+import 'package:divi/core/providers/app_providers.dart';
 import 'package:divi/shared/providers/month_year_provider.dart';
 import 'package:divi/shared/widgets/divi_toasts.dart';
 
-import 'widgets/receipt_item_card.dart';
+import 'widgets/finance_widgets.dart';
 import 'widgets/spike_modal_sheet.dart';
-import '../providers/finance_providers.dart';
+import '../../../core/providers/app_providers.dart';
 
 class StatementScreen extends ConsumerStatefulWidget {
   final String residentName;

@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../shared/constants.dart';
-import '../../../../shared/models/despesa.dart';
+import '../../../../shared/models/domain.dart';
 import '../../../../core/utils/formatters.dart';
-import '../../providers/finance_providers.dart';
+import '../../../../core/providers/app_providers.dart';
 
 import 'add_expense_sheet.dart';
 

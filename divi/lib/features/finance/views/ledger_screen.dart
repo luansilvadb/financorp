@@ -8,7 +8,7 @@ import '../../../shared/constants.dart';
 import '../../../core/engine/finance_engine.dart';
 
 import 'widgets/z_report_card.dart';
-import 'widgets/resident_summary_card.dart';
+import 'widgets/finance_widgets.dart';
 import 'package:divi/shared/widgets/divi_toasts.dart';
 import 'statement_screen.dart';
 

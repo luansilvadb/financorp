@@ -4,7 +4,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
-import '../../providers/finance_providers.dart';
+import '../../../../core/providers/app_providers.dart';
 
 import 'despesa_details_sheet.dart';
 

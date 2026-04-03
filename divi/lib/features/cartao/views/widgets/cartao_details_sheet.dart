@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../../shared/constants.dart';
-import '../../../../shared/models/compra_cartao.dart';
+import '../../../../shared/models/domain.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../shared/widgets/divi_avatar.dart';
 import '../../providers/cartao_providers.dart';

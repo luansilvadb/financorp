@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import 'package:divi/shared/constants.dart';
-import 'package:divi/shared/models/despesa.dart';
-import 'package:divi/shared/models/compra_cartao.dart';
+import 'package:divi/shared/models/domain.dart';
+import 'package:divi/shared/models/domain.dart';
 import 'package:divi/core/utils/formatters.dart';
-import 'package:divi/features/finance/providers/finance_providers.dart';
-import 'package:divi/features/cartao/providers/cartao_providers.dart';
+import 'package:divi/core/providers/app_providers.dart';
+import 'package:divi/core/providers/app_providers.dart';
 import 'package:divi/shared/providers/month_year_provider.dart';
 import 'package:divi/shared/widgets/divi_toasts.dart';
 
