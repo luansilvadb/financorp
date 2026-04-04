@@ -13,7 +13,6 @@ import 'package:divi/shared/widgets/divi_toasts.dart';
 
 import 'widgets/finance_widgets.dart';
 import 'widgets/spike_modal_sheet.dart';
-import '../../../core/providers/app_providers.dart';
 
 class StatementScreen extends ConsumerStatefulWidget {
   final String residentName;
@@ -97,7 +96,7 @@ class _StatementScreenState extends ConsumerState<StatementScreen> {
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 14,
-            color: kInk.withOpacity(0.7),
+            color: kInk.withValues(alpha: 0.7),
           ),
         ),
         actions: [
@@ -401,7 +400,7 @@ class _StatementScreenState extends ConsumerState<StatementScreen> {
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 14,
-            color: kInk.withOpacity(0.7),
+            color: kInk.withValues(alpha: 0.7),
           ),
         ),
         actions: [

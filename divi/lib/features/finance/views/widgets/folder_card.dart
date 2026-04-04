@@ -38,8 +38,8 @@ class _FolderCardState extends State<FolderCard> {
           onTapUp: (_) => setState(() => _isPressed = false),
           onTapCancel: () => setState(() => _isPressed = false),
           borderRadius: BorderRadius.circular(20),
-          highlightColor: kInk.withOpacity(0.05),
-          splashColor: kInk.withOpacity(0.1),
+          highlightColor: kInk.withValues(alpha: 0.05),
+          splashColor: kInk.withValues(alpha: 0.1),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -49,7 +49,7 @@ class _FolderCardState extends State<FolderCard> {
                   ? []
                   : [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.03),
+                        color: Colors.black.withValues(alpha: 0.03),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
                       ),
@@ -65,7 +65,7 @@ class _FolderCardState extends State<FolderCard> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: kInk.withOpacity(0.05),
+                        color: kInk.withValues(alpha: 0.05),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(

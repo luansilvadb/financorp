@@ -39,7 +39,7 @@ class HolePunch extends StatelessWidget {
         border: Border.all(color: kLine, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 2,
             offset: const Offset(1, 1),
           ),

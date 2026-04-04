@@ -59,8 +59,8 @@ class _ResidentSummaryCardState extends State<ResidentSummaryCard> {
               onTapUp: (_) => setState(() => _isPressed = false),
               onTapCancel: () => setState(() => _isPressed = false),
               onTap: widget.onTap,
-              highlightColor: kInk.withOpacity(0.05),
-              splashColor: kInk.withOpacity(0.1),
+              highlightColor: kInk.withValues(alpha: 0.05),
+              splashColor: kInk.withValues(alpha: 0.1),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
                 child: Row(
@@ -181,8 +181,8 @@ class _ReceiptItemCardState extends State<ReceiptItemCard> {
                 HapticFeedback.mediumImpact();
                 widget.onDelete?.call();
               },
-              highlightColor: kInk.withOpacity(0.05),
-              splashColor: kInk.withOpacity(0.1),
+              highlightColor: kInk.withValues(alpha: 0.05),
+              splashColor: kInk.withValues(alpha: 0.1),
               child: Container(
                 padding: const EdgeInsets.all(16),
                 child: Row(

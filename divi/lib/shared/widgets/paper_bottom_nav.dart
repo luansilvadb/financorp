@@ -32,8 +32,8 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            kPaper.withOpacity(0),
-            kPaper.withOpacity(0.9),
+            kPaper.withValues(alpha: 0),
+            kPaper.withValues(alpha: 0.9),
             kPaper,
           ],
           stops: const [0, 0.4, 1],
@@ -52,7 +52,7 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
               borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -96,7 +96,7 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
                   border: Border.all(color: kInk, width: 3),
                   boxShadow: [
                     BoxShadow(
-                      color: kPrimaryColor.withOpacity(0.3),
+                      color: kPrimaryColor.withValues(alpha: 0.3),
                       blurRadius: _isFabPressed ? 10 : 20,
                       offset: _isFabPressed
                           ? const Offset(0, 4)
@@ -115,8 +115,8 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
                       widget.onFabTap();
                     },
                     customBorder: const CircleBorder(),
-                    splashColor: Colors.white.withOpacity(0.3),
-                    highlightColor: Colors.white.withOpacity(0.1),
+                    splashColor: Colors.white.withValues(alpha: 0.3),
+                    highlightColor: Colors.white.withValues(alpha: 0.1),
                     child: const Center(
                       child: Icon(Icons.add_rounded,
                           color: Colors.white, size: 40),
@@ -153,7 +153,7 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
           children: [
             Icon(
               isActive ? iconActive : iconInactive,
-              color: isActive ? kPaper : kPaper.withOpacity(0.4),
+              color: isActive ? kPaper : kPaper.withValues(alpha: 0.4),
               size: 24,
             ),
             const SizedBox(height: 2),
@@ -164,7 +164,7 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
                 fontSize: 8,
                 fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                 letterSpacing: 1.0,
-                color: isActive ? kPaper : kPaper.withOpacity(0.4),
+                color: isActive ? kPaper : kPaper.withValues(alpha: 0.4),
               ),
             ),
           ],

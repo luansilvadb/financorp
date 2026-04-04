@@ -3,7 +3,6 @@ import '../providers/app_providers.dart';
 import '../../shared/models/domain.dart';
 import '../../shared/constants.dart';
 
-/// Records densos para eliminar boilerplate de classes efêmeras (freezed).
 typedef PersonSummaryRecord = ({
   double pendenteCasa,
   double pendenteCartao,
@@ -28,76 +27,60 @@ typedef CompraItemRecord = ({
 typedef FinanceState = ({
   Map<String, PersonSummaryRecord> resumo,
   Map<String, DespesaItemRecord> despesas,
-  Map<String, CompraCartao> compras, // Indexado por ID para acesso O(1)
-  Map<String, List<CompraCartao>> comprasPorPessoa, // Agrupado para views
+  Map<String, CompraCartao> compras,
+  Map<String, List<CompraCartao>> comprasPorPessoa,
   double totalGeral,
   double arrecadadoCasa,
   double totalDespesasCasa,
 });
 
-/// O Motor Central (DiviEngine) - Processamento Single-Pass O(N).
 final diviEngineProvider = Provider<FinanceState>((ref) {
-  final despesasAsync = ref.watch(despesasProvider);
-  final pagamentosAsync = ref.watch(pagamentosProvider);
-  final comprasAsync = ref.watch(cartaoProvider);
-
-  final despesas = despesasAsync.value;
-  final pagamentos = pagamentosAsync.value;
-  final compras = comprasAsync.value;
+  final despesas = ref.watch(despesasProvider).value;
+  final pagamentos = ref.watch(pagamentosProvider).value;
+  final compras = ref.watch(cartaoProvider).value;
 
   if (despesas != null && pagamentos != null && compras != null) {
     return _processData(despesas, pagamentos, compras);
   }
 
   return (
-    resumo: <String, PersonSummaryRecord>{},
-    despesas: <String, DespesaItemRecord>{},
-    compras: <String, CompraCartao>{},
-    comprasPorPessoa: <String, List<CompraCartao>>{},
+    resumo: const <String, PersonSummaryRecord>{},
+    despesas: const <String, DespesaItemRecord>{},
+    compras: const <String, CompraCartao>{},
+    comprasPorPessoa: const <String, List<CompraCartao>>{},
     totalGeral: 0.0,
     arrecadadoCasa: 0.0,
     totalDespesasCasa: 0.0,
   );
 });
 
-FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
-    List<CompraCartao> compras) {
-  // 1. Map de indexação de pagamentos aninhado para evitar interpolação no loop principal O(1)
+FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos, List<CompraCartao> compras) {
   final pagMap = <String, Map<String, bool>>{};
   for (final p in pagamentos) {
-    pagMap.putIfAbsent(p.despesaId, () => <String, bool>{})[p.pessoa] = p.pago;
+    (pagMap[p.despesaId] ??= {})[p.pessoa] = p.pago;
   }
 
-  final despesasIndex = <String, DespesaItemRecord>{};
-  final pendenteCasaPessoa = {for (final p in pessoas) p: 0.0};
-  double totalDespesasCasa = 0.0;
-  double arrecadadoFixo = 0.0;
+  final pendenteCasa = {for (final p in pessoas) p: 0.0};
+  double totalDespesasCasa = 0.0, arrecadadoFixo = 0.0;
 
-  // 2. Processamento de Despesas Fixas O(N)
-  for (final d in despesas) {
-    if (d.id == null) continue;
-
+  final despesasIndex = {for (final d in despesas) if (d.id != null) d.id!: () {
     int totalPagos = 0;
     bool luanPago = false;
     final valorPorPessoa = d.valor / 3;
-    final dId = d.id!;
+    final pagosPorPessoa = {for (final p in pessoas) p: false};
 
     for (final p in pessoas) {
-      final isPago = pagMap[dId]?[p] ?? false;
-      if (isPago) {
+      if (pagosPorPessoa[p] = pagMap[d.id]?[p] ?? false) {
         totalPagos++;
         if (p == 'Luan') luanPago = true;
         arrecadadoFixo += valorPorPessoa;
       } else {
-        pendenteCasaPessoa[p] = (pendenteCasaPessoa[p] ?? 0.0) + valorPorPessoa;
+        pendenteCasa[p] = (pendenteCasa[p] ?? 0.0) + valorPorPessoa;
       }
     }
+    totalDespesasCasa += d.valor;
 
-    final pagosPorPessoa = {
-      for (final p in pessoas) p: pagMap[dId]?[p] ?? false
-    };
-
-    despesasIndex[dId] = (
+    return (
       despesa: d,
       totalPagos: totalPagos,
       allPaid: totalPagos == pessoas.length,
@@ -105,47 +88,31 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
       valorPorPessoa: valorPorPessoa,
       pagosPorPessoa: pagosPorPessoa,
     );
-    totalDespesasCasa += d.valor;
-  }
+  }()};
 
-  final comprasIndex = <String, CompraCartao>{};
   final comprasPorPessoa = {for (final p in pessoas) p: <CompraCartao>[]};
-  final pendenteCartaoPessoa = {for (final p in pessoas) p: 0.0};
-  double creditoCartaoLuan = 0.0;
-  double totalGeralCompras = 0.0;
-  double arrecadadoCartao = 0.0;
+  final pendenteCartao = {for (final p in pessoas) p: 0.0};
+  double creditoLuan = 0.0, totalGeralCompras = 0.0, arrecadadoCartao = 0.0;
 
-  // 3. Processamento de Compras de Cartão O(N)
-  for (final c in compras) {
-    if (c.id == null) continue;
-    comprasIndex[c.id!] = c;
+  final comprasIndex = {for (final c in compras) if (c.id != null) c.id!: () {
     comprasPorPessoa[c.pessoa]?.add(c);
     totalGeralCompras += c.valor;
 
     if (!c.pago) {
-      if (c.pessoa == 'Luan') {
-        pendenteCartaoPessoa['Luan'] =
-            (pendenteCartaoPessoa['Luan'] ?? 0.0) + c.valor;
-      } else {
-        pendenteCartaoPessoa[c.pessoa] =
-            (pendenteCartaoPessoa[c.pessoa] ?? 0.0) + c.valor;
-        creditoCartaoLuan += c.valor;
-      }
+      pendenteCartao[c.pessoa] = (pendenteCartao[c.pessoa] ?? 0.0) + c.valor;
+      if (c.pessoa != 'Luan') creditoLuan += c.valor;
     } else {
       arrecadadoCartao += c.valor;
     }
-  }
+    return c;
+  }()};
 
-  // 4. Agregação Final do Resumo
-  final resumo = {
-    for (final p in pessoas)
-      p: (
-        pendenteCasa: pendenteCasaPessoa[p] ?? 0.0,
-        pendenteCartao: pendenteCartaoPessoa[p] ?? 0.0,
-        creditoCartao: p == 'Luan' ? creditoCartaoLuan : 0.0,
-        totalGeral: (pendenteCasaPessoa[p]! + pendenteCartaoPessoa[p]!),
-      )
-  };
+  final resumo = {for (final p in pessoas) p: (
+    pendenteCasa: pendenteCasa[p] ?? 0.0,
+    pendenteCartao: pendenteCartao[p] ?? 0.0,
+    creditoCartao: p == 'Luan' ? creditoLuan : 0.0,
+    totalGeral: (pendenteCasa[p]! + pendenteCartao[p]!),
+  )};
 
   return (
     resumo: resumo,
@@ -158,18 +125,11 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
   );
 }
 
-final despesaItemProvider =
-    Provider.family<DespesaItemRecord?, String>((ref, id) {
+final despesaItemProvider = Provider.family<DespesaItemRecord?, String>((ref, id) {
   return ref.watch(diviEngineProvider.select((s) => s.despesas[id]));
 });
 
-final compraItemProvider =
-    Provider.family<CompraItemRecord?, String>((ref, id) {
+final compraItemProvider = Provider.family<CompraItemRecord?, String>((ref, id) {
   final compra = ref.watch(diviEngineProvider.select((s) => s.compras[id]));
-  if (compra == null) return null;
-
-  return (
-    compra: compra,
-    isLuan: compra.pessoa == 'Luan',
-  );
+  return compra != null ? (compra: compra, isLuan: compra.pessoa == 'Luan') : null;
 });

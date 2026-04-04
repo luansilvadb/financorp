@@ -1,4 +1,4 @@
-import '../../providers/app_providers.dart';
+import '../../../core/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,7 +7,6 @@ import '../../../shared/providers/month_year_provider.dart';
 import '../../../shared/constants.dart';
 
 import '../../../core/utils/formatters.dart';
-import '../providers/finance_providers.dart';
 import '../../../core/engine/finance_engine.dart';
 
 import 'widgets/despesa_card.dart';
