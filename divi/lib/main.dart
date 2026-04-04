@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/gestures.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,6 +28,22 @@ void main() {
   runApp(const ProviderScope(child: CasaApp()));
 }
 
+
+class AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.stylus,
+      };
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const BouncingScrollPhysics();
+  }
+}
+
 class CasaApp extends StatelessWidget {
   const CasaApp({super.key});
 
@@ -36,6 +53,7 @@ class CasaApp extends StatelessWidget {
       title: 'DIVI',
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
+      scrollBehavior: AppScrollBehavior(),
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme().apply(
           bodyColor: kInk,
