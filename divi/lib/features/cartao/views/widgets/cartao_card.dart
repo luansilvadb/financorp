@@ -1,12 +1,13 @@
+import '../../../../core/engine/finance_engine.dart';
+import '../../../../core/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../shared/widgets/divi_avatar.dart';
-import '../../providers/cartao_providers.dart';
 
 import 'cartao_details_sheet.dart';
 
@@ -72,8 +73,8 @@ class CartaoCard extends ConsumerWidget {
         ),
         padding: const EdgeInsets.only(left: 24),
         alignment: Alignment.centerLeft,
-        child: PhosphorIcon(
-          PhosphorIcons.checkCircle(PhosphorIconsStyle.fill),
+        child: Icon(
+          Icons.check_circle,
           color: kGreen500,
           size: 32,
         ),
@@ -86,8 +87,8 @@ class CartaoCard extends ConsumerWidget {
         ),
         padding: const EdgeInsets.only(right: 24),
         alignment: Alignment.centerRight,
-        child: PhosphorIcon(
-          PhosphorIcons.trash(PhosphorIconsStyle.fill),
+        child: Icon(
+          Icons.delete,
           color: kRed500,
           size: 32,
         ),
@@ -211,10 +212,10 @@ class CartaoCard extends ConsumerWidget {
                 height: 48,
                 margin: const EdgeInsets.only(right: 8),
                 alignment: Alignment.center,
-                child: PhosphorIcon(
+                child: Icon(
                   compra.pago
-                      ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
-                      : PhosphorIcons.warningCircle(PhosphorIconsStyle.fill),
+                      ? Icons.check_circle
+                      : Icons.warning,
                   color: compra.pago ? kGreen500 : kRed500,
                   size: 24,
                 ),

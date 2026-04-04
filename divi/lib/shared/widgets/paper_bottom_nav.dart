@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 import '../constants.dart';
 
 class PaperBottomNav extends StatefulWidget {
@@ -63,17 +63,17 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
               children: [
                 _buildItem(
                   index: 0,
-                  iconActive: PhosphorIcons.receipt(PhosphorIconsStyle.fill),
+                  iconActive: Icons.receipt,
                   iconInactive:
-                      PhosphorIcons.receipt(PhosphorIconsStyle.regular),
+                      Icons.receipt,
                   label: 'CONTAS',
                 ),
                 const SizedBox(width: 48), // Spacer for center FAB
                 _buildItem(
                   index: 1,
-                  iconActive: PhosphorIcons.folderOpen(PhosphorIconsStyle.fill),
+                  iconActive: Icons.folder_open,
                   iconInactive:
-                      PhosphorIcons.folderOpen(PhosphorIconsStyle.regular),
+                      Icons.folder_open,
                   label: 'HISTÓRICO',
                 ),
               ],
@@ -151,7 +151,7 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            PhosphorIcon(
+            Icon(
               isActive ? iconActive : iconInactive,
               color: isActive ? kPaper : kPaper.withOpacity(0.4),
               size: 24,

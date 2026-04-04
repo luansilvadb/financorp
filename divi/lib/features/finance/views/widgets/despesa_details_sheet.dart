@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 
 import '../../../../shared/constants.dart';
-import '../../../../shared/models/despesa.dart';
+import '../../../../shared/models/domain.dart';
 import '../../../../core/utils/formatters.dart';
-import '../../providers/finance_providers.dart';
+import '../../../../core/providers/app_providers.dart';
 
 import 'add_expense_sheet.dart';
 
@@ -47,8 +47,8 @@ class DespesaDetailsSheet extends ConsumerWidget {
                   color: kPrimaryColor.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: PhosphorIcon(
-                  PhosphorIcons.receipt(PhosphorIconsStyle.fill),
+                child: Icon(
+                  Icons.receipt,
                   color: kPrimaryColor,
                   size: 24,
                 ),
@@ -153,11 +153,10 @@ class DespesaDetailsSheet extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        PhosphorIcon(
+                        Icon(
                           pago
-                              ? PhosphorIcons.checkCircle(
-                                  PhosphorIconsStyle.fill)
-                              : PhosphorIcons.xCircle(PhosphorIconsStyle.fill),
+                              ? Icons.check_circle
+                              : Icons.cancel,
                           color: color,
                           size: 22,
                         ),
@@ -185,8 +184,8 @@ class DespesaDetailsSheet extends ConsumerWidget {
                       builder: (context) => AddExpenseSheet(expense: despesa),
                     );
                   },
-                  icon: PhosphorIcon(
-                    PhosphorIcons.pencilSimple(PhosphorIconsStyle.regular),
+                  icon: Icon(
+                    Icons.edit,
                     size: 20,
                   ),
                   label: const Text(
@@ -217,8 +216,8 @@ class DespesaDetailsSheet extends ConsumerWidget {
                         .deleteDespesa(despesa.id!);
                     Navigator.pop(context);
                   },
-                  icon: PhosphorIcon(
-                    PhosphorIcons.trash(PhosphorIconsStyle.regular),
+                  icon: Icon(
+                    Icons.delete,
                     size: 20,
                   ),
                   label: const Text(

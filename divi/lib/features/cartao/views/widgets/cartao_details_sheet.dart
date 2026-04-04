@@ -1,12 +1,12 @@
+import '../../../../core/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 
 import '../../../../shared/constants.dart';
-import '../../../../shared/models/compra_cartao.dart';
+import '../../../../shared/models/domain.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../shared/widgets/divi_avatar.dart';
-import '../../providers/cartao_providers.dart';
 
 import 'add_purchase_sheet.dart';
 
@@ -101,11 +101,10 @@ class CartaoDetailsSheet extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  PhosphorIcon(
+                  Icon(
                     compra.pago
-                        ? PhosphorIcons.arrowCounterClockwise(
-                            PhosphorIconsStyle.regular)
-                        : PhosphorIcons.checkCircle(PhosphorIconsStyle.regular),
+                        ? Icons.undo
+                        : Icons.check_circle_outline,
                     color: compra.pago ? kSlate600 : kGreen500,
                     size: 20,
                   ),
@@ -139,8 +138,8 @@ class CartaoDetailsSheet extends ConsumerWidget {
                       builder: (context) => AddPurchaseSheet(purchase: compra),
                     );
                   },
-                  icon: PhosphorIcon(
-                    PhosphorIcons.pencilSimple(PhosphorIconsStyle.regular),
+                  icon: Icon(
+                    Icons.edit,
                     size: 20,
                   ),
                   label: const Text(
@@ -169,8 +168,8 @@ class CartaoDetailsSheet extends ConsumerWidget {
                     ref.read(cartaoProvider.notifier).deleteCompra(compra.id!);
                     Navigator.pop(context);
                   },
-                  icon: PhosphorIcon(
-                    PhosphorIcons.trash(PhosphorIconsStyle.regular),
+                  icon: Icon(
+                    Icons.delete,
                     size: 20,
                   ),
                   label: const Text(

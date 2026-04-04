@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/engine/finance_engine.dart';
@@ -46,8 +46,8 @@ class PoteStatusCard extends ConsumerWidget {
                   color: kPrimaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: PhosphorIcon(
-                    PhosphorIcons.piggyBank(PhosphorIconsStyle.regular),
+                child: Icon(
+                    Icons.savings,
                     color: kPrimaryColor,
                     size: 28),
               ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:divi/shared/constants.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 
 class FolderCard extends StatefulWidget {
   final String label;
@@ -68,8 +68,8 @@ class _FolderCardState extends State<FolderCard> {
                         color: kInk.withOpacity(0.05),
                         shape: BoxShape.circle,
                       ),
-                      child: PhosphorIcon(
-                        PhosphorIcons.folderSimple(PhosphorIconsStyle.fill),
+                      child: Icon(
+                        Icons.folder,
                         color: kInk,
                         size: 20,
                       ),

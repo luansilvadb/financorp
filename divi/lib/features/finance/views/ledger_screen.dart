@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 
 import '../../../shared/providers/month_year_provider.dart';
 import '../../../shared/constants.dart';
 import '../../../core/engine/finance_engine.dart';
 
 import 'widgets/z_report_card.dart';
-import 'widgets/resident_summary_card.dart';
+import 'widgets/finance_widgets.dart';
 import 'package:divi/shared/widgets/divi_toasts.dart';
 import 'statement_screen.dart';
 
@@ -110,8 +110,8 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
           contentPadding: const EdgeInsets.symmetric(vertical: 14),
           prefixIcon: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: PhosphorIcon(
-              PhosphorIcons.magnifyingGlass(PhosphorIconsStyle.bold),
+            child: Icon(
+              Icons.search,
               size: 16,
               color: kInkFaded,
             ),
@@ -130,8 +130,8 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 12),
-                    child: PhosphorIcon(
-                      PhosphorIcons.xCircle(PhosphorIconsStyle.fill),
+                    child: Icon(
+                      Icons.cancel,
                       size: 18,
                       color: kInkFaded,
                     ),
@@ -244,8 +244,8 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                         _scrollToMonth(currentMonth);
                         DiviToasts.show(context, "VOLTANDO PARA HOJE");
                       },
-                      icon: PhosphorIcon(
-                          PhosphorIcons.arrowClockwise(PhosphorIconsStyle.bold),
+                      icon: Icon(
+                          Icons.refresh,
                           size: 20,
                           color: kPrimaryColor),
                       tooltip: 'Voltar para Hoje',
@@ -267,7 +267,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
         IconButton(
           onPressed: () => ref.read(periodProvider.notifier).prevYear(),
           visualDensity: VisualDensity.compact,
-          icon: PhosphorIcon(PhosphorIcons.caretLeft(PhosphorIconsStyle.bold),
+          icon: Icon(Icons.chevron_left,
               size: 14, color: kInkFaded),
         ),
         Text(
@@ -282,7 +282,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
         IconButton(
           onPressed: () => ref.read(periodProvider.notifier).nextYear(),
           visualDensity: VisualDensity.compact,
-          icon: PhosphorIcon(PhosphorIcons.caretRight(PhosphorIconsStyle.bold),
+          icon: Icon(Icons.chevron_right,
               size: 14, color: kInkFaded),
         ),
       ],

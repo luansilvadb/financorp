@@ -1,13 +1,13 @@
+import '../../../../core/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 
 import '../../../../shared/constants.dart';
-import '../../../../shared/models/compra_cartao.dart';
+import '../../../../shared/models/domain.dart';
 import '../../../../shared/providers/month_year_provider.dart';
 import '../../../../core/utils/formatters.dart';
-import '../../providers/cartao_providers.dart';
 
 class AddPurchaseSheet extends ConsumerStatefulWidget {
   final CompraCartao? purchase;
@@ -79,12 +79,10 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
                     color: kPrimaryColor.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: PhosphorIcon(
+                  child: Icon(
                       isEditing
-                          ? PhosphorIcons.pencilSimple(
-                              PhosphorIconsStyle.regular)
-                          : PhosphorIcons.creditCard(
-                              PhosphorIconsStyle.regular),
+                          ? Icons.edit
+                          : Icons.credit_card,
                       color: kPrimaryColor,
                       size: 24),
                 ),
@@ -101,11 +99,11 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
             ),
             const SizedBox(height: 24),
             _field("DESCRIÇÃO", _descCtrl,
-                PhosphorIcons.textAlignLeft(PhosphorIconsStyle.regular),
+                Icons.format_align_left,
                 placeholder: "Ex: Comida, Farmácia..."),
             const SizedBox(height: 20),
             _field("VALOR (R\$)", _valorCtrl,
-                PhosphorIcons.currencyDollar(PhosphorIconsStyle.regular),
+                Icons.attach_money,
                 placeholder: "0,00",
                 keyboardType: TextInputType.number,
                 formatters: [BrlCurrencyInputFormatter()]),
@@ -220,7 +218,7 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
             hintText: placeholder,
             hintStyle: TextStyle(
                 color: kSlate400.withOpacity(0.6), fontWeight: FontWeight.w500),
-            prefixIcon: PhosphorIcon(icon, color: kPrimaryColor, size: 22),
+            prefixIcon: Icon(icon, color: kPrimaryColor, size: 22),
             filled: true,
             fillColor: kSlate100,
             enabledBorder: OutlineInputBorder(
@@ -268,15 +266,15 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
                 fontWeight: FontWeight.w700, fontSize: 16, color: kSlate900),
             decoration: InputDecoration(
               border: InputBorder.none,
-              prefixIcon: PhosphorIcon(
-                  PhosphorIcons.user(PhosphorIconsStyle.regular),
+              prefixIcon: Icon(
+                  Icons.person,
                   color: kPrimaryColor,
                   size: 22),
               prefixIconConstraints: const BoxConstraints(minWidth: 48),
             ),
             dropdownColor: Colors.white,
-            icon: PhosphorIcon(
-                PhosphorIcons.caretDown(PhosphorIconsStyle.regular),
+            icon: Icon(
+                Icons.keyboard_arrow_down,
                 color: kSlate400),
           ),
         ),

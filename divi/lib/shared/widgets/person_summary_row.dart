@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 import '../../core/engine/finance_engine.dart';
 import '../../core/utils/formatters.dart';
 import '../constants.dart';
@@ -76,10 +76,10 @@ class _PersonMiniCard extends ConsumerWidget {
                 pessoa: pessoa,
                 size: 32,
               ),
-              PhosphorIcon(
+              Icon(
                 ok
-                    ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
-                    : PhosphorIcons.warningCircle(PhosphorIconsStyle.fill),
+                    ? Icons.check_circle
+                    : Icons.warning,
                 color: ok ? kGreen500 : kRed500,
                 size: 16,
               ),

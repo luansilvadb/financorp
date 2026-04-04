@@ -1,10 +1,10 @@
+import '../../../../core/engine/finance_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
-import '../../providers/finance_providers.dart';
 
 import 'despesa_details_sheet.dart';
 
@@ -126,10 +126,10 @@ class DespesaCard extends ConsumerWidget {
             const SizedBox(width: 12),
 
             // Trailing: consolidated status icon
-            PhosphorIcon(
+            Icon(
               allPaid
-                  ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
-                  : PhosphorIcons.warningCircle(PhosphorIconsStyle.fill),
+                  ? Icons.check_circle
+                  : Icons.warning,
               color: allPaid ? kGreen500 : kRed500,
               size: 24,
             ),

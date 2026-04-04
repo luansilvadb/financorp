@@ -1,11 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../shared/models/despesa.dart';
-import '../../../shared/models/compra_cartao.dart';
-import '../../../shared/models/pagamento.dart';
-import '../../../shared/constants.dart';
-
-import '../../../features/finance/providers/finance_providers.dart';
-import '../../../features/cartao/providers/cartao_providers.dart';
+import '../providers/app_providers.dart';
+import '../../shared/models/domain.dart';
+import '../../shared/constants.dart';
 
 /// Records densos para eliminar boilerplate de classes efêmeras (freezed).
 typedef PersonSummaryRecord = ({
@@ -45,9 +41,9 @@ final diviEngineProvider = Provider<FinanceState>((ref) {
   final pagamentosAsync = ref.watch(pagamentosProvider);
   final comprasAsync = ref.watch(cartaoProvider);
 
-  final despesas = despesasAsync.valueOrNull;
-  final pagamentos = pagamentosAsync.valueOrNull;
-  final compras = comprasAsync.valueOrNull;
+  final despesas = despesasAsync.value;
+  final pagamentos = pagamentosAsync.value;
+  final compras = comprasAsync.value;
 
   if (despesas != null && pagamentos != null && compras != null) {
     return _processData(despesas, pagamentos, compras);
@@ -66,10 +62,11 @@ final diviEngineProvider = Provider<FinanceState>((ref) {
 
 FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
     List<CompraCartao> compras) {
-  // 1. Map de indexação de pagamentos para busca O(1)
-  final pagMap = {
-    for (final p in pagamentos) '${p.despesaId}-${p.pessoa}': p.pago
-  };
+  // 1. Map de indexação de pagamentos aninhado para evitar interpolação no loop principal O(1)
+  final pagMap = <String, Map<String, bool>>{};
+  for (final p in pagamentos) {
+    pagMap.putIfAbsent(p.despesaId, () => <String, bool>{})[p.pessoa] = p.pago;
+  }
 
   final despesasIndex = <String, DespesaItemRecord>{};
   final pendenteCasaPessoa = {for (final p in pessoas) p: 0.0};
@@ -83,9 +80,10 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
     int totalPagos = 0;
     bool luanPago = false;
     final valorPorPessoa = d.valor / 3;
+    final dId = d.id!;
 
     for (final p in pessoas) {
-      final isPago = pagMap['${d.id}-$p'] ?? false;
+      final isPago = pagMap[dId]?[p] ?? false;
       if (isPago) {
         totalPagos++;
         if (p == 'Luan') luanPago = true;
@@ -96,10 +94,10 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
     }
 
     final pagosPorPessoa = {
-      for (final p in pessoas) p: pagMap['${d.id}-$p'] ?? false
+      for (final p in pessoas) p: pagMap[dId]?[p] ?? false
     };
 
-    despesasIndex[d.id!] = (
+    despesasIndex[dId] = (
       despesa: d,
       totalPagos: totalPagos,
       allPaid: totalPagos == pessoas.length,
@@ -159,3 +157,19 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos,
     totalDespesasCasa: totalDespesasCasa,
   );
 }
+
+final despesaItemProvider =
+    Provider.family<DespesaItemRecord?, String>((ref, id) {
+  return ref.watch(diviEngineProvider.select((s) => s.despesas[id]));
+});
+
+final compraItemProvider =
+    Provider.family<CompraItemRecord?, String>((ref, id) {
+  final compra = ref.watch(diviEngineProvider.select((s) => s.compras[id]));
+  if (compra == null) return null;
+
+  return (
+    compra: compra,
+    isLuan: compra.pessoa == 'Luan',
+  );
+});
