@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -66,9 +68,13 @@ class CasaApp extends StatelessWidget {
   }
 
   Future<void> _initialize() async {
-    // Load environment variables
+    // Load environment variables if .env exists in assets
     try {
-      await dotenv.load(fileName: ".env");
+      final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+      final assets = manifest.listAssets();
+      if (assets.contains('.env') || assets.contains('assets/.env')) {
+        await dotenv.load(fileName: ".env");
+      }
     } catch (e) {
       // Ignore if .env file is missing, assume environment variables are passed via --dart-define
     }
