@@ -41,15 +41,15 @@ class PremiumBottomNav extends ConsumerWidget {
             child: Container(
               height: 72,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(32),
                 border: Border.all(
-                  color: kPrimaryColor.withOpacity(0.1),
+                  color: kPrimaryColor.withValues(alpha: 0.1),
                   width: 1,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
+                    color: Colors.black.withValues(alpha: 0.04),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -112,11 +112,11 @@ class _PremiumNavItemWidget extends StatelessWidget {
                 width: 56,
                 height: 52,
                 decoration: BoxDecoration(
-                  color: kPrimaryColor.withOpacity(0.1),
+                  color: kPrimaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [
                     BoxShadow(
-                      color: kPrimaryColor.withOpacity(0.12),
+                      color: kPrimaryColor.withValues(alpha: 0.12),
                       blurRadius: 12,
                       spreadRadius: -2,
                     ),

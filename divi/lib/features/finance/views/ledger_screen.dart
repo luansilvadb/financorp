@@ -81,7 +81,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.white.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: kLine),
       ),
@@ -305,7 +305,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
             height: 32,
             width: screenWidth - 32,
             decoration: BoxDecoration(
-              color: kLine.withOpacity(0.1),
+              color: kLine.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
             ),
           ),
@@ -333,7 +333,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                                color: kInk.withOpacity(0.15),
+                                color: kInk.withValues(alpha: 0.15),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4))
                           ]

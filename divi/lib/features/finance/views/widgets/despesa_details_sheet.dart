@@ -44,7 +44,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: kPrimaryColor.withOpacity(0.1),
+                  color: kPrimaryColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -71,7 +71,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: kPrimaryColor.withOpacity(0.08),
+                        color: kPrimaryColor.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
@@ -201,7 +201,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
-                        color: kPrimaryColor.withOpacity(0.15),
+                        color: kPrimaryColor.withValues(alpha: 0.15),
                       ),
                     ),
                   ),

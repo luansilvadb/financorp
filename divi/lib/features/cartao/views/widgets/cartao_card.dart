@@ -68,7 +68,7 @@ class CartaoCard extends ConsumerWidget {
       background: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: kGreen500.withOpacity(0.1),
+          color: kGreen500.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.only(left: 24),
@@ -82,7 +82,7 @@ class CartaoCard extends ConsumerWidget {
       secondaryBackground: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: kRed500.withOpacity(0.1),
+          color: kRed500.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.only(right: 24),
@@ -103,7 +103,7 @@ class CartaoCard extends ConsumerWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

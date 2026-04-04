@@ -5,9 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:divi/shared/constants.dart';
 import 'package:divi/shared/models/domain.dart';
-import 'package:divi/shared/models/domain.dart';
 import 'package:divi/core/utils/formatters.dart';
-import 'package:divi/core/providers/app_providers.dart';
 import 'package:divi/core/providers/app_providers.dart';
 import 'package:divi/shared/providers/month_year_provider.dart';
 import 'package:divi/shared/widgets/divi_toasts.dart';
@@ -125,7 +123,7 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 20,
             offset: const Offset(0, -10),
           ),
@@ -141,7 +139,7 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
                 height: 4,
                 margin: const EdgeInsets.only(top: 12, bottom: 24),
                 decoration: BoxDecoration(
-                  color: kInkFaded.withOpacity(0.2),
+                  color: kInkFaded.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -222,7 +220,7 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: kLine.withOpacity(0.2),
+        color: kLine.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -247,7 +245,7 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: kInk.withOpacity(0.2),
+                    color: kInk.withValues(alpha: 0.2),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   )
@@ -298,7 +296,7 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
           decoration: InputDecoration(
             hintText: placeholder,
             hintStyle: TextStyle(
-              color: kInkFaded.withOpacity(0.2),
+              color: kInkFaded.withValues(alpha: 0.2),
               fontWeight: FontWeight.w400,
               fontSize: 20,
             ),

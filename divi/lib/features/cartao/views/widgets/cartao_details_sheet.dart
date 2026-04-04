@@ -155,7 +155,7 @@ class CartaoDetailsSheet extends ConsumerWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
-                        color: kPrimaryColor.withOpacity(0.15),
+                        color: kPrimaryColor.withValues(alpha: 0.15),
                       ),
                     ),
                   ),
