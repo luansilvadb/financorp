@@ -20,6 +20,8 @@ import 'core/views/splash_screen.dart';
 // App Entry
 // ============================================================
 
+bool _isConfigured = true;
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(child: CasaApp()));
@@ -58,8 +60,9 @@ class CasaApp extends StatelessWidget {
       home: SplashScreen(
         initializationFuture: _initialize(),
         onInitialized: () {
-          // Navigator is already available within the child context of SplashScreen's Material parent
-          // but we'll use the local context in the SplashScreen or a global key if needed.
+          if (!_isConfigured) {
+            runApp(const ConfigErrorScreen());
+          }
         },
       ),
     );
@@ -76,17 +79,73 @@ class CasaApp extends StatelessWidget {
     final url = const String.fromEnvironment('SUPABASE_URL', defaultValue: '');
     final anonKey = const String.fromEnvironment('SUPABASE_ANON_KEY', defaultValue: '');
 
-    if (url.isNotEmpty && anonKey.isNotEmpty) {
-      await Supabase.initialize(
-        url: url,
-        anonKey: anonKey,
-      );
-    } else {
-      await Supabase.initialize(
-        url: dotenv.env['SUPABASE_URL'] ?? '',
-        anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
-      );
+    String finalUrl = url;
+    String finalKey = anonKey;
+
+    if (finalUrl.isEmpty) {
+      finalUrl = dotenv.env['SUPABASE_URL'] ?? '';
     }
+    if (finalKey.isEmpty) {
+      finalKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+    }
+
+    if (finalUrl.isEmpty || finalKey.isEmpty) {
+      _isConfigured = false;
+      return;
+    }
+
+    try {
+      await Supabase.initialize(
+        url: finalUrl,
+        anonKey: finalKey,
+      );
+    } catch (e) {
+      _isConfigured = false;
+    }
+  }
+}
+
+class ConfigErrorScreen extends StatelessWidget {
+  const ConfigErrorScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: const Color(0xFFF4F1EA),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Color(0xFFE63819)),
+                const SizedBox(height: 24),
+                const Text(
+                  "SUPABASE_URL or SUPABASE_ANON_KEY is missing.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2C2C2C),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  "If you are deploying to Vercel, you must pass your Supabase credentials either via a .env file or by modifying the Build Command in Vercel to:\n\nflutter build web --dart-define=SUPABASE_URL=\$SUPABASE_URL --dart-define=SUPABASE_ANON_KEY=\$SUPABASE_ANON_KEY",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF6B6B6B),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
