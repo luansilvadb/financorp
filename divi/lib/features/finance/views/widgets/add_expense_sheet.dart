@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 
 import '../../../../shared/constants.dart';
 import '../../../../shared/models/domain.dart';
@@ -81,8 +81,8 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
                   ),
                   child: Icon(
                       isEditing
-                          ? LucideIcons.pencil
-                          : LucideIcons.plusCircle,
+                          ? Icons.edit
+                          : Icons.add_circle,
                       color: kPrimaryColor,
                       size: 24),
                 ),
@@ -99,13 +99,13 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
             ),
             const SizedBox(height: 24),
             _field("NOME DA CONTA", _nomeCtrl,
-                LucideIcons.alignLeft,
+                Icons.format_align_left,
                 placeholder: "Ex: Aluguel, Luz..."),
             const SizedBox(height: 20),
             _field(
               "VALOR TOTAL",
               _valorCtrl,
-              LucideIcons.dollarSign,
+              Icons.attach_money,
               placeholder: "0,00",
               keyboardType: TextInputType.number,
               formatters: [BrlCurrencyInputFormatter()],
@@ -114,7 +114,7 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
             _field(
               "DIA DO VENCIMENTO",
               _vencCtrl,
-              LucideIcons.calendar,
+              Icons.calendar_today,
               placeholder: "Ex: 5",
               keyboardType: TextInputType.number,
             ),

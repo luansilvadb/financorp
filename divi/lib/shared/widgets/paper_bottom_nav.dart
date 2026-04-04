@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 import '../constants.dart';
 
 class PaperBottomNav extends StatefulWidget {
@@ -63,17 +63,17 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
               children: [
                 _buildItem(
                   index: 0,
-                  iconActive: LucideIcons.receipt,
+                  iconActive: Icons.receipt,
                   iconInactive:
-                      LucideIcons.receipt,
+                      Icons.receipt,
                   label: 'CONTAS',
                 ),
                 const SizedBox(width: 48), // Spacer for center FAB
                 _buildItem(
                   index: 1,
-                  iconActive: LucideIcons.folderOpen,
+                  iconActive: Icons.folder_open,
                   iconInactive:
-                      LucideIcons.folderOpen,
+                      Icons.folder_open,
                   label: 'HISTÓRICO',
                 ),
               ],

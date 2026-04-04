@@ -1,7 +1,8 @@
+import '../../../../core/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 
 import '../../../../shared/constants.dart';
 import '../../../../shared/models/domain.dart';
@@ -80,8 +81,8 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
                   ),
                   child: Icon(
                       isEditing
-                          ? LucideIcons.pencil
-                          : LucideIcons.creditCard,
+                          ? Icons.edit
+                          : Icons.credit_card,
                       color: kPrimaryColor,
                       size: 24),
                 ),
@@ -98,11 +99,11 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
             ),
             const SizedBox(height: 24),
             _field("DESCRIÇÃO", _descCtrl,
-                LucideIcons.alignLeft,
+                Icons.format_align_left,
                 placeholder: "Ex: Comida, Farmácia..."),
             const SizedBox(height: 20),
             _field("VALOR (R\$)", _valorCtrl,
-                LucideIcons.dollarSign,
+                Icons.attach_money,
                 placeholder: "0,00",
                 keyboardType: TextInputType.number,
                 formatters: [BrlCurrencyInputFormatter()]),
@@ -266,14 +267,14 @@ class _AddPurchaseSheetState extends ConsumerState<AddPurchaseSheet> {
             decoration: InputDecoration(
               border: InputBorder.none,
               prefixIcon: Icon(
-                  LucideIcons.user,
+                  Icons.person,
                   color: kPrimaryColor,
                   size: 22),
               prefixIconConstraints: const BoxConstraints(minWidth: 48),
             ),
             dropdownColor: Colors.white,
             icon: Icon(
-                LucideIcons.chevronDown,
+                Icons.keyboard_arrow_down,
                 color: kSlate400),
           ),
         ),

@@ -1,6 +1,7 @@
+import '../../../../core/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 
 import '../../../../shared/constants.dart';
 import '../../../../shared/models/domain.dart';
@@ -102,8 +103,8 @@ class CartaoDetailsSheet extends ConsumerWidget {
                 children: [
                   Icon(
                     compra.pago
-                        ? LucideIcons.rotateCcw
-                        : LucideIcons.checkCircle,
+                        ? Icons.undo
+                        : Icons.check_circle_outline,
                     color: compra.pago ? kSlate600 : kGreen500,
                     size: 20,
                   ),
@@ -138,7 +139,7 @@ class CartaoDetailsSheet extends ConsumerWidget {
                     );
                   },
                   icon: Icon(
-                    LucideIcons.pencil,
+                    Icons.edit,
                     size: 20,
                   ),
                   label: const Text(
@@ -168,7 +169,7 @@ class CartaoDetailsSheet extends ConsumerWidget {
                     Navigator.pop(context);
                   },
                   icon: Icon(
-                    LucideIcons.trash2,
+                    Icons.delete,
                     size: 20,
                   ),
                   label: const Text(

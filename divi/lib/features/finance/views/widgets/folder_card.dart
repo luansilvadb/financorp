@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:divi/shared/constants.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 
 class FolderCard extends StatefulWidget {
   final String label;
@@ -69,7 +69,7 @@ class _FolderCardState extends State<FolderCard> {
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                        LucideIcons.folder,
+                        Icons.folder,
                         color: kInk,
                         size: 20,
                       ),

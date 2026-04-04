@@ -1,7 +1,7 @@
 import '../../../../core/engine/finance_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
@@ -128,8 +128,8 @@ class DespesaCard extends ConsumerWidget {
             // Trailing: consolidated status icon
             Icon(
               allPaid
-                  ? LucideIcons.checkCircle2
-                  : LucideIcons.alertCircle,
+                  ? Icons.check_circle
+                  : Icons.warning,
               color: allPaid ? kGreen500 : kRed500,
               size: 24,
             ),

@@ -1,7 +1,9 @@
+import '../../../../core/engine/finance_engine.dart';
+import '../../../../core/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
@@ -72,7 +74,7 @@ class CartaoCard extends ConsumerWidget {
         padding: const EdgeInsets.only(left: 24),
         alignment: Alignment.centerLeft,
         child: Icon(
-          LucideIcons.checkCircle2,
+          Icons.check_circle,
           color: kGreen500,
           size: 32,
         ),
@@ -86,7 +88,7 @@ class CartaoCard extends ConsumerWidget {
         padding: const EdgeInsets.only(right: 24),
         alignment: Alignment.centerRight,
         child: Icon(
-          LucideIcons.trash2,
+          Icons.delete,
           color: kRed500,
           size: 32,
         ),
@@ -212,8 +214,8 @@ class CartaoCard extends ConsumerWidget {
                 alignment: Alignment.center,
                 child: Icon(
                   compra.pago
-                      ? LucideIcons.checkCircle2
-                      : LucideIcons.alertCircle,
+                      ? Icons.check_circle
+                      : Icons.warning,
                   color: compra.pago ? kGreen500 : kRed500,
                   size: 24,
                 ),

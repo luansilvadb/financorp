@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 import '../../../../core/engine/finance_engine.dart';
 import '../../../../shared/constants.dart';
 import '../../../../shared/widgets/divi_avatar.dart';
@@ -118,7 +118,7 @@ class _ResidentSummaryCardState extends State<ResidentSummaryCard> {
                       ],
                     ),
                     const SizedBox(width: 12),
-                    Icon(LucideIcons.chevronRight, color: kLine, size: 16),
+                    Icon(Icons.chevron_right, color: kLine, size: 16),
                   ],
                 ),
               ),
@@ -196,7 +196,7 @@ class _ReceiptItemCardState extends State<ReceiptItemCard> {
                               if (widget.isHouseExpense)
                                 Padding(
                                   padding: const EdgeInsets.only(right: 6),
-                                  child: Icon(LucideIcons.home, size: 14, color: kInkFaded),
+                                  child: Icon(Icons.home, size: 14, color: kInkFaded),
                                 ),
                               Text(
                                 widget.title,

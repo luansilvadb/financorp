@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 
 import '../../../shared/providers/month_year_provider.dart';
 import '../../../shared/constants.dart';
@@ -111,7 +111,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
           prefixIcon: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Icon(
-              LucideIcons.search,
+              Icons.search,
               size: 16,
               color: kInkFaded,
             ),
@@ -131,7 +131,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 12),
                     child: Icon(
-                      LucideIcons.xCircle,
+                      Icons.cancel,
                       size: 18,
                       color: kInkFaded,
                     ),
@@ -245,7 +245,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                         DiviToasts.show(context, "VOLTANDO PARA HOJE");
                       },
                       icon: Icon(
-                          LucideIcons.refreshCw,
+                          Icons.refresh,
                           size: 20,
                           color: kPrimaryColor),
                       tooltip: 'Voltar para Hoje',
@@ -267,7 +267,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
         IconButton(
           onPressed: () => ref.read(periodProvider.notifier).prevYear(),
           visualDensity: VisualDensity.compact,
-          icon: Icon(LucideIcons.chevronLeft,
+          icon: Icon(Icons.chevron_left,
               size: 14, color: kInkFaded),
         ),
         Text(
@@ -282,7 +282,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
         IconButton(
           onPressed: () => ref.read(periodProvider.notifier).nextYear(),
           visualDensity: VisualDensity.compact,
-          icon: Icon(LucideIcons.chevronRight,
+          icon: Icon(Icons.chevron_right,
               size: 14, color: kInkFaded),
         ),
       ],

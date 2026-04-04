@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/engine/finance_engine.dart';
@@ -47,7 +47,7 @@ class PoteStatusCard extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
-                    LucideIcons.piggyBank,
+                    Icons.savings,
                     color: kPrimaryColor,
                     size: 28),
               ),

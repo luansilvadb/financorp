@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 
 import '../../../../shared/constants.dart';
 import '../../../../shared/models/domain.dart';
@@ -48,7 +48,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  LucideIcons.receipt,
+                  Icons.receipt,
                   color: kPrimaryColor,
                   size: 24,
                 ),
@@ -155,8 +155,8 @@ class DespesaDetailsSheet extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Icon(
                           pago
-                              ? LucideIcons.checkCircle2
-                              : LucideIcons.xCircle,
+                              ? Icons.check_circle
+                              : Icons.cancel,
                           color: color,
                           size: 22,
                         ),
@@ -185,7 +185,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
                     );
                   },
                   icon: Icon(
-                    LucideIcons.pencil,
+                    Icons.edit,
                     size: 20,
                   ),
                   label: const Text(
@@ -217,7 +217,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
                     Navigator.pop(context);
                   },
                   icon: Icon(
-                    LucideIcons.trash2,
+                    Icons.delete,
                     size: 20,
                   ),
                   label: const Text(

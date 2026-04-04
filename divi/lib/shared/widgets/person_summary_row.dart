@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+
 import '../../core/engine/finance_engine.dart';
 import '../../core/utils/formatters.dart';
 import '../constants.dart';
@@ -78,8 +78,8 @@ class _PersonMiniCard extends ConsumerWidget {
               ),
               Icon(
                 ok
-                    ? LucideIcons.checkCircle2
-                    : LucideIcons.alertCircle,
+                    ? Icons.check_circle
+                    : Icons.warning,
                 color: ok ? kGreen500 : kRed500,
                 size: 16,
               ),
