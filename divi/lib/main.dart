@@ -67,12 +67,26 @@ class CasaApp extends StatelessWidget {
 
   Future<void> _initialize() async {
     // Load environment variables
-    await dotenv.load(fileName: ".env");
+    try {
+      await dotenv.load(fileName: ".env");
+    } catch (e) {
+      // Ignore if .env file is missing, assume environment variables are passed via --dart-define
+    }
 
-    await Supabase.initialize(
-      url: dotenv.env['SUPABASE_URL'] ?? '',
-      anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
-    );
+    final url = const String.fromEnvironment('SUPABASE_URL', defaultValue: '');
+    final anonKey = const String.fromEnvironment('SUPABASE_ANON_KEY', defaultValue: '');
+
+    if (url.isNotEmpty && anonKey.isNotEmpty) {
+      await Supabase.initialize(
+        url: url,
+        anonKey: anonKey,
+      );
+    } else {
+      await Supabase.initialize(
+        url: dotenv.env['SUPABASE_URL'] ?? '',
+        anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
+      );
+    }
   }
 }
 
