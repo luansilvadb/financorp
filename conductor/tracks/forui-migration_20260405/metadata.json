@@ -1,0 +1,8 @@
+{
+  "track_id": "forui-migration_20260405",
+  "type": "refactor",
+  "status": "new",
+  "created_at": "2026-04-05T00:00:00Z",
+  "updated_at": "2026-04-05T00:00:00Z",
+  "description": "Refatore a UI/UX deste projeto, quero utilizar EXCLUSIVAMENTE forui.dev como principal UI Library, para maximizar performance, coesão e densidade lógica, assegurando baixo acoplamento e preservação de contratos existentes (retrocompatibilidade)."
+}
