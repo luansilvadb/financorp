@@ -60,15 +60,15 @@ Configure forui theme, add forui_assets dependency, create icon mapping table, p
     - [x] Run `flutter pub get` and confirm no dependency conflicts ✅ COMPLETED
     - [x] **Test:** Write test that imports `forui_assets` and verifies Lucide icon availability ✅ TEST CREATED & PASSING
     - [x] **Implement:** Add forui_assets to pubspec.yaml, run pub get ✅ COMPLETED
-- [~] Task: Configure forui theme
-    - [ ] Analyze current `constants.dart` for color palette (kPaper, kInk, kLine, kPrimaryColor, etc.)
-    - [ ] Create forui theme configuration that maps existing design tokens to forui theme tokens
-    - [ ] Create a `divi/lib/core/theme/forui_theme.dart` file with FTheme configuration
-    - [ ] Map custom colors to forui's neutral theme palette or extend with custom tokens
-    - [ ] **Test:** Write test verifying forui theme is properly configured and accessible
-    - [ ] **Implement:** Create forui theme file, wire into MaterialApp
-- [ ] Task: Create icon mapping table
-    - [ ] Create `divi/lib/core/constants/icon_mapping.dart` with all 87 PhosphorIcon -> Lucide mappings
+- [x] Task: Configure forui theme [sha:c525668]
+    - [x] Analyze current `constants.dart` for color palette (kPaper, kInk, kLine, kPrimaryColor, etc.) ✅ COMPLETED
+    - [x] Create forui theme configuration that maps existing design tokens to forui theme tokens ✅ COMPLETED
+    - [x] Create a `divi/lib/core/theme/forui_theme.dart` file with FTheme configuration ✅ COMPLETED
+    - [x] Map custom colors to forui's neutral theme palette or extend with custom tokens ✅ COMPLETED
+    - [x] **Test:** Write test verifying forui theme is properly configured and accessible ✅ TEST CREATED & PASSING
+    - [x] **Implement:** Create forui theme file, wire into MaterialApp ✅ COMPLETED
+- [~] Task: Create icon mapping table
+    - [ ] Create `divi/lib/core/constants/icon_mapping.dart` with all 70 PhosphorIcon -> Lucide mappings
     - [ ] Include mapping for all icon styles (fill -> solid, regular -> outline, etc.)
     - [ ] Document any PhosphorIcon icons that have no direct Lucide equivalent with suggested alternatives
     - [ ] **Test:** Write test verifying every mapping entry resolves to a valid Lucide icon
