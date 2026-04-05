@@ -54,13 +54,13 @@ Document current state, inventory all Divi components, capture baseline metrics.
 
 Configure forui theme, add forui_assets dependency, create icon mapping table, plan migration.
 
-- [ ] Task: Add forui_assets dependency
-    - [ ] Run `flutter pub add forui_assets` in `divi/` directory
-    - [ ] Verify pubspec.yaml includes both `forui: 0.20.4` and `forui_assets`
-    - [ ] Run `flutter pub get` and confirm no dependency conflicts
-    - [ ] **Test:** Write test that imports `forui_assets` and verifies Lucide icon availability
-    - [ ] **Implement:** Add forui_assets to pubspec.yaml, run pub get
-- [ ] Task: Configure forui theme
+- [x] Task: Add forui_assets dependency [sha:pending]
+    - [x] Run `flutter pub add forui_assets` in `divi/` directory ✅ COMPLETED
+    - [x] Verify pubspec.yaml includes both `forui: 0.20.4` and `forui_assets` ✅ VERIFIED
+    - [x] Run `flutter pub get` and confirm no dependency conflicts ✅ COMPLETED
+    - [x] **Test:** Write test that imports `forui_assets` and verifies Lucide icon availability ✅ TEST CREATED & PASSING
+    - [x] **Implement:** Add forui_assets to pubspec.yaml, run pub get ✅ COMPLETED
+- [~] Task: Configure forui theme
     - [ ] Analyze current `constants.dart` for color palette (kPaper, kInk, kLine, kPrimaryColor, etc.)
     - [ ] Create forui theme configuration that maps existing design tokens to forui theme tokens
     - [ ] Create a `divi/lib/core/theme/forui_theme.dart` file with FTheme configuration

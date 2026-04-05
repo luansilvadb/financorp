@@ -47,6 +47,7 @@ dependencies:
   json_annotation: ^4.9.0
   animations: ^2.0.11
   forui: 0.20.4
+  forui_assets: ^0.20.1
 
 dev_dependencies:
   flutter_test:
