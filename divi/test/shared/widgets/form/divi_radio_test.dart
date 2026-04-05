@@ -42,7 +42,8 @@ void main() {
       );
 
       await tester.tap(find.byType(FRadio));
-      await tester.pump();
+      // Pump and settle to allow forui tappable animations to complete
+      await tester.pumpAndSettle();
 
       expect(selectedValue, 'option1');
     });

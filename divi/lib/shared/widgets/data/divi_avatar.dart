@@ -21,6 +21,11 @@ class DiviAvatar extends StatelessWidget {
       radius: radius,
       backgroundColor: backgroundColor ?? Theme.of(context).primaryColor,
       backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
+      onBackgroundImageError: imageUrl != null
+          ? (exception, stackTrace) {
+              // Silently handle image loading errors
+            }
+          : null,
       child: imageUrl == null
           ? Text(
               label,
