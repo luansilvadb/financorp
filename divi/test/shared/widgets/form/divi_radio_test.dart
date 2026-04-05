@@ -21,7 +21,7 @@ void main() {
       );
 
       expect(find.text('Option 1'), findsOneWidget);
-      expect(find.byType(Radio<String>), findsOneWidget);
+      expect(find.byType(FRadio), findsOneWidget);
     });
 
     testWidgets('should call onChanged when selected', (WidgetTester tester) async {
@@ -41,7 +41,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(Radio<String>));
+      await tester.tap(find.byType(FRadio));
       await tester.pump();
 
       expect(selectedValue, 'option1');
@@ -63,7 +63,7 @@ void main() {
         ),
       );
 
-      expect(find.byType(Radio<String>), findsOneWidget);
+      expect(find.byType(FRadio), findsOneWidget);
     });
   });
 
@@ -118,12 +118,8 @@ void main() {
         ),
       );
 
-      // Find the Radio widget for Option 2 and tap on it
-      final radioWidgets = tester.widgetList<Radio<String>>(find.byType(Radio<String>));
-      final radioList = radioWidgets.toList();
-      
-      // Tap on the second radio button
-      await tester.tap(find.byType(Radio<String>).at(1));
+      // Find the FRadio widget for Option 2 and tap on it
+      await tester.tap(find.byType(FRadio).at(1));
       await tester.pumpAndSettle();
 
       expect(selectedValue, 'Option 2');

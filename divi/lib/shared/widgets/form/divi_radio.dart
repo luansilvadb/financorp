@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 
-/// A reusable radio button component using Material Radio with forui-compatible styling.
+import '../../constants.dart';
+
+/// A reusable radio button component using forui.dev's FRadio.
 class DiviRadio extends StatelessWidget {
   final String label;
   final String value;
@@ -19,22 +22,23 @@ class DiviRadio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Radio<String>(
-          value: value,
-          groupValue: groupValue,
-          onChanged: enabled ? onChanged : null,
-        ),
-        const SizedBox(width: 8),
-        Text(label),
-      ],
+    final isSelected = value == groupValue;
+    
+    return FRadio(
+      label: Text(label),
+      value: isSelected,
+      enabled: enabled,
+      onChange: (selected) {
+        if (selected && enabled) {
+          onChanged(value);
+        }
+      },
     );
   }
 }
 
-/// A reusable radio group component for managing multiple radio buttons.
+/// A reusable radio group component for managing multiple radio buttons
+/// using forui.dev's FRadio components.
 class DiviRadioGroup extends StatelessWidget {
   final String label;
   final List<String> options;
@@ -61,7 +65,12 @@ class DiviRadioGroup extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontFamily: 'Space Mono',
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+            color: kInk,
+          ),
         ),
         const SizedBox(height: 8),
         ...options.map((option) => Padding(
@@ -78,7 +87,11 @@ class DiviRadioGroup extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             errorText!,
-            style: const TextStyle(color: Colors.red, fontSize: 12),
+            style: const TextStyle(
+              fontFamily: 'Space Mono',
+              color: kPrimaryColor,
+              fontSize: 12,
+            ),
           ),
         ],
       ],
