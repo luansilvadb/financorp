@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-/// Icon mapping table for migrating from PhosphorIcons to Lucide icons (via forui_assets).
+/// Icon mapping table for migrating from PhosphorIcons to Lucide icons (via forui_assets/FIcons).
 ///
 /// This file documents all icon mappings needed for the UI/UX refactoring to use
 /// forui.dev exclusively. Each entry maps a PhosphorIcon name and style to its
-/// closest Lucide icon equivalent.
+/// closest FIcons (Lucide) equivalent.
 ///
 /// Usage:
 /// ```dart
 /// // Instead of: PhosphorIcons.receipt(PhosphorIconsStyle.fill)
-/// // Use: IconMapping.receiptFill (which maps to Lucide icon)
+/// // Use: FIcons.receipt
 /// ```
 ///
-/// Note: The actual Lucide icon access will be implemented during Phase 3 migration.
-/// This table serves as a reference for the migration work.
+/// Note: FIcons is the static icon provider from forui_assets package.
+/// All icons use the Icon widget: Icon(FIcons.iconName)
 class IconMapping {
   // Receipt icons
   static const String receiptFill = 'receipt'; // PhosphorIcons.receipt(fill) -> LucideIcons.receipt

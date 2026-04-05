@@ -97,13 +97,14 @@ Configure forui theme, add forui_assets dependency, create icon mapping table, p
 Replace all 87 PhosphorIcon usages with Lucide icons via forui_assets, remove phosphor_flutter.
 
 - [~] Task: Write integration tests for icon rendering
-    - [ ] **Test:** Create `divi/test/integration/icon_migration_test.dart` that verifies all screens render with correct icons
+    - [x] **Test:** Create `divi/test/integration/icon_migration_test.dart` that verifies all screens render with correct icons ✅ CREATED
     - [ ] **Test:** Create widget tests for each screen that uses icons, verifying icon presence after migration
     - [ ] **Test:** Run tests and confirm they currently pass (with PhosphorIcon) - these will be updated to check for Lucide
     - [ ] **Run tests:** Confirm tests pass with current PhosphorIcon implementation
-- [ ] Task: Migrate icons in shared widgets
-    - [ ] Update `divi/lib/shared/widgets/paper_bottom_nav.dart`: replace PhosphorIcons.receipt, PhosphorIcons.folderOpen with Lucide equivalents
-    - [ ] Update `divi/lib/shared/widgets/premium_bottom_nav.dart`: replace PhosphorIconData fields with Lucide icon types
+- [~] Task: Migrate icons in shared widgets
+    - [x] Update `divi/lib/core/views/splash_screen.dart`: PhosphorIcons.intersect → FIcons.squaresIntersect ✅ COMPLETED
+    - [ ] Update `divi/lib/shared/widgets/paper_bottom_nav.dart`: replace PhosphorIcons.receipt, PhosphorIcons.folderOpen with FIcons equivalents
+    - [ ] Update `divi/lib/shared/widgets/premium_bottom_nav.dart`: replace PhosphorIconData fields with FIcons types
     - [ ] Update `divi/lib/shared/widgets/person_summary_row.dart`: replace PhosphorIcons.checkCircle, PhosphorIcons.warningCircle
     - [ ] Update `divi/lib/shared/widgets/card_skeleton.dart`: replace any icon usages
     - [ ] **Test:** Run widget tests for each modified file
