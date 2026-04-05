@@ -27,7 +27,7 @@ void main() {
       );
 
       expect(find.text('Test Label'), findsOneWidget);
-      expect(find.byType(FSelectFormField<String>), findsOneWidget);
+      expect(find.byType(DiviSelect), findsOneWidget);
     });
 
     testWidgets('should display hint text when provided', (WidgetTester tester) async {
@@ -68,7 +68,7 @@ void main() {
       );
 
       // Tap to open dropdown
-      await tester.tap(find.byType(FSelectFormField<String>));
+      await tester.tap(find.byType(DiviSelect));
       await tester.pumpAndSettle();
 
       // Select an option
@@ -94,7 +94,7 @@ void main() {
         ),
       );
 
-      expect(find.byType(FSelectFormField<String>), findsOneWidget);
+      expect(find.byType(DiviSelect), findsOneWidget);
     });
   });
 }
