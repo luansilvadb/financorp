@@ -96,7 +96,7 @@ Configure forui theme, add forui_assets dependency, create icon mapping table, p
 
 Replace all 87 PhosphorIcon usages with Lucide icons via forui_assets, remove phosphor_flutter.
 
-- [ ] Task: Write integration tests for icon rendering
+- [~] Task: Write integration tests for icon rendering
     - [ ] **Test:** Create `divi/test/integration/icon_migration_test.dart` that verifies all screens render with correct icons
     - [ ] **Test:** Create widget tests for each screen that uses icons, verifying icon presence after migration
     - [ ] **Test:** Run tests and confirm they currently pass (with PhosphorIcon) - these will be updated to check for Lucide
