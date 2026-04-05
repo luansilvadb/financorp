@@ -67,17 +67,17 @@ Configure forui theme, add forui_assets dependency, create icon mapping table, p
     - [x] Map custom colors to forui's neutral theme palette or extend with custom tokens ✅ COMPLETED
     - [x] **Test:** Write test verifying forui theme is properly configured and accessible ✅ TEST CREATED & PASSING
     - [x] **Implement:** Create forui theme file, wire into MaterialApp ✅ COMPLETED
-- [~] Task: Create icon mapping table
-    - [ ] Create `divi/lib/core/constants/icon_mapping.dart` with all 70 PhosphorIcon -> Lucide mappings
-    - [ ] Include mapping for all icon styles (fill -> solid, regular -> outline, etc.)
-    - [ ] Document any PhosphorIcon icons that have no direct Lucide equivalent with suggested alternatives
-    - [ ] **Test:** Write test verifying every mapping entry resolves to a valid Lucide icon
-    - [ ] **Implement:** Create icon mapping constants file
-- [ ] Task: Create migration plan document
-    - [ ] Document the order of component migration (icons first, then custom UI, then wrappers)
-    - [ ] Identify dependency graph: which screens consume which components
-    - [ ] Plan file-by-file migration order to minimize merge conflicts
-    - [ ] Define rollback strategy if issues arise
+- [x] Task: Create icon mapping table [sha:fbef3ab]
+    - [x] Create `divi/lib/core/constants/icon_mapping.dart` with all 70 PhosphorIcon -> Lucide mappings ✅ COMPLETED
+    - [x] Include mapping for all icon styles (fill -> solid, regular -> outline, etc.) ✅ COMPLETED
+    - [x] Document any PhosphorIcon icons that have no direct Lucide equivalent with suggested alternatives ✅ COMPLETED
+    - [x] **Test:** Write test verifying every mapping entry resolves to a valid Lucide icon ✅ TEST CREATED & PASSING
+    - [x] **Implement:** Create icon mapping constants file ✅ COMPLETED
+- [x] Task: Create migration plan document [sha:pending]
+    - [x] Document the order of component migration (icons first, then custom UI, then wrappers) ✅ COMPLETED
+    - [x] Identify dependency graph: which screens consume which components ✅ COMPLETED
+    - [x] Plan file-by-file migration order to minimize merge conflicts ✅ COMPLETED
+    - [x] Define rollback strategy if issues arise ✅ COMPLETED
 - [ ] Task: Set up integration test infrastructure
     - [ ] Ensure `integration_test` package is in dev_dependencies
     - [ ] Create `divi/test/integration/` directory structure
