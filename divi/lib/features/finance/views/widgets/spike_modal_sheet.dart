@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -11,6 +10,8 @@ import 'package:divi/features/finance/providers/finance_providers.dart';
 import 'package:divi/features/cartao/providers/cartao_providers.dart';
 import 'package:divi/shared/providers/month_year_provider.dart';
 import 'package:divi/shared/widgets/divi_toasts.dart';
+import 'package:divi/shared/widgets/form/divi_input.dart';
+import 'package:divi/shared/widgets/form/divi_radio.dart';
 
 class SpikeModalSheet extends ConsumerStatefulWidget {
   final Despesa? despesa;
@@ -40,6 +41,11 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
 
   // Selection for credit
   String _pessoa = "Luciana";
+  
+  // Focus nodes for DiviInput
+  final _titleFocus = FocusNode();
+  final _valueFocus = FocusNode();
+  final _dayFocus = FocusNode();
 
   @override
   void initState() {
@@ -62,6 +68,9 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
     _titleCtrl.dispose();
     _valueCtrl.dispose();
     _dayCtrl.dispose();
+    _titleFocus.dispose();
+    _valueFocus.dispose();
+    _dayFocus.dispose();
     super.dispose();
   }
 
@@ -158,23 +167,41 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 children: [
-                  _buildTextField("DESCRICÃO", _titleCtrl,
-                      placeholder: _mode == _SpikeMode.fixedBill
-                          ? "Ex: Aluguel"
-                          : "Ex: Mercado"),
+                  DiviInput(
+                    label: "DESCRIÇÃO",
+                    hintText: _mode == _SpikeMode.fixedBill
+                        ? "Ex: Aluguel"
+                        : "Ex: Mercado",
+                    focusNode: _titleFocus,
+                    initialValue: _titleCtrl.text,
+                    onChanged: (value) => _titleCtrl.text = value ?? '',
+                  ),
                   const SizedBox(height: 32),
-                  _buildTextField("VALOR", _valueCtrl,
-                      placeholder: "0,00",
-                      keyboardType: TextInputType.number,
-                      formatters: [BrlCurrencyInputFormatter()]),
+                  DiviInput(
+                    label: "VALOR",
+                    hintText: "0,00",
+                    focusNode: _valueFocus,
+                    keyboardType: TextInputType.number,
+                    initialValue: _valueCtrl.text.isEmpty ? '' : _valueCtrl.text,
+                    onChanged: (value) => _valueCtrl.text = value ?? '',
+                  ),
                   const SizedBox(height: 32),
                   if (_mode == _SpikeMode.fixedBill)
-                    _buildTextField("DIA VENCIMENTO", _dayCtrl,
-                        placeholder: "Ex: 5",
-                        keyboardType: TextInputType.number)
+                    DiviInput(
+                      label: "DIA VENCIMENTO",
+                      hintText: "Ex: 5",
+                      focusNode: _dayFocus,
+                      keyboardType: TextInputType.number,
+                      initialValue: _dayCtrl.text.isEmpty ? '' : _dayCtrl.text,
+                      onChanged: (value) => _dayCtrl.text = value ?? '',
+                    )
                   else
-                    _buildRadioGroup(
-                        "QUEM DEVE?", ["Luan", "Luciana", "Giovanna"]),
+                    DiviRadioGroup(
+                      label: "QUEM DEVE?",
+                      options: ["Luan", "Luciana", "Giovanna"],
+                      value: _pessoa,
+                      onChanged: (value) => setState(() => _pessoa = value ?? _pessoa),
+                    ),
                   const SizedBox(height: 40),
                 ],
               ),
@@ -266,98 +293,6 @@ class _SpikeModalSheetState extends ConsumerState<SpikeModalSheet> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller,
-      {String? placeholder,
-      TextInputType? keyboardType,
-      List<TextInputFormatter>? formatters}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontFamily: 'Space Mono',
-            fontSize: 12,
-            color: kInkFaded,
-            letterSpacing: 1.5,
-          ),
-        ),
-        TextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          inputFormatters: formatters,
-          style: const TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: kInk,
-          ),
-          decoration: InputDecoration(
-            hintText: placeholder,
-            hintStyle: TextStyle(
-              color: kInkFaded.withOpacity(0.2),
-              fontWeight: FontWeight.w400,
-              fontSize: 20,
-            ),
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: kLine, width: 1),
-            ),
-            focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: kInk, width: 2),
-            ),
-            isDense: true,
-            contentPadding: const EdgeInsets.symmetric(vertical: 12),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRadioGroup(String label, List<String> options) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontFamily: 'Space Mono',
-            fontSize: 12,
-            color: kInkFaded,
-            letterSpacing: 1.5,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ...options.map((opt) => InkWell(
-              onTap: () => setState(() => _pessoa = opt),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      _pessoa == opt
-                          ? PhosphorIcons.circle(PhosphorIconsStyle.fill)
-                          : PhosphorIcons.circle(PhosphorIconsStyle.regular),
-                      size: 20,
-                      color: kInk,
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      opt,
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: kInk,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )),
-      ],
     );
   }
 }

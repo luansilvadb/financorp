@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -7,6 +6,7 @@ import '../../../../shared/constants.dart';
 import '../../../../shared/models/despesa.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../providers/finance_providers.dart';
+import '../../../../shared/widgets/form/divi_input.dart';
 
 class AddExpenseSheet extends ConsumerStatefulWidget {
   final Despesa? expense;
@@ -100,25 +100,27 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
               ],
             ),
             const SizedBox(height: 24),
-            _field("NOME DA CONTA", _nomeCtrl,
-                PhosphorIcons.textAlignLeft(PhosphorIconsStyle.regular),
-                placeholder: "Ex: Aluguel, Luz..."),
-            const SizedBox(height: 20),
-            _field(
-              "VALOR TOTAL",
-              _valorCtrl,
-              PhosphorIcons.currencyDollar(PhosphorIconsStyle.regular),
-              placeholder: "0,00",
-              keyboardType: TextInputType.number,
-              formatters: [BrlCurrencyInputFormatter()],
+            DiviInput(
+              label: "NOME DA CONTA",
+              hintText: "Ex: Aluguel, Luz...",
+              initialValue: _nomeCtrl.text,
+              onChanged: (value) => _nomeCtrl.text = value ?? '',
             ),
             const SizedBox(height: 20),
-            _field(
-              "DIA DO VENCIMENTO",
-              _vencCtrl,
-              PhosphorIcons.calendarBlank(PhosphorIconsStyle.regular),
-              placeholder: "Ex: 5",
+            DiviInput(
+              label: "VALOR TOTAL",
+              hintText: "0,00",
               keyboardType: TextInputType.number,
+              initialValue: _valorCtrl.text,
+              onChanged: (value) => _valorCtrl.text = value ?? '',
+            ),
+            const SizedBox(height: 20),
+            DiviInput(
+              label: "DIA DO VENCIMENTO",
+              hintText: "Ex: 5",
+              keyboardType: TextInputType.number,
+              initialValue: _vencCtrl.text,
+              onChanged: (value) => _vencCtrl.text = value ?? '',
             ),
             const SizedBox(height: 32),
             Row(
@@ -188,55 +190,6 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _field(
-    String label,
-    TextEditingController ctrl,
-    IconData icon, {
-    String? placeholder,
-    TextInputType? keyboardType,
-    List<TextInputFormatter>? formatters,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w900,
-            color: kSlate400,
-            letterSpacing: 1.2,
-          ),
-        ),
-        const SizedBox(height: 10),
-        TextField(
-          controller: ctrl,
-          keyboardType: keyboardType,
-          inputFormatters: formatters,
-          style: const TextStyle(
-              fontWeight: FontWeight.w700, fontSize: 16, color: kSlate900),
-          decoration: InputDecoration(
-            hintText: placeholder,
-            hintStyle: TextStyle(
-                color: kSlate400.withOpacity(0.6), fontWeight: FontWeight.w500),
-            prefixIcon: PhosphorIcon(icon, color: kPrimaryColor, size: 22),
-            filled: true,
-            fillColor: kSlate100,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: kPrimaryColor, width: 2),
-            ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 18),
-          ),
-        ),
-      ],
     );
   }
 }
