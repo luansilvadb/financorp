@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:forui_assets/forui_assets.dart';
 
 import '../../../../shared/constants.dart';
 import '../../../../core/utils/formatters.dart';
@@ -126,10 +126,10 @@ class DespesaCard extends ConsumerWidget {
             const SizedBox(width: 12),
 
             // Trailing: consolidated status icon
-            PhosphorIcon(
+            Icon(
               allPaid
-                  ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
-                  : PhosphorIcons.warningCircle(PhosphorIconsStyle.fill),
+                  ? FIcons.checkCircle
+                  : FIcons.alertCircle,
               color: allPaid ? kGreen500 : kRed500,
               size: 24,
             ),
