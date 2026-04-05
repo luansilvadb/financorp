@@ -268,13 +268,22 @@
 
 ## Traceability
 
-*Esta seção será preenchida pelo roadmapper com mapeamento REQ → Phase*
+*Mapeamento de requisitos para fases do roadmap*
 
 | Requirement | Phase | Status | Notes |
 |-------------|-------|--------|-------|
-| INFRA-01 | TBD | Pending | |
-| INFRA-02 | TBD | Pending | |
-| ... | ... | ... | ... |
+| INFRA-01 a INFRA-10 | Phase 1 | Pending | Flutter Upgrade & Foundation |
+| COMP-01 a COMP-19 | Phase 2 | Pending | Base Components Migration |
+| NAV-01 a NAV-12 | Phase 3 | Pending | Navigation & Layout |
+| FORM-01 a FORM-17 | Phase 4 | Pending | Forms & Modals |
+| SCREEN-01 a SCREEN-06 | Phase 5 | Pending | LedgerScreen Complete |
+| SCREEN-07 a SCREEN-15 | Phase 6 | Pending | Remaining Screens & Shared |
+| PERF-01 a PERF-08 | Phase 5 | Pending | Performance optimization (Ledger) |
+| PERF-09 a PERF-15 | Phase 8 | Pending | Performance optimization (Final) |
+| TEST-01 a TEST-25 | Phase 7 | Pending | Testing & QA |
+| DOC-01 a DOC-12 | Phase 8 | Pending | Documentation |
+
+**Coverage:** 100% (all 113 requirements mapped to phases)
 
 ---
 
