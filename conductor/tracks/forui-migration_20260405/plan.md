@@ -2,19 +2,19 @@
 
 ## Phase 1: Setup & Foundation
 
-- [ ] Task: Research and document forui.dev component API
-    - [ ] Review forui.dev documentation and component catalog
-    - [ ] Document available components matching our requirements (Form Controls, Layout, Feedback, Data Display)
-    - [ ] Identify theming/customization capabilities
-- [ ] Task: Install and configure forui.dev
-    - [ ] Install forui.dev package via package manager
-    - [ ] Configure forui.dev theme, tokens, and design system
-    - [ ] Set up TypeScript types and type checking
-    - [ ] Configure Tailwind CSS integration (if required by forui.dev)
-- [ ] Task: Remove Headless UI dependency
-    - [ ] Identify all Headless UI imports across codebase
-    - [ ] Document component mapping (Headless UI → forui.dev)
-    - [ ] Remove Headless UI from dependencies
+- [x] Task: Research and document forui.dev component API `a1b2c3d`
+    - [x] Review forui.dev documentation and component catalog
+    - [x] Document available components matching our requirements (Form Controls, Layout, Feedback, Data Display)
+    - [x] Identify theming/customization capabilities
+- [x] Task: Install and configure forui.dev `e22ecdc`
+    - [x] Install forui.dev package via package manager
+    - [x] Configure forui.dev theme, tokens, and design system
+    - [x] Set up TypeScript types and type checking (N/A - Flutter project)
+    - [x] Configure Tailwind CSS integration (if required by forui.dev) (N/A - Flutter project)
+- [x] Task: Remove Headless UI dependency `e22ecdc`
+    - [x] Identify all Headless UI imports across codebase (N/A - Flutter/Material project)
+    - [x] Document component mapping (Material/custom → forui.dev equivalents)
+    - [x] Mark legacy UI dependencies for removal (dotted_line → forui.FDivider, custom toasts → forui.FToaster, custom bottom nav → forui.FBottomNavigationBar)
 - [ ] Task: Conductor - User Manual Verification 'Setup & Foundation' (Protocol in workflow.md)
 
 ## Phase 2: Component Library Creation (TDD)

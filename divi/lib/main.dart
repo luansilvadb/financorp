@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:forui/forui.dart';
 
 // Core & Shared
 import 'shared/providers/month_year_provider.dart';
@@ -30,29 +31,35 @@ class CasaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Configure forui.dev theme based on platform
+    final foruiTheme = const <TargetPlatform>{
+      TargetPlatform.android,
+      TargetPlatform.iOS,
+      TargetPlatform.fuchsia,
+    }.contains(defaultTargetPlatform)
+        ? FThemes.neutral.light.touch
+        : FThemes.neutral.light.desktop;
+
     return MaterialApp(
       title: 'DIVI',
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      theme: ThemeData(
-        textTheme: GoogleFonts.interTextTheme().apply(
-          bodyColor: kInk,
-          displayColor: kInk,
-        ),
-        scaffoldBackgroundColor: kPaper,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: kPrimaryColor,
-          surface: kPaper,
-          onSurface: kInk,
-          error: kPrimaryColor,
-        ),
-      ),
+      supportedLocales: FLocalizations.supportedLocales,
+      localizationsDelegates: const [...FLocalizations.localizationsDelegates],
+      theme: foruiTheme.toApproximateMaterialTheme(),
       builder: (context, child) {
-        return Stack(
-          children: [
-            if (child != null) child,
-            const PaperBackground(),
-          ],
+        return FTheme(
+          data: foruiTheme,
+          child: FToaster(
+            child: FTooltipGroup(
+              child: Stack(
+                children: [
+                  if (child != null) child,
+                  const PaperBackground(),
+                ],
+              ),
+            ),
+          ),
         );
       },
       home: SplashScreen(
