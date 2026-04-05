@@ -17,55 +17,55 @@
     - [x] Mark legacy UI dependencies for removal (dotted_line → forui.FDivider, custom toasts → forui.FToaster, custom bottom nav → forui.FBottomNavigationBar)
 - [x] Task: Conductor - User Manual Verification 'Setup & Foundation' (Protocol in workflow.md) `d4929ca`
 
-## Phase 2: Component Library Creation (TDD)
+## Phase 2: Component Library Creation (TDD) [checkpoint: c1da4c4]
 
-- [ ] Task: Create Form Control Components with forui.dev
-    - [ ] Write failing tests for Input component
-    - [ ] Implement Input component with forui.dev
-    - [ ] Write failing tests for Select component
-    - [ ] Implement Select component with forui.dev
-    - [ ] Write failing tests for Checkbox component
-    - [ ] Implement Checkbox component with forui.dev
-    - [ ] Write failing tests for Radio component
-    - [ ] Implement Radio component with forui.dev
-    - [ ] Write failing tests for Textarea component
-    - [ ] Implement Textarea component with forui.dev
-    - [ ] Verify >80% code coverage for form components
-- [ ] Task: Create Layout & Navigation Components with forui.dev
-    - [ ] Write failing tests for Header component
-    - [ ] Implement Header component with forui.dev
-    - [ ] Write failing tests for Sidebar component
-    - [ ] Implement Sidebar component with forui.dev
-    - [ ] Write failing tests for Navigation/Menu component
-    - [ ] Implement Navigation/Menu component with forui.dev
-    - [ ] Write failing tests for Footer component
-    - [ ] Implement Footer component with forui.dev
-    - [ ] Verify >80% code coverage for layout components
-- [ ] Task: Create Feedback & Overlay Components with forui.dev
-    - [ ] Write failing tests for Modal/Dialog component
-    - [ ] Implement Modal/Dialog component with forui.dev
-    - [ ] Write failing tests for Toast/Alert component
-    - [ ] Implement Toast/Alert component with forui.dev
-    - [ ] Write failing tests for Tooltip component
-    - [ ] Implement Tooltip component with forui.dev
-    - [ ] Write failing tests for Loading/Spinner component
-    - [ ] Implement Loading/Spinner component with forui.dev
-    - [ ] Verify >80% code coverage for feedback components
-- [ ] Task: Create Data Display Components with forui.dev
-    - [ ] Write failing tests for Table component
-    - [ ] Implement Table component with forui.dev
-    - [ ] Write failing tests for Card component
-    - [ ] Implement Card component with forui.dev
-    - [ ] Write failing tests for List component
-    - [ ] Implement List component with forui.dev
-    - [ ] Write failing tests for Avatar component
-    - [ ] Implement Avatar component with forui.dev
-    - [ ] Write failing tests for Badge component
-    - [ ] Implement Badge component with forui.dev
-    - [ ] Write failing tests for Tabs component
-    - [ ] Implement Tabs component with forui.dev
-    - [ ] Verify >80% code coverage for data display components
-- [ ] Task: Conductor - User Manual Verification 'Component Library Creation' (Protocol in workflow.md)
+- [x] Task: Create Form Control Components with forui.dev `c4f6dd7`
+    - [x] Write failing tests for Input component
+    - [x] Implement Input component with forui.dev
+    - [x] Write failing tests for Select component
+    - [x] Implement Select component with forui.dev
+    - [x] Write failing tests for Checkbox component
+    - [x] Implement Checkbox component with forui.dev
+    - [x] Write failing tests for Radio component
+    - [x] Implement Radio component with forui.dev
+    - [x] Write failing tests for Textarea component
+    - [x] Implement Textarea component with forui.dev
+    - [x] Verify >80% code coverage for form components
+- [x] Task: Create Layout & Navigation Components with forui.dev `c1da4c4`
+    - [x] Write failing tests for Header component
+    - [x] Implement Header component with forui.dev
+    - [x] Write failing tests for Sidebar component
+    - [x] Implement Sidebar component with forui.dev
+    - [x] Write failing tests for Navigation/Menu component
+    - [x] Implement Navigation/Menu component with forui.dev
+    - [x] Write failing tests for Footer component
+    - [x] Implement Footer component with forui.dev
+    - [x] Verify >80% code coverage for layout components
+- [x] Task: Create Feedback & Overlay Components with forui.dev `c1da4c4`
+    - [x] Write failing tests for Modal/Dialog component
+    - [x] Implement Modal/Dialog component with forui.dev
+    - [x] Write failing tests for Toast/Alert component
+    - [x] Implement Toast/Alert component with forui.dev
+    - [x] Write failing tests for Tooltip component
+    - [x] Implement Tooltip component with forui.dev
+    - [x] Write failing tests for Loading/Spinner component
+    - [x] Implement Loading/Spinner component with forui.dev
+    - [x] Verify >80% code coverage for feedback components
+- [x] Task: Create Data Display Components with forui.dev `c1da4c4`
+    - [x] Write failing tests for Table component
+    - [x] Implement Table component with forui.dev
+    - [x] Write failing tests for Card component
+    - [x] Implement Card component with forui.dev
+    - [x] Write failing tests for List component
+    - [x] Implement List component with forui.dev
+    - [x] Write failing tests for Avatar component
+    - [x] Implement Avatar component with forui.dev
+    - [x] Write failing tests for Badge component
+    - [x] Implement Badge component with forui.dev
+    - [x] Write failing tests for Tabs component
+    - [x] Implement Tabs component with forui.dev
+    - [x] Verify >80% code coverage for data display components
+- [x] Task: Conductor - User Manual Verification 'Component Library Creation' (Protocol in workflow.md) `c1da4c4`
 
 ## Phase 3: Page-Level Migration
 
