@@ -11,7 +11,7 @@ cmds = [
 ]
 
 [phases.build]
-cmds = ['flutter build web']
+cmds = ['touch .env', 'flutter build web']
 
 [start]
 cmd = 'python3 -m http.server $PORT --directory build/web'

@@ -77,7 +77,7 @@ class _CardSkeletonState extends State<CardSkeleton>
                         width: 80,
                         height: 10,
                         decoration: BoxDecoration(
-                          color: kSlate100.withOpacity(0.5),
+                          color: kSlate100.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
