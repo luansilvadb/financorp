@@ -52,13 +52,48 @@ const avataresPessoa = {
 };
 */
 
-const kPrimaryColor = Color(0xFFE63819); // Primary / Debt
-const kPaper = Color(0xFFF4F1EA); // Warm off-white
-const kInk = Color(0xFF2C2C2C); // Black toner
+const kPrimaryColor = Color(
+  0xFFE63819,
+); // Primary / Debt (legacy — migrate to kPrimaryOlive)
+const kPaper = Color(
+  0xFFF4F1EA,
+); // Warm off-white (legacy — migrate to kSurfacePaper)
+const kInk = Color(
+  0xFF2C2C2C,
+); // Black toner (legacy — migrate to kTextPrimary)
 const kInkFaded = Color(0xFF6B6B6B);
 const kLine = Color(0xFFD1CDC5);
 const kPaid = Color(0xFF2A7F62);
 const kHighlight = Color(0xFFFCEDA8);
+
+// ============================================================
+// New semantic color tokens (UX-DR1) — additive, backward compat
+// ============================================================
+
+// Core palette
+const kPrimaryOlive = Color(0xFF6B705C); // New primary (calm, earthy)
+const kSurfacePaper = Color(0xFFFAF6F1); // New surface (paper kraft light)
+const kPaperDepth = Color(0xFFEDE8E0); // Paper shadow / depth
+
+// Text colors
+const kTextPrimary = Color(0xFF2C2825); // Warm charcoal
+const kTextSecondary = Color(0xFF6B6560); // Warm gray dark
+const kTextMuted = Color(0xFF8B8178); // Warm gray
+
+// Semantic states (emotional semaphore — never red for guilt)
+const kSemanticPaid = Color(0xFF2A7F62); // Green — paid/settled
+const kSemanticPending = Color(0xFFD4953B); // Amber — attention
+const kSemanticOverdue = Color(0xFFC2654A); // Rust — overdue
+
+// Darker variants for text contrast (WCAG AA)
+const kSemanticPaidDark = Color(0xFF1E5C45);
+const kSemanticPendingDark = Color(0xFF96692A);
+const kSemanticOverdueDark = Color(0xFF8E4632);
+
+// Resident color aliases (for future use alongside coresPessoa)
+const kLuanBlue = Color(0xFF3B82F6);
+const kLucianaPink = Color(0xFFEC4899);
+const kGiovannaPurple = Color(0xFF8B5CF6);
 
 // Remaining values for compatibility until removed
 const kBackgroundLight = kPaper;
@@ -71,3 +106,11 @@ const kSlate200 = kLine;
 const kSlate100 = Color(0xFFFFFFFF); // White paper layer
 const kGreen500 = kPaid;
 const kRed500 = kPrimaryColor;
+
+// Spacing scale (base 8px)
+const kSpacingXs = 4.0;
+const kSpacingSm = 8.0;
+const kSpacingMd = 16.0;
+const kSpacingLg = 24.0;
+const kSpacingXl = 32.0;
+const kSpacingXxl = 48.0;

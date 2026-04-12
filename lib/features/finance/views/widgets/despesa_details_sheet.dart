@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../../../shared/constants.dart';
 import '../../../../shared/models/domain.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/providers/app_providers.dart';
+import '../../../../shared/widgets/stamp_animation.dart';
 
 import 'add_expense_sheet.dart';
 
@@ -14,6 +14,54 @@ class DespesaDetailsSheet extends ConsumerWidget {
 
   const DespesaDetailsSheet({super.key, required this.despesa});
 
+  void _confirmDelete(BuildContext context, WidgetRef ref) {
+    showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: kSurfacePaper,
+        title: const Text(
+          "Tem certeza?",
+          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600, color: kTextPrimary),
+        ),
+        content: const Text(
+          "Esta ação não pode ser desfeita.",
+          style: TextStyle(fontFamily: 'Inter', color: kTextSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text("Cancelar", style: TextStyle(color: kTextPrimary)),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: FilledButton.styleFrom(backgroundColor: kSemanticOverdue),
+            child: const Text("Sim, excluir"),
+          ),
+        ],
+      ),
+    ).then((confirmed) {
+      if (confirmed == true && context.mounted) {
+        ref.read(despesasProvider.notifier).deleteDespesa(despesa.id!);
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  Future<void> _togglePagamento(
+    BuildContext context,
+    WidgetRef ref,
+    String pessoa,
+    bool currentStatus,
+  ) async {
+    // Show stamp animation
+    await StampAnimation.show(context, isPaid: !currentStatus);
+
+    // Toggle the payment
+    ref
+        .read(pagamentosProvider.notifier)
+        .togglePagamento(despesa.id!, pessoa, currentStatus);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pagamentos = ref.watch(pagamentosProvider).value ?? [];
@@ -21,7 +69,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 12, bottom: 32),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: kSurfacePaper,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: Column(
@@ -33,7 +81,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
             height: 4,
             margin: const EdgeInsets.only(bottom: 24),
             decoration: BoxDecoration(
-              color: kSlate200,
+              color: kPaperDepth,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -44,14 +92,10 @@ class DespesaDetailsSheet extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: kPrimaryColor.withValues(alpha: 0.1),
+                  color: kPrimaryOlive.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.receipt,
-                  color: kPrimaryColor,
-                  size: 24,
-                ),
+                child: Icon(Icons.receipt, color: kPrimaryOlive, size: 24),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -61,25 +105,29 @@ class DespesaDetailsSheet extends ConsumerWidget {
                     Text(
                       despesa.nome,
                       style: const TextStyle(
+                        fontFamily: 'Young Serif',
                         fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        color: kSlate900,
+                        fontWeight: FontWeight.w400,
+                        color: kTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 2),
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
-                        color: kPrimaryColor.withValues(alpha: 0.08),
+                        color: kPrimaryOlive.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         "VENC. DIA ${despesa.diaVencimento}",
                         style: const TextStyle(
+                          fontFamily: 'Space Mono',
                           fontSize: 10,
-                          fontWeight: FontWeight.w900,
-                          color: kPrimaryColor,
+                          fontWeight: FontWeight.bold,
+                          color: kPrimaryOlive,
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -93,17 +141,19 @@ class DespesaDetailsSheet extends ConsumerWidget {
                   Text(
                     fmt(despesa.valor),
                     style: const TextStyle(
-                      fontWeight: FontWeight.w900,
+                      fontFamily: 'Young Serif',
+                      fontWeight: FontWeight.w400,
                       fontSize: 22,
-                      color: kSlate900,
+                      color: kTextPrimary,
                     ),
                   ),
                   Text(
                     "${fmt(despesa.valor / 3)} /pessoa",
                     style: const TextStyle(
+                      fontFamily: 'Inter',
                       fontSize: 12,
-                      color: kSlate400,
-                      fontWeight: FontWeight.w600,
+                      color: kTextSecondary,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -120,21 +170,19 @@ class DespesaDetailsSheet extends ConsumerWidget {
                 (pag) =>
                     pag.despesaId == despesa.id && pag.pessoa == p && pag.pago,
               );
-              final color = pago ? kGreen500 : kRed500;
-              final bgColor =
-                  pago ? const Color(0xFFF0FDF4) : const Color(0xFFFEF2F2);
-              final borderColor =
-                  pago ? const Color(0xFFDCFCE7) : const Color(0xFFFEE2E2);
+              final color = pago ? kSemanticPaid : kSemanticPending;
+              final bgColor = pago
+                  ? kSemanticPaid.withValues(alpha: 0.08)
+                  : kSemanticPending.withValues(alpha: 0.08);
+              final borderColor = pago
+                  ? kSemanticPaid.withValues(alpha: 0.2)
+                  : kSemanticPending.withValues(alpha: 0.2);
 
               return Expanded(
                 child: GestureDetector(
-                  onTap: () => ref
-                      .read(pagamentosProvider.notifier)
-                      .togglePagamento(despesa.id!, p, pago),
+                  onTap: () => _togglePagamento(context, ref, p, pago),
                   child: Container(
-                    margin: EdgeInsets.only(
-                      right: p == pessoas.last ? 0 : 8,
-                    ),
+                    margin: EdgeInsets.only(right: p == pessoas.last ? 0 : 8),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     decoration: BoxDecoration(
                       color: bgColor,
@@ -154,9 +202,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
                         ),
                         const SizedBox(height: 4),
                         Icon(
-                          pago
-                              ? Icons.check_circle
-                              : Icons.cancel,
+                          pago ? Icons.check_circle : Icons.autorenew,
                           color: color,
                           size: 22,
                         ),
@@ -174,7 +220,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: TextButton.icon(
+                child: OutlinedButton.icon(
                   onPressed: () {
                     Navigator.pop(context);
                     showModalBottomSheet(
@@ -184,56 +230,25 @@ class DespesaDetailsSheet extends ConsumerWidget {
                       builder: (context) => AddExpenseSheet(expense: despesa),
                     );
                   },
-                  icon: Icon(
-                    Icons.edit,
-                    size: 20,
-                  ),
+                  icon: const Icon(Icons.edit_outlined, size: 20),
                   label: const Text(
                     "Editar",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 15,
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: kPrimaryColor,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(
-                        color: kPrimaryColor.withValues(alpha: 0.15),
-                      ),
-                    ),
+                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: TextButton.icon(
-                  onPressed: () {
-                    ref
-                        .read(despesasProvider.notifier)
-                        .deleteDespesa(despesa.id!);
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    size: 20,
-                  ),
+                child: OutlinedButton.icon(
+                  onPressed: () => _confirmDelete(context, ref),
+                  icon: const Icon(Icons.delete_outline, size: 20),
                   label: const Text(
                     "Excluir",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
                   ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: kRed500,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: const BorderSide(color: Color(0xFFFEE2E2)),
-                    ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: kSemanticOverdue,
+                    side: const BorderSide(color: kSemanticOverdue, width: 1.5),
                   ),
                 ),
               ),

@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:divi/shared/constants.dart';
 
-
 class FolderCard extends StatefulWidget {
   final String label;
   final String sublabel;
+  final int recordCount;
   final VoidCallback onTap;
 
   const FolderCard({
     super.key,
     required this.label,
     required this.sublabel,
+    this.recordCount = 0,
     required this.onTap,
   });
 
@@ -68,11 +69,7 @@ class _FolderCardState extends State<FolderCard> {
                         color: kInk.withValues(alpha: 0.05),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        Icons.folder,
-                        color: kInk,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.folder, color: kInk, size: 20),
                     ),
                     Text(
                       widget.sublabel,
@@ -106,6 +103,18 @@ class _FolderCardState extends State<FolderCard> {
                     borderRadius: BorderRadius.circular(1),
                   ),
                 ),
+                if (widget.recordCount > 0) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    '${widget.recordCount} registros',
+                    style: const TextStyle(
+                      fontFamily: 'Space Mono',
+                      fontSize: 9,
+                      color: kInkFaded,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

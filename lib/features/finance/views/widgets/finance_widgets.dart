@@ -166,11 +166,14 @@ class _ReceiptItemCardState extends State<ReceiptItemCard> {
     return AnimatedScale(
       scale: _isPressed ? 0.96 : 1.0,
       duration: const Duration(milliseconds: 100),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: ClipPath(
-          clipper: ReceiptClipper(jaggedTop: true, jaggedBottom: true, toothSize: 4),
-          child: Material(
+      child: Semantics(
+        label: "${widget.isHouseExpense ? 'Despesa da casa' : 'Compra'}, ${widget.title}, ${formatCurrency.format(widget.amount)}, ${widget.isPaid ? 'Pago' : 'Pendente'}, vence em ${widget.date}",
+        button: true,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: ClipPath(
+            clipper: ReceiptClipper(jaggedTop: true, jaggedBottom: true, toothSize: 4),
+            child: Material(
             color: Colors.white,
             child: InkWell(
               onTapDown: (_) => setState(() => _isPressed = true),
@@ -239,15 +242,21 @@ class _ReceiptItemCardState extends State<ReceiptItemCard> {
                     const SizedBox(width: 12),
                     GestureDetector(
                       onTap: widget.onToggle,
+                      behavior: HitTestBehavior.opaque,
                       child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: widget.isPaid ? kPaid : kLine, width: 2),
-                          borderRadius: BorderRadius.circular(6),
-                          color: widget.isPaid ? kPaid : Colors.transparent,
+                        width: 48,
+                        height: 48,
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: widget.isPaid ? kPaid : kLine, width: 2),
+                            borderRadius: BorderRadius.circular(6),
+                            color: widget.isPaid ? kPaid : Colors.transparent,
+                          ),
+                          child: widget.isPaid ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
                         ),
-                        child: widget.isPaid ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
                       ),
                     ),
                   ],
@@ -257,6 +266,7 @@ class _ReceiptItemCardState extends State<ReceiptItemCard> {
           ),
         ),
       ),
+    ),
     );
   }
 }

@@ -4,7 +4,7 @@ part 'domain.freezed.dart';
 part 'domain.g.dart';
 
 @freezed
-class Despesa with _$Despesa {
+abstract class Despesa with _$Despesa {
   @JsonSerializable(includeIfNull: false)
   const factory Despesa({
     String? id,
@@ -13,12 +13,11 @@ class Despesa with _$Despesa {
     required double valor,
   }) = _Despesa;
 
-  factory Despesa.fromJson(Map<String, dynamic> json) =>
-      _$DespesaFromJson(json);
+  factory Despesa.fromJson(Map<String, dynamic> json) => _$DespesaFromJson(json);
 }
 
 @freezed
-class CompraCartao with _$CompraCartao {
+abstract class CompraCartao with _$CompraCartao {
   @JsonSerializable(includeIfNull: false)
   const factory CompraCartao({
     String? id,
@@ -31,12 +30,12 @@ class CompraCartao with _$CompraCartao {
     @Default(false) bool pago,
   }) = _CompraCartao;
 
-  factory CompraCartao.fromJson(Map<String, dynamic> json) =>
-      _$CompraCartaoFromJson(json);
+  factory CompraCartao.fromJson(Map<String, dynamic> json) => _$CompraCartaoFromJson(json);
 }
 
 @freezed
-class Pagamento with _$Pagamento {
+abstract class Pagamento with _$Pagamento {
+  @JsonSerializable(includeIfNull: false)
   const factory Pagamento({
     required String id,
     @JsonKey(name: 'despesa_id') required String despesaId,
@@ -46,6 +45,5 @@ class Pagamento with _$Pagamento {
     required bool pago,
   }) = _Pagamento;
 
-  factory Pagamento.fromJson(Map<String, dynamic> json) =>
-      _$PagamentoFromJson(json);
+  factory Pagamento.fromJson(Map<String, dynamic> json) => _$PagamentoFromJson(json);
 }

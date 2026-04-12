@@ -32,9 +32,9 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            kPaper.withValues(alpha: 0),
-            kPaper.withValues(alpha: 0.9),
-            kPaper,
+            kSurfacePaper.withValues(alpha: 0),
+            kSurfacePaper.withValues(alpha: 0.9),
+            kSurfacePaper,
           ],
           stops: const [0, 0.4, 1],
         ),
@@ -48,7 +48,7 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
             height: 64,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: kInk,
+              color: kTextPrimary,
               borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
@@ -61,21 +61,23 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                const Spacer(),
                 _buildItem(
                   index: 0,
                   iconActive: Icons.receipt,
-                  iconInactive:
-                      Icons.receipt,
+                  iconInactive: Icons.receipt,
                   label: 'CONTAS',
                 ),
-                const SizedBox(width: 48), // Spacer for center FAB
+                const Spacer(),
+                const SizedBox(width: 80), // Espaço reservado para o FAB central
+                const Spacer(),
                 _buildItem(
                   index: 1,
                   iconActive: Icons.folder_open,
-                  iconInactive:
-                      Icons.folder_open,
+                  iconInactive: Icons.folder_outlined,
                   label: 'HISTÓRICO',
                 ),
+                const Spacer(),
               ],
             ),
           ),
@@ -91,12 +93,12 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
                 width: 72,
                 height: 72,
                 decoration: BoxDecoration(
-                  color: kPrimaryColor,
+                  color: kPrimaryOlive,
                   shape: BoxShape.circle,
-                  border: Border.all(color: kInk, width: 3),
+                  border: Border.all(color: kTextPrimary, width: 3),
                   boxShadow: [
                     BoxShadow(
-                      color: kPrimaryColor.withValues(alpha: 0.3),
+                      color: kPrimaryOlive.withValues(alpha: 0.3),
                       blurRadius: _isFabPressed ? 10 : 20,
                       offset: _isFabPressed
                           ? const Offset(0, 4)
@@ -118,8 +120,11 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
                     splashColor: Colors.white.withValues(alpha: 0.3),
                     highlightColor: Colors.white.withValues(alpha: 0.1),
                     child: const Center(
-                      child: Icon(Icons.add_rounded,
-                          color: Colors.white, size: 40),
+                      child: Icon(
+                        Icons.add_rounded,
+                        color: Colors.white,
+                        size: 40,
+                      ),
                     ),
                   ),
                 ),
@@ -153,7 +158,7 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
           children: [
             Icon(
               isActive ? iconActive : iconInactive,
-              color: isActive ? kPaper : kPaper.withValues(alpha: 0.4),
+              color: isActive ? kSurfacePaper : kSurfacePaper.withValues(alpha: 0.4),
               size: 24,
             ),
             const SizedBox(height: 2),
@@ -164,7 +169,7 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
                 fontSize: 8,
                 fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                 letterSpacing: 1.0,
-                color: isActive ? kPaper : kPaper.withValues(alpha: 0.4),
+                color: isActive ? kSurfacePaper : kSurfacePaper.withValues(alpha: 0.4),
               ),
             ),
           ],

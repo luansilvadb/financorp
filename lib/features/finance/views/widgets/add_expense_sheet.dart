@@ -1,15 +1,21 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:divi/shared/constants.dart';
+import 'package:divi/shared/models/domain.dart';
+import 'package:divi/core/utils/formatters.dart';
+import 'package:divi/core/providers/app_providers.dart';
+import 'package:divi/shared/widgets/divi_toasts.dart';
+import 'package:divi/shared/widgets/stamp_animation.dart';
 
-import '../../../../shared/constants.dart';
-import '../../../../shared/models/domain.dart';
-import '../../../../core/utils/formatters.dart';
-import '../../../../core/providers/app_providers.dart';
-
+/// Bottom sheet form for adding a new fixed expense.
+///
+/// UX-DR7 (Bottom Sheet First), UX-DR10 (Silent Errors), UX-DR4 (Stamp Animation)
 class AddExpenseSheet extends ConsumerStatefulWidget {
   final Despesa? expense;
+
   const AddExpenseSheet({super.key, this.expense});
 
   @override
@@ -19,16 +25,21 @@ class AddExpenseSheet extends ConsumerStatefulWidget {
 class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
   final _nomeCtrl = TextEditingController();
   final _valorCtrl = TextEditingController();
-  final _vencCtrl = TextEditingController();
+  final _diaCtrl = TextEditingController();
+
+  final Map<String, String> _errors = {};
+  Timer? _validationTimer;
+  bool _hasTyped = false;
+  double? _parsedValor;
 
   @override
   void initState() {
     super.initState();
     if (widget.expense != null) {
-      final exp = widget.expense!;
-      _nomeCtrl.text = exp.nome;
-      _valorCtrl.text = fmt(exp.valor).replaceAll(RegExp(r'R\$\s*'), '');
-      _vencCtrl.text = exp.diaVencimento.toString();
+      _nomeCtrl.text = widget.expense!.nome;
+      _valorCtrl.text = formatBrl(widget.expense!.valor);
+      _diaCtrl.text = widget.expense!.diaVencimento.toString();
+      _parsedValor = widget.expense!.valor;
     }
   }
 
@@ -36,204 +47,405 @@ class _AddExpenseSheetState extends ConsumerState<AddExpenseSheet> {
   void dispose() {
     _nomeCtrl.dispose();
     _valorCtrl.dispose();
-    _vencCtrl.dispose();
+    _diaCtrl.dispose();
+    _validationTimer?.cancel();
     super.dispose();
+  }
+
+  void _onValueChanged(String text) {
+    _hasTyped = true;
+    _parsedValor = parseBrl(text);
+    setState(() {});
+
+    // Debounced validation
+    _validationTimer?.cancel();
+    _validationTimer = Timer(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        _validate();
+      }
+    });
+  }
+
+  void _onDiaChanged(String text) {
+    _hasTyped = true;
+    setState(() {}); // Immediate update for button state
+
+    _validationTimer?.cancel();
+    _validationTimer = Timer(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        _validate();
+      }
+    });
+  }
+
+  void _validate() {
+    final newErrors = <String, String>{};
+
+    if (_nomeCtrl.text.trim().isEmpty) {
+      newErrors['nome'] = 'Nome é obrigatório';
+    }
+    if (_parsedValor == null || _parsedValor! <= 0) {
+      newErrors['valor'] = 'Valor deve ser maior que zero';
+    }
+    final diaText = _diaCtrl.text.replaceAll(RegExp(r'\D'), '');
+    final dia = int.tryParse(diaText);
+    if (dia == null || dia < 1 || dia > 31) {
+      newErrors['dia'] = 'Dia deve ser entre 1 e 31';
+    }
+
+    setState(() {
+      _errors.clear();
+      _errors.addAll(newErrors);
+    });
+  }
+
+  bool get _isValid {
+    final diaText = _diaCtrl.text.replaceAll(RegExp(r'\D'), '');
+    final dia = int.tryParse(diaText) ?? 0;
+    return _nomeCtrl.text.trim().isNotEmpty &&
+        (_parsedValor ?? 0) > 0 &&
+        dia >= 1 &&
+        dia <= 31;
+  }
+
+  Future<void> _submit() async {
+    _validate();
+    if (!_isValid) return;
+
+    if (widget.expense != null) {
+      // Edit mode
+      final updated = widget.expense!.copyWith(
+        nome: _nomeCtrl.text.trim(),
+        diaVencimento: int.parse(_diaCtrl.text.replaceAll(RegExp(r'\D'), '')),
+        valor: _parsedValor!,
+      );
+      try {
+        await ref.read(despesasProvider.notifier).updateDespesa(updated);
+        if (!mounted) return;
+        final nav = Navigator.of(context);
+        await StampAnimation.show(context);
+        if (!mounted) return;
+        nav.pop();
+      } catch (e) {
+        if (!mounted) return;
+        DiviToasts.show(
+          context,
+          "Não foi possível salvar. Tente novamente.",
+          isError: true,
+        );
+      }
+    } else {
+      // Create mode
+      final newDespesa = Despesa(
+        id: null,
+        nome: _nomeCtrl.text.trim(),
+        diaVencimento: int.parse(_diaCtrl.text.replaceAll(RegExp(r'\D'), '')),
+        valor: _parsedValor!,
+      );
+
+      try {
+        await ref.read(despesasProvider.notifier).addDespesa(newDespesa);
+
+        // Simple stamp animation inline
+        if (!mounted) return;
+        final nav = Navigator.of(context);
+        await StampAnimation.show(context);
+        if (!mounted) return;
+        nav.pop();
+      } catch (e) {
+        if (!mounted) return;
+        DiviToasts.show(
+          context,
+          "Não foi possível salvar. Tente novamente.",
+          isError: true,
+        );
+      }
+    }
+  }
+
+  void _confirmDismiss() {
+    if (_hasTyped && !_isValid) {
+      showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: kSurfacePaper,
+          title: const Text(
+            "Dados não salvos",
+            style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600, color: kTextPrimary),
+          ),
+          content: const Text(
+            "Tem dados que ainda não foram salvos. Fechar mesmo assim?",
+            style: TextStyle(fontFamily: 'Inter', color: kTextSecondary),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text("Cancelar", style: TextStyle(color: kTextPrimary)),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+                Navigator.pop(context);
+              },
+              child: const Text("Fechar mesmo"),
+            ),
+          ],
+        ),
+      );
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isEditing = widget.expense != null;
+    final previewText = _parsedValor != null && _parsedValor! > 0
+        ? "${fmt(_parsedValor!)} ÷ 3 = ${fmt(_parsedValor! / 3)}/cada"
+        : null;
 
-    return Container(
-      padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: 12,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 32,
-      ),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 24),
-                decoration: BoxDecoration(
-                  color: kSlate200,
-                  borderRadius: BorderRadius.circular(2),
+    return GestureDetector(
+      onTap: _confirmDismiss,
+      child: Container(
+        color: Colors.transparent,
+        child: GestureDetector(
+          onTap: () {}, // block tap-through
+          child: DraggableScrollableSheet(
+            initialChildSize: 0.6,
+            maxChildSize: 0.85,
+            minChildSize: 0.6,
+            builder: (ctx, scrollCtrl) {
+              return Material(
+                type: MaterialType.transparency,
+                child: Container(
+                decoration: const BoxDecoration(
+                  color: kSurfacePaper,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
-              ),
-            ),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                      isEditing
-                          ? Icons.edit
-                          : Icons.add_circle,
-                      color: kPrimaryColor,
-                      size: 24),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  isEditing ? "Editar Despesa" : "Nova Despesa",
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                    color: kSlate900,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            _field("NOME DA CONTA", _nomeCtrl,
-                Icons.format_align_left,
-                placeholder: "Ex: Aluguel, Luz..."),
-            const SizedBox(height: 20),
-            _field(
-              "VALOR TOTAL",
-              _valorCtrl,
-              Icons.attach_money,
-              placeholder: "0,00",
-              keyboardType: TextInputType.number,
-              formatters: [BrlCurrencyInputFormatter()],
-            ),
-            const SizedBox(height: 20),
-            _field(
-              "DIA DO VENCIMENTO",
-              _vencCtrl,
-              Icons.calendar_today,
-              placeholder: "Ex: 5",
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 32),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: TextButton.styleFrom(
-                      foregroundColor: kSlate500,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                child: Column(
+                  children: [
+                    // Handle bar
+                    Center(
+                      child: Container(
+                        width: 36,
+                        height: 4,
+                        margin: const EdgeInsets.only(top: 12, bottom: 16),
+                        decoration: BoxDecoration(
+                          color: kPaperDepth,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
-                    child: const Text(
-                      "Cancelar",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final nome = _nomeCtrl.text.trim();
-                      final valor = parseBrl(_valorCtrl.text);
 
-                      if (nome.isEmpty || valor <= 0) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Preencha o nome e um valor válido"),
-                            backgroundColor: kRed500,
+                    // Title
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        children: [
+                          const Text(
+                            "NOVA DESPESA FIXA",
+                            style: TextStyle(
+                              fontFamily: 'Space Mono',
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
+                              color: kTextSecondary,
+                            ),
                           ),
-                        );
-                        return;
-                      }
-
-                      final d = Despesa(
-                        id: widget.expense?.id,
-                        nome: nome,
-                        diaVencimento: int.tryParse(_vencCtrl.text) ?? 5,
-                        valor: valor,
-                      );
-                      ref.read(despesasProvider.notifier).addDespesa(d);
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kPrimaryColor,
-                      foregroundColor: Colors.white,
-                      elevation: 4,
-                      shadowColor: kPrimaryColor.withValues(alpha: 0.4),
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                          const Spacer(),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.close,
+                              size: 20,
+                              color: kTextSecondary,
+                            ),
+                            onPressed: _confirmDismiss,
+                          ),
+                        ],
                       ),
                     ),
-                    child: Text(
-                      isEditing ? "Salvar Alterações" : "Salvar",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w900, fontSize: 16),
+
+                    // Form
+                    Expanded(
+                      child: ListView(
+                        controller: scrollCtrl,
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        children: [
+                          const SizedBox(height: 16),
+
+                          // Nome field
+                          _buildField(
+                            label: "NOME DA DESPESA",
+                            controller: _nomeCtrl,
+                            placeholder: "Ex: Aluguel, Conta de Luz...",
+                            error: _errors['nome'],
+                          ),
+                          const SizedBox(height: 24),
+
+                          // Valor field
+                          _buildField(
+                            label: "VALOR TOTAL",
+                            controller: _valorCtrl,
+                            placeholder: "0,00",
+                            keyboardType: TextInputType.number,
+                            formatters: [BrlCurrencyInputFormatter()],
+                            error: _errors['valor'],
+                            onChanged: _onValueChanged,
+                          ),
+                          const SizedBox(height: 24),
+
+                          // Dia vencimento
+                          _buildField(
+                            label: "DIA DE VENCIMENTO",
+                            controller: _diaCtrl,
+                            placeholder: "Ex: 15",
+                            keyboardType: TextInputType.number,
+                            error: _errors['dia'],
+                            onChanged: _onDiaChanged,
+                          ),
+                          const SizedBox(height: 32),
+
+                          // Real-time preview
+                          if (previewText != null)
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: kPaperDepth,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                previewText,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontFamily: 'Space Mono',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: kTextPrimary,
+                                ),
+                              ),
+                            ),
+                          const SizedBox(height: 40),
+                        ],
+                      ),
                     ),
-                  ),
+
+                    // Save button
+                    SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                        child: FilledButton(
+                          onPressed: _isValid ? _submit : null,
+                          style: FilledButton.styleFrom(
+                            minimumSize: const Size(double.infinity, 56),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            "SALVAR DESPESA",
+                            style: TextStyle(
+                              fontFamily: 'Space Mono',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
-  Widget _field(
-    String label,
-    TextEditingController ctrl,
-    IconData icon, {
-    String? placeholder,
+  Widget _buildField({
+    required String label,
+    required TextEditingController controller,
+    required String placeholder,
+    String? error,
     TextInputType? keyboardType,
     List<TextInputFormatter>? formatters,
+    void Function(String)? onChanged,
   }) {
+    final hasError = error != null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w900,
-            color: kSlate400,
-            letterSpacing: 1.2,
+            fontFamily: 'Space Mono',
+            fontSize: 12,
+            color: kTextSecondary,
+            letterSpacing: 1.5,
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         TextField(
-          controller: ctrl,
+          controller: controller,
           keyboardType: keyboardType,
           inputFormatters: formatters,
+          onChanged: onChanged,
           style: const TextStyle(
-              fontWeight: FontWeight.w700, fontSize: 16, color: kSlate900),
+            fontFamily: 'Inter',
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: kTextPrimary,
+          ),
           decoration: InputDecoration(
             hintText: placeholder,
             hintStyle: TextStyle(
-                color: kSlate400.withValues(alpha: 0.6), fontWeight: FontWeight.w500),
-            prefixIcon: Icon(icon, color: kPrimaryColor, size: 22),
-            filled: true,
-            fillColor: kSlate100,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide.none,
+              color: kTextSecondary.withValues(alpha: 0.2),
+              fontWeight: FontWeight.w400,
+              fontSize: 20,
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: kPrimaryColor, width: 2),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: hasError
+                    ? kSemanticOverdue.withValues(alpha: 0.6)
+                    : kPaperDepth,
+                width: hasError ? 2 : 1,
+              ),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 18),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: hasError ? kSemanticOverdue : kPrimaryOlive,
+                width: 2,
+              ),
+            ),
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
           ),
         ),
+        if (hasError)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  size: 14,
+                  color: kSemanticOverdue,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    error,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: kSemanticOverdue,
+                      fontFamily: 'Inter',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
       ],
     );
   }

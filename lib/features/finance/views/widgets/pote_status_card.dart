@@ -1,126 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../shared/constants.dart';
-import '../../../../core/utils/formatters.dart';
+import 'package:intl/intl.dart';
 import '../../../../core/engine/finance_engine.dart';
+import '../../../../shared/constants.dart';
+import '../../../../shared/widgets/skeuomorphic.dart';
 
 class PoteStatusCard extends ConsumerWidget {
   const PoteStatusCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Escuta a meta global (Despesas + Cartão) e a arrecadação global no motor unificado
-    final totalDespesas =
-        ref.watch(diviEngineProvider.select((s) => s.totalDespesasCasa));
-    final arrecadado =
-        ref.watch(diviEngineProvider.select((s) => s.arrecadadoCasa));
+    final financeState = ref.watch(diviEngineProvider);
+    final total = financeState.totalDespesasCasa;
+    final arrecadado = financeState.arrecadadoCasa;
+    
+    final progress = total > 0 ? (arrecadado / total).clamp(0.0, 1.0) : 0.0;
+    final formatCurrency = NumberFormat.simpleCurrency(locale: 'pt_BR');
 
-    final progress =
-        totalDespesas > 0 ? (arrecadado / totalDespesas).clamp(0.0, 1.0) : 0.0;
-    final percent = (progress * 100).toStringAsFixed(1);
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
+    return ClipPath(
+      clipper: ReceiptClipper(jaggedTop: false, jaggedBottom: true, toothSize: 5),
+      child: Container(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: Border.all(color: kPrimaryColor.withValues(alpha: 0.05)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: kPrimaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                    Icons.savings,
-                    color: kPrimaryColor,
-                    size: 28),
-              ),
-              const SizedBox(width: 12),
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Status do Pote da Casa",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 16,
-                      color: kSlate900,
-                    ),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "POTE DA CASA",
+                  style: TextStyle(
+                    fontFamily: 'Space Mono',
+                    color: kInkFaded,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
                   ),
-                  Text(
-                    "Fundo compartilhado mensal",
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: kSlate500,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                Text(
+                  "${(progress * 100).toInt()}%",
+                  style: TextStyle(
+                    fontFamily: 'Space Mono',
+                    color: progress >= 1.0 ? kSemanticPaid : kInk,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                fmt(arrecadado),
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                  color: kPrimaryColor,
                 ),
-              ),
-              Text(
-                "Meta: ${fmt(totalDespesas)}",
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: kSlate400,
+              ],
+            ),
+            const SizedBox(height: 12),
+            // Progress Bar
+            Stack(
+              children: [
+                Container(
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: kSlate100,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(999),
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 10,
-              color: kPrimaryColor,
-              backgroundColor: kSlate100,
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  height: 8,
+                  width: (MediaQuery.of(context).size.width - 72) * progress,
+                  decoration: BoxDecoration(
+                    color: progress >= 1.0 ? kSemanticPaid : kSemanticPending,
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: [
+                      BoxShadow(
+                        color: (progress >= 1.0 ? kSemanticPaid : kSemanticPending).withValues(alpha: 0.2),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 8),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              "$percent% arrecadado",
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w800,
-                color: kSlate500,
-              ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Arrecadado: ${formatCurrency.format(arrecadado)}",
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 11,
+                    color: kInkFaded,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  "Meta: ${formatCurrency.format(total)}",
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 11,
+                    color: kInkFaded,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
