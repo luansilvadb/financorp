@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:intl/intl.dart';
 
 import '../../../shared/providers/month_year_provider.dart';
 import '../../../shared/constants.dart';
 import '../../../core/engine/finance_engine.dart';
+import '../../../shared/widgets/group_summary.dart';
+import '../../../shared/widgets/divi_empty_state.dart';
+import '../../../shared/widgets/offline_banner.dart';
+import '../../../shared/widgets/divi_toasts.dart';
 
 import 'widgets/z_report_card.dart';
 import 'widgets/finance_widgets.dart';
-import 'package:divi/shared/widgets/divi_toasts.dart';
+import 'widgets/add_expense_sheet.dart';
+import 'widgets/pote_status_card.dart';
 import 'statement_screen.dart';
 
 class LedgerScreen extends ConsumerStatefulWidget {
@@ -23,6 +28,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _monthScrollController = ScrollController();
   String _searchQuery = "";
+  bool _hasLoadedOnce = false;
 
   @override
   void initState() {
@@ -58,22 +64,226 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
   @override
   Widget build(BuildContext context) {
     final period = ref.watch(periodProvider);
-    final financeState = ref.watch(diviEngineProvider);
+    final hasSummary = ref.watch(diviEngineProvider.select((s) => s.resumo.isNotEmpty));
 
-    return SafeArea(
-      bottom: false,
+    // Show skeleton if data not loaded yet
+    if (!_hasLoadedOnce && !hasSummary) {
+      // Mark as loaded after first frame
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        setState(() => _hasLoadedOnce = true);
+      });
+      return SafeArea(bottom: false, child: _buildLoadingSkeleton());
+    }
+
+    final financeState = ref.watch(diviEngineProvider);
+    return SafeArea(bottom: false, child: _buildContent(financeState, period));
+  }
+
+  Widget _buildContent(dynamic financeState, Period period) {
+    final now = DateTime.now();
+    final isCurrentMonth =
+        period.mes == (now.month - 1) && period.ano == now.year;
+    final hasData = financeState.resumo.isNotEmpty;
+    final hasAnyDataInSystem =
+        financeState.despesas.isNotEmpty || financeState.compras.isNotEmpty;
+
+    return OfflineBanner(
+      isOffline: false, // Simulated offline status (always online for now)
       child: ListView(
-        padding:
-            const EdgeInsets.only(left: 16, right: 16, bottom: 120, top: 8),
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+          bottom: 120,
+          top: 8,
+        ),
         children: [
           _buildHeader(period),
           const SizedBox(height: 16),
-          const ZReportCard(),
-          const SizedBox(height: 16),
-          _buildSearchBar(),
-          const SizedBox(height: 16),
-          ..._buildResidentList(financeState),
+          // Apply muted opacity for historical months
+          Opacity(
+            opacity: isCurrentMonth ? 1.0 : 0.85,
+            child: Column(
+              children: [
+                const GroupSummary(),
+                const SizedBox(height: 16),
+                _buildTimestamp(),
+                const SizedBox(height: 16),
+                const PoteStatusCard(),
+                const SizedBox(height: 16),
+                const ZReportCard(),
+                const SizedBox(height: 16),
+                _buildSearchBar(),
+                const SizedBox(height: 16),
+                ..._buildResidentList(financeState),
+              ],
+            ),
+          ),
+          // Welcome state for first-time users
+          if (!hasAnyDataInSystem) ...[
+            const SizedBox(height: 40),
+            DiviEmptyState(
+              icon: Icons.account_balance_wallet_outlined,
+              title: 'Bem-vindo ao DIVI',
+              subtitle: 'Suas contas em paz, com quem divide a vida.',
+              action: ElevatedButton.icon(
+                onPressed: () => _openAddExpenseSheet(),
+                icon: const Icon(Icons.add, size: 18),
+                label: const Text('Adicionar primeira despesa'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: kPrimaryOlive,
+                  foregroundColor: Colors.white,
+                  textStyle: const TextStyle(
+                    fontFamily: 'Space Mono',
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+          // Empty state for months with no data
+          if (hasAnyDataInSystem && !hasData) ...[
+            const SizedBox(height: 40),
+            _buildEmptyState(period),
+          ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildTimestamp() {
+    final now = DateTime.now();
+    final timeStr = DateFormat.Hm('pt_BR').format(now);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.access_time, size: 12, color: kSlate400),
+        const SizedBox(width: 4),
+        Text(
+          'Atualizado às $timeStr',
+          style: TextStyle(
+            fontSize: 10,
+            color: kTextSecondary,
+            fontFamily: 'Space Mono',
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingSkeleton() {
+    return ListView(
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 120, top: 8),
+      children: [
+        // Header skeleton
+        _sizedBox(height: 40),
+        const SizedBox(height: 16),
+        // GroupSummary skeleton
+        _buildSkeletonCard(height: 80),
+        const SizedBox(height: 16),
+        // Timestamp skeleton
+        _sizedBox(height: 16),
+        // ZReportCard skeleton
+        _buildSkeletonCard(height: 120),
+        const SizedBox(height: 16),
+        // Search bar skeleton
+        _buildSkeletonCard(height: 48),
+        const SizedBox(height: 16),
+        // Resident cards skeletons
+        _buildSkeletonCard(height: 100),
+        const SizedBox(height: 16),
+        _buildSkeletonCard(height: 100),
+        const SizedBox(height: 16),
+        _buildSkeletonCard(height: 100),
+      ],
+    );
+  }
+
+  Widget _buildSkeletonCard({required double height}) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.3, end: 0.6),
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOut,
+      builder: (context, value, child) {
+        return Container(
+          height: height,
+          decoration: BoxDecoration(
+            color: kSlate100.withValues(alpha: value),
+            borderRadius: BorderRadius.circular(16),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _sizedBox({required double height}) {
+    return SizedBox(height: height);
+  }
+
+  Widget _buildEmptyState(Period period) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        child: Column(
+          children: [
+            Icon(
+              Icons.folder_off,
+              size: 64,
+              color: kInkFaded.withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "Nenhuma despesa registrada em ${mesesFull[period.mes]}",
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: kInkFaded,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "${period.ano}",
+              style: TextStyle(
+                fontFamily: 'Space Mono',
+                fontSize: 12,
+                color: kInkFaded.withValues(alpha: 0.7),
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () => _openAddExpenseSheet(),
+              icon: const Icon(Icons.add, size: 18),
+              label: const Text("Adicionar retroativa"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kPrimaryOlive,
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontFamily: 'Space Mono',
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _openAddExpenseSheet() {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const AddExpenseSheet(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(opacity: animation, child: child),
+        transitionDuration: const Duration(milliseconds: 200),
+        opaque: false,
       ),
     );
   }
@@ -81,9 +291,9 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.5),
+        color: kSurfacePaper.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: kLine),
+        border: Border.all(color: kPaperDepth),
       ),
       child: TextField(
         controller: _searchController,
@@ -96,25 +306,21 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
         style: const TextStyle(
           fontFamily: 'Space Mono',
           fontSize: 12,
-          color: kInk,
+          color: kTextPrimary,
         ),
         decoration: InputDecoration(
           hintText: "BUSCAR MORADOR...",
           hintStyle: const TextStyle(
             fontFamily: 'Space Mono',
             fontSize: 10,
-            color: kInkFaded,
+            color: kTextSecondary,
           ),
           border: InputBorder.none,
           isDense: true,
           contentPadding: const EdgeInsets.symmetric(vertical: 14),
           prefixIcon: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Icon(
-              Icons.search,
-              size: 16,
-              color: kInkFaded,
-            ),
+            child: Icon(Icons.search, size: 16, color: kTextSecondary),
           ),
           prefixIconConstraints: const BoxConstraints(
             minWidth: 40,
@@ -130,11 +336,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 12),
-                    child: Icon(
-                      Icons.cancel,
-                      size: 18,
-                      color: kInkFaded,
-                    ),
+                    child: Icon(Icons.cancel, size: 18, color: kInkFaded),
                   ),
                 )
               : null,
@@ -147,41 +349,25 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
     );
   }
 
-  List<Widget> _buildResidentList(dynamic financeState) {
-    final residents = [
-      {
-        'name': 'Luan',
-        'subtitle': 'MORADOR',
-        'color': kPrimaryColor,
-      },
-      {
-        'name': 'Giovanna',
-        'subtitle': 'MORADOR',
-        'color': kPaid,
-      },
-      {
-        'name': 'Luciana',
-        'subtitle': 'MORADOR',
-        'color': const Color(0xFFF59E0B),
-      },
-    ];
+  List<Widget> _buildResidentList(FinanceState financeState) {
+    if (financeState.resumo.isEmpty) return [];
 
-    final filtered = residents.where((r) {
-      if (_searchQuery.isEmpty) return true;
-      return r['name'].toString().toLowerCase().contains(_searchQuery);
-    }).toList();
-
-    return filtered.map((r) {
-      final name = r['name'] as String;
-      if (financeState.resumo[name] == null) return const SizedBox.shrink();
+    return financeState.resumo.keys
+        .where((String name) =>
+            name.toLowerCase().contains(_searchQuery.toLowerCase()))
+        .map<Widget>((String name) {
+      // Map colors for known residents (TODO: Move to resident profile/model)
+      Color highlightColor = kPrimaryColor;
+      if (name == 'Giovanna') highlightColor = kPaid;
+      if (name == 'Luciana') highlightColor = const Color(0xFFF59E0B);
 
       return Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: ResidentSummaryCard(
           title: name,
-          subtitle: r['subtitle'] as String,
+          subtitle: "MORADOR",
           data: financeState.resumo[name]!,
-          highlightColor: r['color'] as Color,
+          highlightColor: highlightColor,
           onTap: () => _pushStatement(name),
         ),
       );
@@ -209,17 +395,17 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
               child: _buildYearSelector(period),
             ),
             // Centered DIVI Title
-            const Align(
-              alignment: Alignment.center,
+            Semantics(
+              label: "Logotipo DIVI",
               child: Text(
                 "DIVI",
                 style: TextStyle(
                   fontFamily: 'Young Serif',
-                  color: kInk,
+                  color: kTextPrimary,
                   fontSize: 28,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w400,
                   letterSpacing: -1.2,
-                  shadows: [
+                  shadows: const [
                     Shadow(
                       color: Color(0xFFFF9500),
                       offset: Offset(-1.2, 0),
@@ -232,10 +418,12 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                 ),
               ),
             ),
+
             // Reset button on the Right
             Align(
               alignment: Alignment.centerRight,
-              child: period.mes != (DateTime.now().month - 1) ||
+              child:
+                  period.mes != (DateTime.now().month - 1) ||
                       period.ano != DateTime.now().year
                   ? IconButton(
                       onPressed: () {
@@ -244,10 +432,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                         _scrollToMonth(currentMonth);
                         DiviToasts.show(context, "VOLTANDO PARA HOJE");
                       },
-                      icon: Icon(
-                          Icons.refresh,
-                          size: 20,
-                          color: kPrimaryColor),
+                      icon: Icon(Icons.refresh, size: 20, color: kPrimaryColor),
                       tooltip: 'Voltar para Hoje',
                     )
                   : const SizedBox.shrink(),
@@ -267,8 +452,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
         IconButton(
           onPressed: () => ref.read(periodProvider.notifier).prevYear(),
           visualDensity: VisualDensity.compact,
-          icon: Icon(Icons.chevron_left,
-              size: 14, color: kInkFaded),
+          icon: Icon(Icons.chevron_left, size: 14, color: kInkFaded),
         ),
         Text(
           "${period.ano}",
@@ -282,8 +466,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
         IconButton(
           onPressed: () => ref.read(periodProvider.notifier).nextYear(),
           visualDensity: VisualDensity.compact,
-          icon: Icon(Icons.chevron_right,
-              size: 14, color: kInkFaded),
+          icon: Icon(Icons.chevron_right, size: 14, color: kInkFaded),
         ),
       ],
     );
@@ -305,7 +488,7 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
             height: 32,
             width: screenWidth - 32,
             decoration: BoxDecoration(
-              color: kLine.withValues(alpha: 0.1),
+              color: kPaperDepth.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
             ),
           ),
@@ -327,15 +510,17 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                   // Removido AnimatedContainer e duração para eliminar o fade
                   margin: const EdgeInsets.only(right: 12),
                   width: 80,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
-                    color: isSelected ? kInk : Colors.transparent,
+                    color: isSelected ? kTextPrimary : Colors.transparent,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                                color: kInk.withValues(alpha: 0.15),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4))
+                              color: kTextPrimary.withValues(alpha: 0.15),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
                           ]
                         : [],
                   ),
@@ -348,9 +533,10 @@ class _LedgerScreenState extends ConsumerState<LedgerScreen> {
                       fontFamily: 'Space Mono',
                       fontSize: 10,
                       letterSpacing: 1,
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected ? kPaper : kInkFaded,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      color: isSelected ? kSurfacePaper : kTextSecondary,
                     ),
                   ),
                 ),

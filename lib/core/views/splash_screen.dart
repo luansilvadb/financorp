@@ -97,7 +97,7 @@ class _SplashScreenState extends State<SplashScreen>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [kPrimaryColor, kSlate900],
+            colors: [kPrimaryOlive, kTextPrimary],
           ),
         ),
         child: Stack(
@@ -127,11 +127,7 @@ class _SplashScreenState extends State<SplashScreen>
                           width: 1,
                         ),
                       ),
-                      child: Icon(
-                        Icons.home,
-                        color: Colors.white,
-                        size: 80,
-                      ),
+                      child: Icon(Icons.home, color: Colors.white, size: 80),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -142,10 +138,7 @@ class _SplashScreenState extends State<SplashScreen>
                         parent: _controller,
                         curve: const Interval(0.4, 1.0, curve: Curves.easeIn),
                       ).value;
-                      return Opacity(
-                        opacity: textOpacity,
-                        child: child,
-                      );
+                      return Opacity(opacity: textOpacity, child: child);
                     },
                     child: Column(
                       children: [

@@ -11,8 +11,10 @@ class PaperBackground extends StatelessWidget {
       child: IgnorePointer(
         child: Opacity(
           opacity: 0.03,
-          child: CustomPaint(
-            painter: NoisePainter(),
+          child: RepaintBoundary(
+            child: CustomPaint(
+              painter: NoisePainter(),
+            ),
           ),
         ),
       ),

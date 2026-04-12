@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +17,8 @@ import 'shared/widgets/paper_bottom_nav.dart';
 // Features
 import 'features/finance/views/ledger_screen.dart';
 import 'features/finance/views/archive_screen.dart';
-import 'features/finance/views/widgets/spike_modal_sheet.dart';
+import 'features/finance/views/widgets/add_expense_sheet.dart';
+import 'features/cartao/views/widgets/add_purchase_sheet.dart';
 import 'core/views/splash_screen.dart';
 
 // ============================================================
@@ -55,23 +57,112 @@ class CasaApp extends StatelessWidget {
       scaffoldMessengerKey: scaffoldMessengerKey,
       scrollBehavior: AppScrollBehavior(),
       theme: ThemeData(
-        textTheme: GoogleFonts.interTextTheme().apply(
-          bodyColor: kInk,
-          displayColor: kInk,
-        ),
-        scaffoldBackgroundColor: kPaper,
+        useMaterial3: true,
+        // Color scheme — Mesa Calma (olive-based)
         colorScheme: ColorScheme.fromSeed(
-          seedColor: kPrimaryColor,
-          surface: kPaper,
-          onSurface: kInk,
-          error: kPrimaryColor,
+          seedColor: kPrimaryOlive,
+          surface: kSurfacePaper,
+          onSurface: kTextPrimary,
+          primary: kPrimaryOlive,
+          onPrimary: Colors.white,
+          error: kSemanticOverdue,
+        ),
+        scaffoldBackgroundColor: kSurfacePaper,
+
+        // Typography — Young Serif (display), Inter (body), Space Mono (labels)
+        textTheme: TextTheme(
+          displayLarge: GoogleFonts.youngSerif(
+            fontSize: 32,
+            fontWeight: FontWeight.w400,
+          ),
+          headlineLarge: GoogleFonts.youngSerif(
+            fontSize: 24,
+            fontWeight: FontWeight.w400,
+          ),
+          headlineMedium: GoogleFonts.youngSerif(
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
+          bodyLarge: GoogleFonts.inter(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+          bodyMedium: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+          labelLarge: GoogleFonts.inter(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+          labelMedium: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          labelSmall: GoogleFonts.spaceMono(
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+          ),
+        ).apply(bodyColor: kTextPrimary, displayColor: kTextPrimary),
+
+        // Card theme — zero elevation (recibos deitam, não flutuam)
+        cardTheme: const CardThemeData(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+        ),
+
+        // Button themes — olive primary, outline secondary
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            backgroundColor: kPrimaryOlive,
+            foregroundColor: Colors.white,
+            textStyle: GoogleFonts.inter(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+            minimumSize: const Size(double.infinity, 56),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: kPrimaryOlive, width: 1.5),
+            foregroundColor: kPrimaryOlive,
+            textStyle: GoogleFonts.inter(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            minimumSize: const Size(double.infinity, 56),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+
+        // Input decoration
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: kSurfacePaper,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: kPaperDepth),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: kPrimaryOlive, width: 1.5),
+          ),
         ),
       ),
       builder: (context, child) {
         return Stack(
           children: [
-            if (child != null) child,
             const PaperBackground(),
+            // ignore: use_null_aware_elements
+            if (child != null) child,
           ],
         );
       },
@@ -86,6 +177,9 @@ class CasaApp extends StatelessWidget {
   }
 
   Future<void> _initialize() async {
+    // Initialize locale data for intl/DateFormat
+    await initializeDateFormatting('pt_BR', null);
+
     // Load environment variables if .env exists in assets
     try {
       final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
@@ -133,13 +227,99 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
+  void _showAddModeSelector() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+        decoration: const BoxDecoration(
+          color: kSurfacePaper,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "O QUE VOCÊ DESEJA ADICIONAR?",
+              style: TextStyle(
+                fontFamily: 'Space Mono',
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+                color: kTextSecondary,
+              ),
+            ),
+            const SizedBox(height: 24),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: kPrimaryOlive.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.receipt_outlined, color: kPrimaryOlive),
+              ),
+              title: const Text(
+                "Despesa Fixa",
+                style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600, color: kTextPrimary),
+              ),
+              subtitle: const Text(
+                "Contas mensais (aluguel, luz...)",
+                style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: kTextSecondary),
+              ),
+              onTap: () {
+                Navigator.pop(ctx);
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => const AddExpenseSheet(),
+                );
+              },
+            ),
+            const Divider(color: kPaperDepth, height: 32),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: kPrimaryOlive.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.credit_card_outlined, color: kPrimaryOlive),
+              ),
+              title: const Text(
+                "Compra no Cartão",
+                style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600, color: kTextPrimary),
+              ),
+              subtitle: const Text(
+                "Gastos avulsos e compras do dia a dia",
+                style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: kTextSecondary),
+              ),
+              onTap: () {
+                Navigator.pop(ctx);
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => const AddPurchaseSheet(),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
       body: IndexedStack(
         index: _aba,
-        children: const [
+        children: [
           LedgerScreen(),
           ArchiveScreen(),
         ],
@@ -147,15 +327,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       bottomNavigationBar: PaperBottomNav(
         currentIndex: _aba,
         onTap: (index) => setState(() => _aba = index),
-        onFabTap: () {
-          // Temporarily use the old add flows until Spike is ready
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) => const SpikeModalSheet(),
-          );
-        },
+        onFabTap: _showAddModeSelector,
       ),
     );
   }

@@ -106,8 +106,10 @@ class ReceiptClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) =>
-      false; // Could be improved by checking properties
+  bool shouldReclip(covariant ReceiptClipper oldClipper) =>
+      oldClipper.jaggedTop != jaggedTop ||
+      oldClipper.jaggedBottom != jaggedBottom ||
+      oldClipper.toothSize != toothSize;
 }
 
 /// Creates a folder tab at the top-left using curves, simulating a Physical Folder.

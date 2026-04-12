@@ -1,0 +1,52 @@
+# Sprint Status: DIVI
+# Generated: 2026-04-12
+# Tracks story progress for the DIVI project
+
+# STATUS DEFINITIONS:
+# backlog     = Story not yet started
+# in-progress = Story being implemented
+# ready-for-dev = Story spec created, ready for implementation
+# review      = Implementation complete, awaiting code review
+# done        = Story reviewed, approved, and merged
+
+development_status:
+  # Epic 1: Project Foundation & Navigation
+  epic-1: done
+  1-1-setup-project-infrastructure: done
+  1-2-implement-themedata-design-tokens: done
+  1-3-splash-screen-navigation-shell: done
+
+  # Epic 2: Expense Management
+  epic-2: done
+  2-1-implement-app-repository: done
+  2-2-implement-riverpod-providers: done
+  2-3-add-fixed-expense: done
+  2-4-add-card-purchase: done
+  2-5-edit-delete-expenses: done
+
+  # Epic 3: Payment Tracking
+  epic-3: done
+  3-1-toggle-payment-fixed-expenses: done
+  3-2-toggle-payment-card-purchases: done
+  3-3-implement-group-summary: done
+
+  # Epic 4: Ledger & Statement Views
+  epic-4: done
+  4-1-implement-ledger-screen: done
+  4-2-implement-statement-screen: done
+  4-3-implement-search-filter: done
+  4-4-implement-cartao-tab: done
+
+  # Epic 5: Monthly Archive
+  epic-5: done
+  5-1-implement-archive-screen: done
+  5-2-navigate-historical-months: done
+
+  # Epic 6: UX Polish & Consistency
+  epic-6: done
+  6-1-implement-empty-states: done
+  6-2-implement-error-handling: done
+  6-3-accessibility-audit: done
+  6-4-performance-optimization: done
+
+last_updated: "2026-04-12"

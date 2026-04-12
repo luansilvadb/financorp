@@ -2,7 +2,6 @@ import '../../../../core/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../../../shared/constants.dart';
 import '../../../../shared/models/domain.dart';
 import '../../../../core/utils/formatters.dart';
@@ -15,12 +14,39 @@ class CartaoDetailsSheet extends ConsumerWidget {
 
   const CartaoDetailsSheet({super.key, required this.compra});
 
+  void _confirmDelete(BuildContext context, WidgetRef ref) {
+    showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: kPaper,
+        title: const Text("Tem certeza?"),
+        content: const Text("Esta ação não pode ser desfeita."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text("Cancelar"),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: FilledButton.styleFrom(backgroundColor: kSemanticOverdue),
+            child: const Text("Sim, excluir"),
+          ),
+        ],
+      ),
+    ).then((confirmed) {
+      if (confirmed == true && context.mounted) {
+        ref.read(cartaoProvider.notifier).deleteCompra(compra.id!);
+        Navigator.pop(context);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 12, bottom: 32),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: kSurfacePaper,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: Column(
@@ -32,7 +58,7 @@ class CartaoDetailsSheet extends ConsumerWidget {
             height: 4,
             margin: const EdgeInsets.only(bottom: 24),
             decoration: BoxDecoration(
-              color: kSlate200,
+              color: kPaperDepth,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -40,10 +66,7 @@ class CartaoDetailsSheet extends ConsumerWidget {
           // Header: Avatar + Title + Value
           Row(
             children: [
-              DiviAvatar(
-                pessoa: compra.pessoa,
-                size: 44,
-              ),
+              DiviAvatar(pessoa: compra.pessoa, size: 44),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
@@ -52,18 +75,20 @@ class CartaoDetailsSheet extends ConsumerWidget {
                     Text(
                       compra.descricao,
                       style: const TextStyle(
+                        fontFamily: 'Young Serif',
                         fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                        color: kSlate900,
+                        fontWeight: FontWeight.w400,
+                        color: kTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       "${compra.pessoa} • ${compra.data}",
                       style: const TextStyle(
+                        fontFamily: 'Inter',
                         fontSize: 13,
-                        color: kSlate400,
-                        fontWeight: FontWeight.w600,
+                        color: kTextSecondary,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
@@ -72,9 +97,10 @@ class CartaoDetailsSheet extends ConsumerWidget {
               Text(
                 fmt(compra.valor),
                 style: const TextStyle(
-                  fontWeight: FontWeight.w900,
+                  fontFamily: 'Young Serif',
+                  fontWeight: FontWeight.w400,
                   fontSize: 22,
-                  color: kSlate900,
+                  color: kTextPrimary,
                 ),
               ),
             ],
@@ -92,29 +118,28 @@ class CartaoDetailsSheet extends ConsumerWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 16),
               decoration: BoxDecoration(
-                color: compra.pago ? kSlate100 : const Color(0xFFF0FDF4),
+                color: compra.pago ? kPaperDepth.withValues(alpha: 0.5) : kSemanticPaid.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: compra.pago ? kSlate200 : const Color(0xFFDCFCE7),
+                  color: compra.pago ? kPaperDepth : kSemanticPaid.withValues(alpha: 0.2),
                 ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    compra.pago
-                        ? Icons.undo
-                        : Icons.check_circle_outline,
-                    color: compra.pago ? kSlate600 : kGreen500,
+                    compra.pago ? Icons.undo : Icons.check_circle_outline,
+                    color: compra.pago ? kTextSecondary : kSemanticPaid,
                     size: 20,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     compra.pago ? "Marcar Pendente" : "Marcar como Pago",
                     style: TextStyle(
-                      fontWeight: FontWeight.w800,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      color: compra.pago ? kSlate600 : kGreen500,
+                      color: compra.pago ? kTextSecondary : kSemanticPaid,
                     ),
                   ),
                 ],
@@ -128,7 +153,7 @@ class CartaoDetailsSheet extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: TextButton.icon(
+                child: OutlinedButton.icon(
                   onPressed: () {
                     Navigator.pop(context);
                     showModalBottomSheet(
@@ -138,54 +163,25 @@ class CartaoDetailsSheet extends ConsumerWidget {
                       builder: (context) => AddPurchaseSheet(purchase: compra),
                     );
                   },
-                  icon: Icon(
-                    Icons.edit,
-                    size: 20,
-                  ),
+                  icon: const Icon(Icons.edit_outlined, size: 20),
                   label: const Text(
                     "Editar",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 15,
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: kPrimaryColor,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(
-                        color: kPrimaryColor.withValues(alpha: 0.15),
-                      ),
-                    ),
+                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: TextButton.icon(
-                  onPressed: () {
-                    ref.read(cartaoProvider.notifier).deleteCompra(compra.id!);
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    size: 20,
-                  ),
+                child: OutlinedButton.icon(
+                  onPressed: () => _confirmDelete(context, ref),
+                  icon: const Icon(Icons.delete_outline, size: 20),
                   label: const Text(
                     "Excluir",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
                   ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: kRed500,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: const BorderSide(color: Color(0xFFFEE2E2)),
-                    ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: kSemanticOverdue,
+                    side: const BorderSide(color: kSemanticOverdue, width: 1.5),
                   ),
                 ),
               ),
