@@ -65,6 +65,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pagamentos = ref.watch(pagamentosProvider).value ?? [];
+    final resumo = ref.watch(diviEngineProvider.select((s) => s.resumo));
 
     return Container(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 12, bottom: 32),
@@ -163,6 +164,36 @@ class DespesaDetailsSheet extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
+          // Dica de Equilíbrio [Ω]
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: kSurfacePaper,
+              border: Border.all(color: kPaperDepth),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.tips_and_updates_outlined,
+                    color: kSemanticPending, size: 20),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    "DICA: Priorize quem está com saldo positivo no Equilíbrio do Pote.",
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: kTextSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
           // Payment Status per Person
           Row(
             children: pessoas.map((p) {
@@ -177,6 +208,18 @@ class DespesaDetailsSheet extends ConsumerWidget {
               final borderColor = pago
                   ? kSemanticPaid.withValues(alpha: 0.2)
                   : kSemanticPending.withValues(alpha: 0.2);
+
+              final saldo = resumo[p]?.saldoEquilibrio ?? 0.0;
+              final balanceLabel = saldo > 0
+                  ? "+${fmt(saldo)}"
+                  : saldo < 0
+                      ? fmt(saldo)
+                      : "OK";
+              final balanceColor = saldo > 0
+                  ? kSemanticOverdue
+                  : saldo < 0
+                      ? kSemanticPaid
+                      : kTextMuted;
 
               return Expanded(
                 child: GestureDetector(
@@ -205,6 +248,16 @@ class DespesaDetailsSheet extends ConsumerWidget {
                           pago ? Icons.check_circle : Icons.autorenew,
                           color: color,
                           size: 22,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          balanceLabel,
+                          style: TextStyle(
+                            fontFamily: 'Space Mono',
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                            color: balanceColor,
+                          ),
                         ),
                       ],
                     ),

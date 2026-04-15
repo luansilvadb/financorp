@@ -45,6 +45,17 @@ class _ResidentSummaryCardState extends State<ResidentSummaryCard> {
       statusColor = kPrimaryColor;
     }
 
+    final balancingText = widget.data.saldoEquilibrio > 0
+        ? "DEVE REPOR ${formatCurrency.format(widget.data.saldoEquilibrio)}"
+        : widget.data.saldoEquilibrio < 0
+            ? "RECEBE ${formatCurrency.format(widget.data.saldoEquilibrio.abs())}"
+            : "EM EQUILÍBRIO";
+    final balancingColor = widget.data.saldoEquilibrio > 0
+        ? kSemanticOverdue
+        : widget.data.saldoEquilibrio < 0
+            ? kSemanticPaid
+            : kInkFaded;
+
     return AnimatedScale(
       scale: _isPressed ? 0.96 : 1.0,
       duration: const Duration(milliseconds: 100),
@@ -87,6 +98,16 @@ class _ResidentSummaryCardState extends State<ResidentSummaryCard> {
                               fontFamily: 'Space Mono',
                               fontSize: 12,
                               color: kInkFaded,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            balancingText,
+                            style: TextStyle(
+                              fontFamily: 'Space Mono',
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                              color: balancingColor,
                             ),
                           ),
                         ],

@@ -7,6 +7,8 @@ typedef PersonSummaryRecord = ({
   double pendenteCasa,
   double pendenteCartao,
   double creditoCartao,
+  double pagoCasa,
+  double saldoEquilibrio,
   double totalGeral,
 });
 
@@ -61,6 +63,7 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos, Li
   }
 
   final pendenteCasa = {for (final p in pessoas) p: 0.0};
+  final pagoCasa = {for (final p in pessoas) p: 0.0};
   double totalDespesasCasa = 0.0, arrecadadoFixo = 0.0;
 
   final despesasIndex = {for (final d in despesas) if (d.id != null) d.id!: () {
@@ -74,6 +77,7 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos, Li
         totalPagos++;
         if (p == 'Luan') luanPago = true;
         arrecadadoFixo += valorPorPessoa;
+        pagoCasa[p] = (pagoCasa[p] ?? 0.0) + valorPorPessoa;
       } else {
         pendenteCasa[p] = (pendenteCasa[p] ?? 0.0) + valorPorPessoa;
       }
@@ -107,10 +111,18 @@ FinanceState _processData(List<Despesa> despesas, List<Pagamento> pagamentos, Li
     return c;
   }()};
 
+  // Cálculo de Equilíbrio do Pote (Regras de Ação [Ω])
+  final cotaIndividual = arrecadadoFixo / pessoas.length;
+  final saldoEquilibrio = {
+    for (final p in pessoas) p: cotaIndividual - (pagoCasa[p] ?? 0.0)
+  };
+
   final resumo = {for (final p in pessoas) p: (
     pendenteCasa: pendenteCasa[p] ?? 0.0,
     pendenteCartao: pendenteCartao[p] ?? 0.0,
     creditoCartao: p == 'Luan' ? creditoLuan : 0.0,
+    pagoCasa: pagoCasa[p] ?? 0.0,
+    saldoEquilibrio: saldoEquilibrio[p] ?? 0.0,
     totalGeral: (pendenteCasa[p]! + pendenteCartao[p]!),
   )};
 

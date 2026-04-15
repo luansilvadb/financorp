@@ -112,6 +112,16 @@ class _PersonSummaryCard extends ConsumerWidget {
                     label: "Pendente Casa", val: fmt(summary.pendenteCasa)),
                 const SizedBox(height: 8),
                 _SummaryRow(label: "Cartão", val: fmt(summary.pendenteCartao)),
+                const SizedBox(height: 8),
+                _SummaryRow(
+                  label: "Equilíbrio do Pote",
+                  val: (summary.saldoEquilibrio > 0 ? "+" : "") +
+                      fmt(summary.saldoEquilibrio),
+                  color: summary.saldoEquilibrio > 0
+                      ? kSemanticOverdue
+                      : kSemanticPaid,
+                  isBold: true,
+                ),
                 if (pessoa == "Luan") ...[
                   const SizedBox(height: 8),
                   _SummaryRow(
