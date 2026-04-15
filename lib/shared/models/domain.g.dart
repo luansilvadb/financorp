@@ -51,6 +51,7 @@ _Pagamento _$PagamentoFromJson(Map<String, dynamic> json) => _Pagamento(
   mes: (json['mes'] as num).toInt(),
   ano: (json['ano'] as num).toInt(),
   pago: json['pago'] as bool,
+  valorPago: (json['valor_pago'] as num?)?.toDouble() ?? 0.0,
 );
 
 Map<String, dynamic> _$PagamentoToJson(_Pagamento instance) =>
@@ -61,4 +62,5 @@ Map<String, dynamic> _$PagamentoToJson(_Pagamento instance) =>
       'mes': instance.mes,
       'ano': instance.ano,
       'pago': instance.pago,
+      'valor_pago': instance.valorPago,
     };

@@ -571,7 +571,7 @@ as bool,
 /// @nodoc
 mixin _$Pagamento {
 
- String get id;@JsonKey(name: 'despesa_id') String get despesaId; String get pessoa; int get mes; int get ano; bool get pago;
+ String get id;@JsonKey(name: 'despesa_id') String get despesaId; String get pessoa; int get mes; int get ano; bool get pago;@JsonKey(name: 'valor_pago') double get valorPago;
 /// Create a copy of Pagamento
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -584,16 +584,16 @@ $PagamentoCopyWith<Pagamento> get copyWith => _$PagamentoCopyWithImpl<Pagamento>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Pagamento&&(identical(other.id, id) || other.id == id)&&(identical(other.despesaId, despesaId) || other.despesaId == despesaId)&&(identical(other.pessoa, pessoa) || other.pessoa == pessoa)&&(identical(other.mes, mes) || other.mes == mes)&&(identical(other.ano, ano) || other.ano == ano)&&(identical(other.pago, pago) || other.pago == pago));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Pagamento&&(identical(other.id, id) || other.id == id)&&(identical(other.despesaId, despesaId) || other.despesaId == despesaId)&&(identical(other.pessoa, pessoa) || other.pessoa == pessoa)&&(identical(other.mes, mes) || other.mes == mes)&&(identical(other.ano, ano) || other.ano == ano)&&(identical(other.pago, pago) || other.pago == pago)&&(identical(other.valorPago, valorPago) || other.valorPago == valorPago));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,despesaId,pessoa,mes,ano,pago);
+int get hashCode => Object.hash(runtimeType,id,despesaId,pessoa,mes,ano,pago,valorPago);
 
 @override
 String toString() {
-  return 'Pagamento(id: $id, despesaId: $despesaId, pessoa: $pessoa, mes: $mes, ano: $ano, pago: $pago)';
+  return 'Pagamento(id: $id, despesaId: $despesaId, pessoa: $pessoa, mes: $mes, ano: $ano, pago: $pago, valorPago: $valorPago)';
 }
 
 
@@ -604,7 +604,7 @@ abstract mixin class $PagamentoCopyWith<$Res>  {
   factory $PagamentoCopyWith(Pagamento value, $Res Function(Pagamento) _then) = _$PagamentoCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(name: 'despesa_id') String despesaId, String pessoa, int mes, int ano, bool pago
+ String id,@JsonKey(name: 'despesa_id') String despesaId, String pessoa, int mes, int ano, bool pago,@JsonKey(name: 'valor_pago') double valorPago
 });
 
 
@@ -621,7 +621,7 @@ class _$PagamentoCopyWithImpl<$Res>
 
 /// Create a copy of Pagamento
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? despesaId = null,Object? pessoa = null,Object? mes = null,Object? ano = null,Object? pago = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? despesaId = null,Object? pessoa = null,Object? mes = null,Object? ano = null,Object? pago = null,Object? valorPago = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,despesaId: null == despesaId ? _self.despesaId : despesaId // ignore: cast_nullable_to_non_nullable
@@ -629,7 +629,8 @@ as String,pessoa: null == pessoa ? _self.pessoa : pessoa // ignore: cast_nullabl
 as String,mes: null == mes ? _self.mes : mes // ignore: cast_nullable_to_non_nullable
 as int,ano: null == ano ? _self.ano : ano // ignore: cast_nullable_to_non_nullable
 as int,pago: null == pago ? _self.pago : pago // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,valorPago: null == valorPago ? _self.valorPago : valorPago // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 
@@ -714,10 +715,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'despesa_id')  String despesaId,  String pessoa,  int mes,  int ano,  bool pago)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'despesa_id')  String despesaId,  String pessoa,  int mes,  int ano,  bool pago, @JsonKey(name: 'valor_pago')  double valorPago)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Pagamento() when $default != null:
-return $default(_that.id,_that.despesaId,_that.pessoa,_that.mes,_that.ano,_that.pago);case _:
+return $default(_that.id,_that.despesaId,_that.pessoa,_that.mes,_that.ano,_that.pago,_that.valorPago);case _:
   return orElse();
 
 }
@@ -735,10 +736,10 @@ return $default(_that.id,_that.despesaId,_that.pessoa,_that.mes,_that.ano,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'despesa_id')  String despesaId,  String pessoa,  int mes,  int ano,  bool pago)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'despesa_id')  String despesaId,  String pessoa,  int mes,  int ano,  bool pago, @JsonKey(name: 'valor_pago')  double valorPago)  $default,) {final _that = this;
 switch (_that) {
 case _Pagamento():
-return $default(_that.id,_that.despesaId,_that.pessoa,_that.mes,_that.ano,_that.pago);case _:
+return $default(_that.id,_that.despesaId,_that.pessoa,_that.mes,_that.ano,_that.pago,_that.valorPago);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -755,10 +756,10 @@ return $default(_that.id,_that.despesaId,_that.pessoa,_that.mes,_that.ano,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'despesa_id')  String despesaId,  String pessoa,  int mes,  int ano,  bool pago)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'despesa_id')  String despesaId,  String pessoa,  int mes,  int ano,  bool pago, @JsonKey(name: 'valor_pago')  double valorPago)?  $default,) {final _that = this;
 switch (_that) {
 case _Pagamento() when $default != null:
-return $default(_that.id,_that.despesaId,_that.pessoa,_that.mes,_that.ano,_that.pago);case _:
+return $default(_that.id,_that.despesaId,_that.pessoa,_that.mes,_that.ano,_that.pago,_that.valorPago);case _:
   return null;
 
 }
@@ -770,7 +771,7 @@ return $default(_that.id,_that.despesaId,_that.pessoa,_that.mes,_that.ano,_that.
 
 @JsonSerializable(includeIfNull: false)
 class _Pagamento implements Pagamento {
-  const _Pagamento({required this.id, @JsonKey(name: 'despesa_id') required this.despesaId, required this.pessoa, required this.mes, required this.ano, required this.pago});
+  const _Pagamento({required this.id, @JsonKey(name: 'despesa_id') required this.despesaId, required this.pessoa, required this.mes, required this.ano, required this.pago, @JsonKey(name: 'valor_pago') this.valorPago = 0.0});
   factory _Pagamento.fromJson(Map<String, dynamic> json) => _$PagamentoFromJson(json);
 
 @override final  String id;
@@ -779,6 +780,7 @@ class _Pagamento implements Pagamento {
 @override final  int mes;
 @override final  int ano;
 @override final  bool pago;
+@override@JsonKey(name: 'valor_pago') final  double valorPago;
 
 /// Create a copy of Pagamento
 /// with the given fields replaced by the non-null parameter values.
@@ -793,16 +795,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Pagamento&&(identical(other.id, id) || other.id == id)&&(identical(other.despesaId, despesaId) || other.despesaId == despesaId)&&(identical(other.pessoa, pessoa) || other.pessoa == pessoa)&&(identical(other.mes, mes) || other.mes == mes)&&(identical(other.ano, ano) || other.ano == ano)&&(identical(other.pago, pago) || other.pago == pago));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Pagamento&&(identical(other.id, id) || other.id == id)&&(identical(other.despesaId, despesaId) || other.despesaId == despesaId)&&(identical(other.pessoa, pessoa) || other.pessoa == pessoa)&&(identical(other.mes, mes) || other.mes == mes)&&(identical(other.ano, ano) || other.ano == ano)&&(identical(other.pago, pago) || other.pago == pago)&&(identical(other.valorPago, valorPago) || other.valorPago == valorPago));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,despesaId,pessoa,mes,ano,pago);
+int get hashCode => Object.hash(runtimeType,id,despesaId,pessoa,mes,ano,pago,valorPago);
 
 @override
 String toString() {
-  return 'Pagamento(id: $id, despesaId: $despesaId, pessoa: $pessoa, mes: $mes, ano: $ano, pago: $pago)';
+  return 'Pagamento(id: $id, despesaId: $despesaId, pessoa: $pessoa, mes: $mes, ano: $ano, pago: $pago, valorPago: $valorPago)';
 }
 
 
@@ -813,7 +815,7 @@ abstract mixin class _$PagamentoCopyWith<$Res> implements $PagamentoCopyWith<$Re
   factory _$PagamentoCopyWith(_Pagamento value, $Res Function(_Pagamento) _then) = __$PagamentoCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(name: 'despesa_id') String despesaId, String pessoa, int mes, int ano, bool pago
+ String id,@JsonKey(name: 'despesa_id') String despesaId, String pessoa, int mes, int ano, bool pago,@JsonKey(name: 'valor_pago') double valorPago
 });
 
 
@@ -830,7 +832,7 @@ class __$PagamentoCopyWithImpl<$Res>
 
 /// Create a copy of Pagamento
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? despesaId = null,Object? pessoa = null,Object? mes = null,Object? ano = null,Object? pago = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? despesaId = null,Object? pessoa = null,Object? mes = null,Object? ano = null,Object? pago = null,Object? valorPago = null,}) {
   return _then(_Pagamento(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,despesaId: null == despesaId ? _self.despesaId : despesaId // ignore: cast_nullable_to_non_nullable
@@ -838,7 +840,8 @@ as String,pessoa: null == pessoa ? _self.pessoa : pessoa // ignore: cast_nullabl
 as String,mes: null == mes ? _self.mes : mes // ignore: cast_nullable_to_non_nullable
 as int,ano: null == ano ? _self.ano : ano // ignore: cast_nullable_to_non_nullable
 as int,pago: null == pago ? _self.pago : pago // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,valorPago: null == valorPago ? _self.valorPago : valorPago // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 

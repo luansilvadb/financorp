@@ -53,10 +53,18 @@ class PagamentosNotifier extends OptimisticNotifier<Pagamento> {
     return repo.getPagamentos(p.mes, p.ano);
   }
 
-  Future<void> togglePagamento(String despesaId, String pessoa, bool currentStatus) async {
+  Future<void> togglePagamento(String despesaId, String pessoa, bool currentStatus, {double? valor}) async {
     final p = ref.read(periodProvider);
     final id = '$despesaId-$pessoa-${p.mes}-${p.ano}';
-    final n = Pagamento(id: id, despesaId: despesaId, pessoa: pessoa, mes: p.mes, ano: p.ano, pago: !currentStatus);
+    final n = Pagamento(
+      id: id,
+      despesaId: despesaId,
+      pessoa: pessoa,
+      mes: p.mes,
+      ano: p.ano,
+      pago: !currentStatus,
+      valorPago: valor ?? 0.0,
+    );
     return optimisticUpdate(n, (i) => i.id == id, () => repo.upsertPagamento(n));
   }
 
