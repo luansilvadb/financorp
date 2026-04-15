@@ -12,10 +12,12 @@ import 'add_expense_sheet.dart';
 class _PaymentValueSelector extends StatefulWidget {
   final String pessoa;
   final double valorSugerido;
+  final double valorTotal;
 
   const _PaymentValueSelector({
     required this.pessoa,
     required this.valorSugerido,
+    required this.valorTotal,
   });
 
   @override
@@ -61,8 +63,17 @@ class _PaymentValueSelectorState extends State<_PaymentValueSelector> {
             ),
             const SizedBox(height: 12),
             OutlinedButton(
+              onPressed: () => Navigator.pop(context, widget.valorTotal),
+              child: Text("PAGAR VALOR TOTAL (${fmt(widget.valorTotal)})"),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton(
               onPressed: () => setState(() => _isCustom = true),
-              child: const Text("INFORMAR OUTRO VALOR"),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: kTextMuted, width: 1),
+                foregroundColor: kTextMuted,
+              ),
+              child: const Text("OUTRO VALOR"),
             ),
           ] else ...[
             TextField(
@@ -167,6 +178,7 @@ class DespesaDetailsSheet extends ConsumerWidget {
       builder: (ctx) => _PaymentValueSelector(
         pessoa: pessoa,
         valorSugerido: valorSugerido,
+        valorTotal: despesa.valor,
       ),
     );
 

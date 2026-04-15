@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dotted_line/dotted_line.dart';
 import '../../../shared/constants.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/engine/finance_engine.dart';
@@ -53,16 +54,20 @@ class _PersonSummaryCard extends ConsumerWidget {
 
     if (summary == null) return const SizedBox.shrink();
 
-    final statusLabel = summary.totalGeral < 0
+    final isCreditor = summary.saldoAcerto < -0.01;
+    final isDebtor = summary.saldoAcerto > 0.01;
+    final isQuitado = !isCreditor && !isDebtor;
+
+    final statusLabel = isCreditor
         ? "Receber"
-        : summary.totalGeral > 0
+        : isDebtor
             ? "Pagar"
             : "Quitado";
-    final statusColor = summary.totalGeral < 0
-        ? kGreen500
-        : summary.totalGeral > 0
-            ? kRed500
-            : kSlate400;
+    final statusColor = isCreditor
+        ? kSemanticPaid
+        : isDebtor
+            ? kSemanticOverdue
+            : kTextMuted;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -109,24 +114,29 @@ class _PersonSummaryCard extends ConsumerWidget {
             child: Column(
               children: [
                 _SummaryRow(
-                    label: "Pendente Casa", val: fmt(summary.pendenteCasa)),
+                    label: "Total Pago Real",
+                    val: fmt(summary.valorPagoReal),
+                    isBold: true,
+                    color: kTextPrimary),
+                const SizedBox(height: 12),
+                const DottedLine(dashColor: kPaperDepth),
+                const SizedBox(height: 12),
+                _SummaryRow(
+                    label: "Pendente (1/3 legacy)",
+                    val: fmt(summary.pendenteCasa),
+                    color: kTextMuted),
                 const SizedBox(height: 8),
-                _SummaryRow(label: "Cartão", val: fmt(summary.pendenteCartao)),
-                if (pessoa == "Luan") ...[
-                  const SizedBox(height: 8),
-                  _SummaryRow(
-                      label: "Crédito a Receber",
-                      val: fmt(summary.creditoCartao),
-                      color: kPrimaryColor,
-                      isBold: true),
-                ],
+                _SummaryRow(
+                    label: "Cartão",
+                    val: fmt(summary.pendenteCartao),
+                    color: kTextMuted),
                 const SizedBox(height: 16),
                 _TotalRow(
-                  label: summary.totalGeral < 0
-                      ? "SALDO A RECEBER"
-                      : "TOTAL A PAGAR",
-                  val: fmt(summary.totalGeral.abs()),
-                  color: summary.totalGeral == 0 ? kSlate400 : statusColor,
+                  label: isCreditor
+                      ? "SALDO A RECEBER (ACERTO)"
+                      : "TOTAL A PAGAR (ACERTO)",
+                  val: fmt(summary.saldoAcerto.abs()),
+                  color: isQuitado ? kTextMuted : statusColor,
                 ),
               ],
             ),

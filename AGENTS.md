@@ -28,6 +28,11 @@ Este projeto é regido pelo princípio de que **custo é o primeiro princípio d
 - **Custo evitado:** Retrabalho futuro em reconciliação de contas manual e suporte a novos moradores.
 - **Débito introduzido:** Complexidade extra no motor financeiro e migração de banco de dados para `valor_pago`. | **Pagar em:** 2024-05-25
 
+### 2024-05-22 — Refinamento de UX: Atalhos de Pagamento Total
+- **Problema:** Usuários que pagam a conta inteira tinham que digitar o valor manual.
+- **Solução:** Adicionado botão "Pagar Valor Total" no seletor de valor.
+- **Custo:** Mínimo (UI extra). Valor de tempo economizado para o usuário é alto.
+
 ## Mapa de Débito Técnico
 | ID    | Descrição                       | Custo de pagamento | Impacto atual           | Prazo      |
 |-------|---------------------------------|--------------------|-------------------------|------------|
