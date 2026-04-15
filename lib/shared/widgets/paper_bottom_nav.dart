@@ -73,9 +73,9 @@ class _PaperBottomNavState extends State<PaperBottomNav> {
                 const Spacer(),
                 _buildItem(
                   index: 1,
-                  iconActive: Icons.folder_open,
-                  iconInactive: Icons.folder_outlined,
-                  label: 'HISTÓRICO',
+                  iconActive: Icons.handshake,
+                  iconInactive: Icons.handshake_outlined,
+                  label: 'ACERTO',
                 ),
                 const Spacer(),
               ],

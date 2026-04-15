@@ -16,7 +16,7 @@ import 'shared/widgets/paper_bottom_nav.dart';
 
 // Features
 import 'features/finance/views/ledger_screen.dart';
-import 'features/finance/views/archive_screen.dart';
+import 'features/finance/views/settlement_screen.dart';
 import 'features/finance/views/widgets/add_expense_sheet.dart';
 import 'features/cartao/views/widgets/add_purchase_sheet.dart';
 import 'core/views/splash_screen.dart';
@@ -320,8 +320,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: IndexedStack(
         index: _aba,
         children: [
-          LedgerScreen(),
-          ArchiveScreen(),
+          const LedgerScreen(),
+          const SettlementScreen(),
         ],
       ),
       bottomNavigationBar: PaperBottomNav(

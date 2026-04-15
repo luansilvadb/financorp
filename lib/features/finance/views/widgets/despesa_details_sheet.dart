@@ -9,6 +9,113 @@ import '../../../../shared/widgets/stamp_animation.dart';
 
 import 'add_expense_sheet.dart';
 
+class _PaymentValueSelector extends StatefulWidget {
+  final String pessoa;
+  final double valorSugerido;
+  final double valorTotal;
+
+  const _PaymentValueSelector({
+    required this.pessoa,
+    required this.valorSugerido,
+    required this.valorTotal,
+  });
+
+  @override
+  State<_PaymentValueSelector> createState() => _PaymentValueSelectorState();
+}
+
+class _PaymentValueSelectorState extends State<_PaymentValueSelector> {
+  final _ctrl = TextEditingController();
+  bool _isCustom = false;
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 40),
+      decoration: const BoxDecoration(
+        color: kSurfacePaper,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            "COMO VOCÊ DESEJA PAGAR?",
+            style: TextStyle(
+              fontFamily: 'Space Mono',
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.5,
+              color: kTextSecondary,
+            ),
+          ),
+          const SizedBox(height: 32),
+          if (!_isCustom) ...[
+            FilledButton(
+              onPressed: () => Navigator.pop(context, widget.valorSugerido),
+              child: Text("PAGAR MINHA PARTE (${fmt(widget.valorSugerido)})"),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton(
+              onPressed: () => Navigator.pop(context, widget.valorTotal),
+              child: Text("PAGAR VALOR TOTAL (${fmt(widget.valorTotal)})"),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton(
+              onPressed: () => setState(() => _isCustom = true),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: kTextMuted, width: 1),
+                foregroundColor: kTextMuted,
+              ),
+              child: const Text("OUTRO VALOR"),
+            ),
+          ] else ...[
+            TextField(
+              controller: _ctrl,
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              inputFormatters: [BrlCurrencyInputFormatter()],
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontFamily: 'Young Serif',
+                fontSize: 32,
+                color: kTextPrimary,
+              ),
+              decoration: const InputDecoration(
+                hintText: "0,00",
+                prefixText: "R\$ ",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: kPaperDepth),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            FilledButton(
+              onPressed: () {
+                final val = parseBrl(_ctrl.text);
+                if (val != null && val > 0) {
+                  Navigator.pop(context, val);
+                }
+              },
+              child: const Text("CONFIRMAR APORTE"),
+            ),
+            TextButton(
+              onPressed: () => setState(() => _isCustom = false),
+              child: const Text("Voltar", style: TextStyle(color: kTextSecondary)),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class DespesaDetailsSheet extends ConsumerWidget {
   final Despesa despesa;
 
@@ -53,13 +160,37 @@ class DespesaDetailsSheet extends ConsumerWidget {
     String pessoa,
     bool currentStatus,
   ) async {
-    // Show stamp animation
-    await StampAnimation.show(context, isPaid: !currentStatus);
+    if (currentStatus) {
+      // Se já está pago, apenas desmarca (simplificação para desfazer erro)
+      await StampAnimation.show(context, isPaid: false);
+      ref
+          .read(pagamentosProvider.notifier)
+          .togglePagamento(despesa.id!, pessoa, currentStatus);
+      return;
+    }
 
-    // Toggle the payment
-    ref
-        .read(pagamentosProvider.notifier)
-        .togglePagamento(despesa.id!, pessoa, currentStatus);
+    // Se vai pagar, abre o seletor de modalidade (Guardião do Custo: Flexibilidade)
+    final valorSugerido = despesa.valor / pessoas.length;
+
+    final double? valorFinal = await showModalBottomSheet<double>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => _PaymentValueSelector(
+        pessoa: pessoa,
+        valorSugerido: valorSugerido,
+        valorTotal: despesa.valor,
+      ),
+    );
+
+    if (valorFinal != null && context.mounted) {
+      await StampAnimation.show(context, isPaid: true);
+      ref.read(pagamentosProvider.notifier).togglePagamento(
+            despesa.id!,
+            pessoa,
+            currentStatus,
+            valor: valorFinal,
+          );
+    }
   }
 
   @override
@@ -178,12 +309,17 @@ class DespesaDetailsSheet extends ConsumerWidget {
                   ? kSemanticPaid.withValues(alpha: 0.2)
                   : kSemanticPending.withValues(alpha: 0.2);
 
+              final valorPago = pagamentos.firstWhere(
+                (pag) => pag.despesaId == despesa.id && pag.pessoa == p,
+                orElse: () => Pagamento(id: '', despesaId: '', pessoa: '', mes: 0, ano: 0, pago: false, valorPago: 0),
+              ).valorPago;
+
               return Expanded(
                 child: GestureDetector(
                   onTap: () => _togglePagamento(context, ref, p, pago),
                   child: Container(
                     margin: EdgeInsets.only(right: p == pessoas.last ? 0 : 8),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
                       color: bgColor,
                       borderRadius: BorderRadius.circular(16),
@@ -204,8 +340,20 @@ class DespesaDetailsSheet extends ConsumerWidget {
                         Icon(
                           pago ? Icons.check_circle : Icons.autorenew,
                           color: color,
-                          size: 22,
+                          size: 20,
                         ),
+                        if (pago && valorPago > 0)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Text(
+                              fmt(valorPago),
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                                color: color,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

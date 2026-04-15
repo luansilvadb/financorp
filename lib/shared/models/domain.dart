@@ -43,6 +43,7 @@ abstract class Pagamento with _$Pagamento {
     required int mes,
     required int ano,
     required bool pago,
+    @JsonKey(name: 'valor_pago') @Default(0.0) double valorPago,
   }) = _Pagamento;
 
   factory Pagamento.fromJson(Map<String, dynamic> json) => _$PagamentoFromJson(json);
