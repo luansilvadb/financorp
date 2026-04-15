@@ -33,6 +33,11 @@ Este projeto é regido pelo princípio de que **custo é o primeiro princípio d
 - **Solução:** Adicionado botão "Pagar Valor Total" no seletor de valor.
 - **Custo:** Mínimo (UI extra). Valor de tempo economizado para o usuário é alto.
 
+### 2024-05-22 — Unificação do Modelo de Saldo (Settlement-First)
+- **Problema:** A UI principal ainda mostrava "Total Devido" baseado no 1/3 fixo, causando confusão quando alguém pagava a conta inteira.
+- **Solução:** Toda a UI (Ledger, Resumo, Settlement) agora utiliza o `saldoAcerto` ($S = CI - VP$).
+- **Custo:** Mínimo. Alinhamento total com as regras de negócio solicitadas.
+
 ## Mapa de Débito Técnico
 | ID    | Descrição                       | Custo de pagamento | Impacto atual           | Prazo      |
 |-------|---------------------------------|--------------------|-------------------------|------------|

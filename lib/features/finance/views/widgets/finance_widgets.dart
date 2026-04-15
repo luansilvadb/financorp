@@ -34,15 +34,20 @@ class _ResidentSummaryCardState extends State<ResidentSummaryCard> {
   Widget build(BuildContext context) {
     final formatCurrency = NumberFormat.simpleCurrency(locale: 'pt_BR');
 
-    final amount = (widget.data.totalGeral).abs();
-    bool owes = widget.data.totalGeral > 0;
-    bool isSettled = widget.data.totalGeral == 0;
+    final amount = (widget.data.saldoAcerto).abs();
+    bool isDevedor = widget.data.saldoAcerto > 0.01;
+    bool isCredor = widget.data.saldoAcerto < -0.01;
+    bool isSettled = !isDevedor && !isCredor;
 
     String statusText = "QUITADO";
-    Color statusColor = kPaid;
-    if (owes) {
-      statusText = "TOTAL DEVIDO";
-      statusColor = kPrimaryColor;
+    Color statusColor = kSemanticPaid;
+
+    if (isDevedor) {
+      statusText = "A PAGAR";
+      statusColor = kSemanticOverdue;
+    } else if (isCredor) {
+      statusText = "A RECEBER";
+      statusColor = kSemanticPaid;
     }
 
     return AnimatedScale(
